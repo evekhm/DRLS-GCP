@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$DIR"/../../SET
+
+APPLICATION='crd'
+IMAGE="gcr.io/$PROJECT_ID/$APPLICATION"
+
+##############  Application Specific Parameters  ##############
+LOCAL_PATH='CDS-Library/CDS-Library.zip' #To upload to GCP for crd service
+
+#  GCP Storage
+BUCKET_NAME=${PROJECT_ID}-${APPLICATION}
+BUCKET="gs://$BUCKET_NAME"
+DB='CDS-Library.zip'

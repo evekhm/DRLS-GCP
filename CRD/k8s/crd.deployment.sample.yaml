@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: crd
+  name: crd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crd
+  template:
+    metadata:
+      labels:
+        app: crd
+    spec:
+      serviceAccountName: __KSA_NAME__
+      containers:
+        - env:
+          - name: LAUNCHURL
+            valueFrom:
+              configMapKeyRef:
+                name: crd-config
+                key: launchUrl
+          - name: ENDPOINTS_CRDREQUESTGENERATOR
+            valueFrom:
+              configMapKeyRef:
+                name: crd-config
+                key: endpoints.crdRequestGenerator
+          - name: ENDPOINTS_DTR
+            valueFrom:
+              configMapKeyRef:
+                name: crd-config
+                key: endpoints.dtr
+          - name: ENDPOINTS_TESTEHR
+            valueFrom:
+              configMapKeyRef:
+                name: crd-config
+                key: endpoints.testEhr
+          - name: ENDPOINTS_FHIRSERVER
+            valueFrom:
+              configMapKeyRef:
+                name: crd-config
+                key: endpoints.fhirserver
+          - name: JAVA_OPTIONS
+            valueFrom:
+              configMapKeyRef:
+                name: crd-config
+                key: profile
+          - name: GOOGLE_STORAGE_BUCKET
+            valueFrom:
+              configMapKeyRef:
+                name: crd-config
+                key: google.storage.bucket
+          - name: GOOGLE_STORAGE_PROJECTID
+            valueFrom:
+              configMapKeyRef:
+                name: crd-config
+                key: google.storage.projectId
+          - name: GOOGLE_POD_DB
+            valueFrom:
+              configMapKeyRef:
+                name: crd-config
+                key: google.pod.db
+          - name: GOOGLE_STORAGE_DB
+            valueFrom:
+              configMapKeyRef:
+                name: crd-config
+                key: google.storage.db
+          - name: GOOGLE_STORAGE_EXAMPLESPATH
+            valueFrom:
+              configMapKeyRef:
+                name: crd-config
+                key: google.storage.examplesPath
+          - name: GOOGLE_STORAGE_RULESPATH
+            valueFrom:
+              configMapKeyRef:
+                name: crd-config
+                key: google.storage.rulesPath
+          - name: VSAC_API_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: crd-config
+                key: vsac_api_key
+          image: __IMAGE__
+          name: crd
+          ports:
+            - containerPort: 8090
+          resources:
+            requests:
+              cpu: 2
+              memory: 4Gi
+              ephemeral-storage: 5Gi
+            limits:
+              cpu: 4
+              memory: 8Gi
+              ephemeral-storage: 5Gi
+      restartPolicy: Always

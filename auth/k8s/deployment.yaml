@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    application: keycloak
+  name: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      application: keycloak
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        application: keycloak
+    spec:
+      containers:
+        - env:
+            - name: DB_VENDOR
+              value: h2
+            - name: KEYCLOAK_PASSWORD
+              value: admin
+            - name: KEYCLOAK_USER
+              value: admin
+          image: hkong2/keycloak
+          name: pas-dev-keycloak
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always

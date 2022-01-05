@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    application: crd-request-generator
+  name: crd-request-generator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      application: crd-request-generator
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        application: crd-request-generator
+    spec:
+      containers:
+        - image: __IMAGE__
+          name: crd-request-generator
+          ports:
+            - containerPort: 3000
+            - containerPort: 3001
+          resources:
+            requests:
+              cpu: 2
+              memory: 4Gi
+              ephemeral-storage: 2Gi
+            limits:
+              cpu: 4
+              memory: 8Gi
+              ephemeral-storage: 2Gi
+      restartPolicy: Always

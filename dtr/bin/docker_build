@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=$(pwd)
+source "$DIR"/SET
+
+cd "$DIR"/../../../dtr || exit
+
+[ -d node_modules ] && rm -rf node_modules
+[ -f package-lock.json ] && rm -f package-lock.json
+
+npm install
+docker build -f Dockerfile.dev -t "$IMAGE" .
+
+cd "$PWD" || exit
