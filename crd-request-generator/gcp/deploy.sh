@@ -9,7 +9,7 @@ BIN="$GCP"/../bin
 
 source "$BIN"/SET
 
-echo "**** Building and Deploying $APPLICATION  to GCP cluster $CLUSTER ****"
+echo "**** Deploying $APPLICATION  ****"
 
 "$BIN"/docker_build
 
@@ -21,5 +21,5 @@ docker push "$IMAGE"
 
 
 cd "$PWD" || exit
-echo "**** Done!  ****"
+
 

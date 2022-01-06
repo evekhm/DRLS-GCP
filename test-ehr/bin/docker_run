@@ -2,16 +2,16 @@
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
 source "$BIN"/SET
-#./docker_stop
 
 
 if docker images | grep -q "${IMAGE}"
 then
   echo "Using already built image $IMAGE"
-  "$BIN"/docker_stop
 else
   "$BIN"/docker_build
 fi
+
+"$BIN"/docker_stop
 
 echo "Running docker container $IMAGE for application $APPLICATION"
 docker run -p 8080:8080 --label "$APPLICATION"  "$IMAGE"

@@ -37,11 +37,6 @@ spec:
               configMapKeyRef:
                 name: crd-config
                 key: endpoints.testEhr
-          - name: ENDPOINTS_FHIRSERVER
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: endpoints.fhirserver
           - name: JAVA_OPTIONS
             valueFrom:
               configMapKeyRef:

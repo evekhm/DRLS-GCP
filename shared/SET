@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+PROJECT_ID=$(gcloud config get-value project 2> /dev/null);
+PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format='get(projectNumber)')
+
+# GCP
+ZONE='us-central1'
+REGION='us-central1'
+
+# GCP Cluster
+CLUSTER='prior-auth-cluster'
+GSA_NAME='gsa-priauth-service'
+KSA_NAME='k8s-priauth-service'
+K8S_NAMESPACE='default'
+
+
+KEYCLOAK='http://34.71.152.118:8180' #keycloak
+CRD='http://34.136.144.179:8090'
+TEST_EHR="http://localhost:8080"
+CRD_REQUEST_GENERATOR_HOST="http://localhost"
+CRD_REQUEST_GENERATOR="${CRD_REQUEST_GENERATOR_HOST}:3000"
+DTR="http://localhost:3005"
+
+CDS_SERVICE="${CRD}/r4/cds-services"
+FHIR_SERVER="${TEST_EHR}/test-ehr/r4"
+PUBLIC_KEYS="${CRD_REQUEST_GENERATOR_HOST}:3001/public_keys"
+AUTH="${KEYCLOAK}/auth"

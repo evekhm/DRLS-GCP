@@ -3,7 +3,14 @@ BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
 source "$BIN"/SET
 
-#./docker_stop
+if docker images | grep -q "${IMAGE}"
+then
+  echo "Using already built image $IMAGE"
+else
+  "$BIN"/docker_build
+fi
+
+"$BIN"/docker_stop
 
 docker run --rm -p 8090:8090 --env GOOGLE_APPLICATION_CREDENTIALS=/usr/keys\
  --env VSAC_API_KEY=abbbecec-8b75-4e95-b9c0-62e758ec3a55 --label "$APPLICATION"  "$IMAGE"

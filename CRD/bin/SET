@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$BIN"/../../bin/SET
+source "$BIN"/../../shared/SET
 
 APPLICATION='crd'
 VERSION=v5

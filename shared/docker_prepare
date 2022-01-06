@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+BIN="$1"
+
+if docker images | grep -q "${IMAGE}"
+then
+  echo "Using already built image $IMAGE"
+else
+  "$BIN"/docker_build
+fi
+
+"$BIN"/docker_stop

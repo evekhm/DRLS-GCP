@@ -2,14 +2,14 @@
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
 source "$BIN"/SET
-#./docker_stop
 
 if docker images | grep -q "${IMAGE}"
 then
   echo "Using already built image $IMAGE"
-  "$BIN"/docker_stop
 else
   "$BIN"/docker_build
 fi
+
+"$BIN"/docker_stop
 
 docker run --rm -p 3000:3000 -p 3001:3001 --env-file "$BIN"/.env --label "$APPLICATION"  "$IMAGE"

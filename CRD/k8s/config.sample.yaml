@@ -14,14 +14,13 @@ data:
 
   profile: -Dspring.profiles.active=gcp
 
-  launchUrl: http://35.226.167.225:3005/launch
+  launchUrl: __DTR__/launch
 
   localDb.path:  /CDS-Library/CRD-DTR/
   localDb.examplesPath:  /CDS-Library/Examples/
 
-  endpoints.crdRequestGenerator: http://35.238.54.191
-  endpoints.dtr: http://35.226.167.225:3005
-  endpoints.testEhr: http://35.225.245.72:8080
-  endpoints.fhirserver: http://localhost:8080/test-ehr/r4
+  endpoints.crdRequestGenerator: __CRD_REQUEST_GENERATOR__
+  endpoints.dtr: __DTR__
+  endpoints.testEhr: __TEST_EHR__
 
   vsac_api_key: __VSAC_API_KEY__

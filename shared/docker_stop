@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PWD=$(pwd)
 
 APPLICATION=$1
 docker ps --filter label="$APPLICATION"

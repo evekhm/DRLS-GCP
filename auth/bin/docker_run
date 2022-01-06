@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=$(pwd)
+source "$BIN"/SET
+
+"$BIN"/docker_stop
+docker run --name keycloak -p 8180:8080 --rm -e DB_VENDOR=h2 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin hkong2/keycloak

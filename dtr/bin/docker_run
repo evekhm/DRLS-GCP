@@ -6,10 +6,11 @@ source "$BIN"/SET
 if docker images | grep -q "${IMAGE}"
 then
   echo "Using already built image $IMAGE"
-  "$BIN"/docker_stop
 else
   "$BIN"/docker_build
 fi
 
+"$BIN"/docker_stop
+
 echo "Running docker container $IMAGE for application $APPLICATION"
-docker run  --env VSAC_API_KEY="$VSAC_API_KEY" --env-file -p 3005:3005 --label "$APPLICATION"  "$IMAGE"
+docker run --rm -p 3005:3005 --env VSAC_API_KEY="$VSAC_API_KEY" --label "$APPLICATION"  "$IMAGE"

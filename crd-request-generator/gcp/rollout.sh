@@ -5,6 +5,5 @@ source "$GCP"/../bin/SET
 
 "$GCP"/apply.sh
 
-echo "***** Rolling Out Deployment *****"
+echo 'Rolling Out Deployment'
 kubectl rollout restart deployment crd
-echo "***** Rollout Initiated! *****"

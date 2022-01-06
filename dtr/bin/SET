@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$BIN"/../../bin/SET
+source "$BIN"/../../shared/SET
 
 APPLICATION='dtr'
-VERSION=v3
+VERSION=v6jan
 IMAGE="gcr.io/$PROJECT_ID/$APPLICATION:$VERSION"
