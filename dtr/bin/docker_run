@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
-source "$DIR"/SET
-#./docker_stop
+source "$BIN"/SET
 
-docker run  --env VSAC_API_KEY=abbbecec-8b75-4e95-b9c0-62e758ec3a55 -p 3005:3005 --label "$APPLICATION"  "$IMAGE"
+if docker images | grep -q "${IMAGE}"
+then
+  echo "Using already built image $IMAGE"
+  "$BIN"/docker_stop
+else
+  "$BIN"/docker_build
+fi
+
+echo "Running docker container $IMAGE for application $APPLICATION"
+docker run  --env VSAC_API_KEY="$VSAC_API_KEY" --env-file -p 3005:3005 --label "$APPLICATION"  "$IMAGE"

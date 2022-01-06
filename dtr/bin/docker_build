@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
-source "$DIR"/SET
+source "$BIN"/SET
 
-cd "$DIR"/../../../dtr || exit
+cd "$BIN/../../../$APPLICATION" || exit
 
+echo "Building image $IMAGE..."
 [ -d node_modules ] && rm -rf node_modules
 [ -f package-lock.json ] && rm -f package-lock.json
-
-npm install
 docker build -f Dockerfile.dev -t "$IMAGE" .
+
+echo "Created image $IMAGE..."
 
 cd "$PWD" || exit

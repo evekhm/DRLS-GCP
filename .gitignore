@@ -1,0 +1,7 @@
+/.idea/
+/CRD/k8s/config.yaml
+/CRD/k8s/deployment.yaml
+/CRD/k8s/serviceaccount.yaml
+/crd-request-generator/bin/.env.comments
+/test-ehr/bin/test
+/services
