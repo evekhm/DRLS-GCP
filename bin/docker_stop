@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
-source "$DIR"/SET
 
+APPLICATION=$1
 docker ps --filter label="$APPLICATION"
 
 CID=$(docker ps --filter label="$APPLICATION" --format={{.ID}})

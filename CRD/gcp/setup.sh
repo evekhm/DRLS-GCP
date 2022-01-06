@@ -2,14 +2,23 @@
 set -u # This prevents running the script if any of the variables have not been set
 set -e # Exit if error is detected during pipeline execution
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$DIR"/../bin/SET
+GCP="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$GCP"/../bin/SET
 
 configure_cloud_build(){
   echo 'TODO'
 #  gcloud projects add-iam-policy-binding $PROJECT_ID \
 #      --member="service-$PROJECT_NUMBER@gcp-sa-cloudbuild.iam.gserviceaccount.com" \
 #      --role="roles/cloudbuild.serviceAgent"
+}
+
+create_CDS_Library_zip(){
+  echo "Creating new CDS-Library Archive ... "
+  PWD=$(pwd)
+  cd "$GCP"/../../../CRD
+  zip --exclude '*.git*' -r CDS-Library.zip CDS-Library
+  mv CDS-Library.zip "$LOCAL_PATH"
+  cd "$PWD" || exit
 }
 
 create_kservice_account(){
@@ -24,8 +33,8 @@ create_kservice_account(){
     echo "Kubernetes Service account $KSA_NAME has been found."
   else
     echo "Creating kubernetes service account... $KSA_NAME"
-    kubectl create serviceaccount $KSA_NAME \
-        --namespace $K8S_NAMESPACE
+    kubectl create serviceaccount "$KSA_NAME" \
+        --namespace "$K8S_NAMESPACE"
   fi
 }
 
@@ -37,7 +46,7 @@ create_bucket(){
       echo "Creating GCS bucket for pipeline: [$BUCKET]..."
       gsutil mb -p "$PROJECT_ID" "${BUCKET}"/
   fi
-  gsutil cp "${DIR}/../${LOCAL_PATH}" "$BUCKET"/"$DB"
+  gsutil cp "${LOCAL_PATH}" "$BUCKET"/"$DB"
 }
 
 setup_cluster() {
@@ -98,6 +107,8 @@ configure_cloud_build
 setup_cluster
 
 #Assign Workload Identity https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#kubectl
+
+create_CDS_Library_zip
 
 create_bucket
 

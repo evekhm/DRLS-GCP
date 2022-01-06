@@ -57,16 +57,21 @@ spec:
               configMapKeyRef:
                 name: crd-config
                 key: google.storage.projectId
-          - name: GOOGLE_POD_DB
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: google.pod.db
           - name: GOOGLE_STORAGE_DB
             valueFrom:
               configMapKeyRef:
                 name: crd-config
                 key: google.storage.db
+          - name: GOOGLE_POD_PATH
+            valueFrom:
+              configMapKeyRef:
+                name: crd-config
+                key: google.pod.path
+          - name: GOOGLE_POD_ZIP
+            valueFrom:
+              configMapKeyRef:
+                name: crd-config
+                key: google.pod.zip
           - name: GOOGLE_STORAGE_EXAMPLESPATH
             valueFrom:
               configMapKeyRef:

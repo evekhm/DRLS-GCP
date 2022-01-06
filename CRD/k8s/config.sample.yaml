@@ -3,13 +3,14 @@ kind: ConfigMap
 metadata:
   name: crd-config
 data:
-  google.pod.db: /usr/share/CDS-Library.zip
+  google.pod.zip: /usr/share/CDS-Library.zip
+  google.pod.path: /usr/share/CDS-Library.zip/CDS-Library
 
   google.storage.projectId: __PROJECT_ID__
   google.storage.bucket: __BUCKET__
   google.storage.db: __DB__
-  google.storage.examplesPath: Examples/
-  google.storage.rulesPath: CRD-DTR/
+  google.storage.examplesPath: /Examples/
+  google.storage.rulesPath: /CRD-DTR/
 
   profile: -Dspring.profiles.active=gcp
 
@@ -23,4 +24,4 @@ data:
   endpoints.testEhr: http://35.225.245.72:8080
   endpoints.fhirserver: http://localhost:8080/test-ehr/r4
 
-  vsac_api_key: abbbecec-8b75-4e95-b9c0-62e758ec3a55
+  vsac_api_key: __VSAC_API_KEY__

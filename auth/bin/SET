@@ -1,16 +1,5 @@
 #!/usr/bin/env bash
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$BIN"/../../bin/SET
 
-PROJECT_ID=$(gcloud config get-value project 2> /dev/null);
-PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format='get(projectNumber)')
-
-APPLICATION='crd'
-
-ZONE='us-central1'
-REGION='us-central1'
-CLUSTER='prior-auth-cluster'
-
-LABEL='priauth'
-GSA_NAME='gsa-priauth-service'
-#KSA_NAME='k8s-spring-service'
-KSA_NAME='k8s-priauth-service'
-K8S_NAMESPACE='default'
+APPLICATION='keycloak'

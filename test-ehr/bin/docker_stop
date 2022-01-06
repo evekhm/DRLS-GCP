@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=$(pwd)
 source "$BIN"/SET
 "$BIN"/../../bin/docker_stop "$APPLICATION"

@@ -3,6 +3,6 @@
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$BIN"/../../bin/SET
 
-APPLICATION='crd-request-generator'
+APPLICATION='test-ehr'
 VERSION=v1
 IMAGE="gcr.io/$PROJECT_ID/$APPLICATION:$VERSION"

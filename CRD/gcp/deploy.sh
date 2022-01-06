@@ -1,26 +1,24 @@
 #!/usr/bin/env bash
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+set -u # This prevents running the script if any of the variables have not been set
+set -e # Exit if error is detected during pipeline execution
+
+GCP="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
-source "$DIR"/../bin/SET
+UTILS="$GCP"/../../bin
+BIN="$GCP"/../bin
 
-function getExternalIp() {
-  IP=$(kubectl get service "$APPLICATION" -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-}
+source "$BIN"/SET
 
-"$DIR"/../bin/docker_build
+echo "**** Deploying $APPLICATION  ****"
+
+"$BIN"/docker_build
 
 docker push "$IMAGE"
 
-"$DIR"/apply.sh
+"$GCP"/rollout.sh
 
-getExternalIp
-while [ -z "$IP" ]
-do
-   echo "Waiting for external IP to get assigned to the service $APPLICATION...."
-   sleep 10
-   getExternalIp
-done
-echo "External IP for $APPLICATION is $IP"
+"$UTILS"/get_service_external_ip "$APPLICATION"-service
+
 
 cd "$PWD" || exit
 
