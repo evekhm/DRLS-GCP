@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    application: dtr
+  name: dtr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      application: dtr
+  template:
+    metadata:
+      labels:
+        application: dtr
+    spec:
+      containers:
+        - image: __IMAGE__:__VERSION__
+          name: dtr
+          ports:
+            - containerPort: 3005
+          resources:
+            requests:
+              cpu: 1
+              memory: 4Gi
+              ephemeral-storage: 4Gi
+            limits:
+              cpu: 2
+              memory: 8Gi
+              ephemeral-storage: 5Gi
+      restartPolicy: Always

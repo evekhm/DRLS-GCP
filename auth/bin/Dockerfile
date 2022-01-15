@@ -1,0 +1,2 @@
+FROM hkong2/keycloak
+COPY ClientFhirServerRealm.json  ClientFhirServerRealm.json

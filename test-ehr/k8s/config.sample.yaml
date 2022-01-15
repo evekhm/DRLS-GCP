@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-ehr-config
+data:
+  oauth_token: "__AUTH__/auth/realms/ClientFhirServer/protocol/openid-connect/token"
+  oauth_authorize: "__AUTH__/auth/realms/ClientFhirServer/protocol/openid-connect/auth"
+  auth_redirect_host: "__TEST_EHR__"
+  proxy_authorize: "__TEST_EHR__/test-ehr/auth"
+  proxy_token: "__TEST_EHR__/test-ehr/token"
+  redirect_post_launch: "__TEST_EHR__/test-ehr/_services/smart/Launch"

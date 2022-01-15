@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=$(pwd)
+UTILS="$BIN"/../../shared
+
+source "$BIN"/SET
+
+"$UTILS/docker_prepare" "$BIN"
+
+echo "Running docker container $IMAGE for application $APPLICATION"
+
+docker run --rm -d -p 8080:8080 \
+--env OAUTH_TOKEN="'http://$AUTH/realms/ClientFhirServer/protocol/openid-connect/token'" \
+--env OAUTH_AUTHORIZE="'http://$AUTH/realms/ClientFhirServer/protocol/openid-connect/auth'"  --label "$APPLICATION" "$IMAGE"

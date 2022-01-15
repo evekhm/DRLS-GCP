@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=$(pwd)
+source "$BIN"/SET
+
+cd "$BIN/../../../$APPLICATION" || exit
+
+echo "Building image $IMAGE:$VERSION..."
+[ -d node_modules ] && rm -rf node_modules
+[ -f package-lock.json ] && rm -f package-lock.json
+
+sed 's|__TEST_EHR__|'"$TEST_EHR"'|g; ' "$BIN"/db.sample.json > "$BIN"/../../../dtr/databaseData/db.json
+docker build -f Dockerfile.dev -t "$IMAGE":"$VERSION" .
+
+echo "Created image $IMAGE:$VERSION..."
+
+cd "$PWD" || exit

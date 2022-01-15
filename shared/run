@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+function run(){
+  "$DIR"/../"$1"/bin/docker_run
+}
+
+run auth
+run dtr
+run test-ehr
+run crd-request-generator
+
+#docker-compose down
+#docker volume prune
+#source "$DIR"/.env
+#docker-compose -f "$DIR"/../docker-compose.yml up --build --force-recreate

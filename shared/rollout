@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BIN=$1
+GCP=$2
+
+source "$BIN"/SET
+
+"$GCP"/apply.sh
+
+echo "Rolling Out $APPLICATION deployment ..."
+kubectl rollout restart deployment "$APPLICATION"
+echo "***** Rollout Initiated! *****"

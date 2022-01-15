@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    application: crd-request-generator
+  name: crd-request-generator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      application: crd-request-generator
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        application: crd-request-generator
+    spec:
+      containers:
+        - image: __IMAGE__:__VERSION__
+          name: crd-request-generator
+          ports:
+            - containerPort: 3000
+            - containerPort: 3001
+          resources:
+            requests:
+              cpu: 2
+              memory: 4Gi
+              ephemeral-storage: 2Gi
+            limits:
+              cpu: 4
+              memory: 8Gi
+              ephemeral-storage: 2Gi
+          env:
+          - name: REACT_APP_EHR_SERVER
+            valueFrom:
+              configMapKeyRef:
+                name: crd-request-generator-config
+                key: ehr_server
+          - name: REACT_APP_EHR_BASE
+            valueFrom:
+              configMapKeyRef:
+                name: crd-request-generator-config
+                key: ehr_base
+          - name: REACT_APP_CDS_SERVICE
+            valueFrom:
+              configMapKeyRef:
+                name: crd-request-generator-config
+                key: cds_service
+          - name: REACT_APP_AUTH
+            valueFrom:
+              configMapKeyRef:
+                name: crd-request-generator-config
+                key: auth
+          - name: REACT_APP_PUBLIC_KEYS
+            valueFrom:
+              configMapKeyRef:
+                name: crd-request-generator-config
+                key: public_keys
+      restartPolicy: Always

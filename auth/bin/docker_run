@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=$(pwd)
+UTILS="$BIN"/../../shared
+
+source "$BIN"/SET
+
+"$UTILS/docker_prepare" "$BIN"
+
+echo "Running docker container $IMAGE:$VERSION for application $APPLICATION"
+
+docker run --rm -d \
+   --name keycloak -p 8180:8080 -d \
+  --label "$APPLICATION" \
+  -e DB_VENDOR=h2 \
+  -e KEYCLOAK_USER=admin \
+  -e KEYCLOAK_PASSWORD=admin \
+  -e KEYCLOAK_IMPORT=\ClientFhirServerRealm.json \
+  "$IMAGE":"$VERSION"
+
+docker ps --filter label="$APPLICATION" --format={{.Ports}}

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$BIN"/../../shared/SET
+
+APPLICATION='crd-request-generator'
+IMAGE="gcr.io/$PROJECT_ID/$APPLICATION"
+VERSION=v13jan

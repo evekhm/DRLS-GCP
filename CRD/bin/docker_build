@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -u # This prevents running the script if any of the variables have not been set
+set -e # Exit if error is detected during pipeline execution
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=$(pwd)
+source "$BIN"/SET
+
+echo "Building image $IMAGE:$VERSION ..."
+cd "$BIN"/../../../CRD || exit
+./gradlew clean
+
+docker build -f Dockerfile.dev -t "${IMAGE}":"${VERSION}" .
+docker tag "${IMAGE}":"${VERSION}" "${IMAGE}":latest
+
+echo "Created image ${IMAGE}:${VERSION}"
+
+cd "$PWD" || exit
+

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BIN=$1
+GCP=$2
+
+echo "**** Configuring $APPLICATION at GKE $CLUSTER cluster for project $PROJECT_ID ****"
+
+source "$BIN"/SET
+gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
+
+"$GCP"/apply
+"$UTILS"/get_service_external_ip_port "$APPLICATION"
+echo "***** Done! *****"

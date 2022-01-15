@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=$(pwd)
+source "$BIN"/SET
+
+if docker images | grep -q "${IMAGE}"
+then
+  echo "Using already built image $IMAGE:$VERSION"
+else
+  "$BIN"/docker_build
+fi
+
+"$BIN"/docker_stop
+
+echo "Running docker container $IMAGE:$VERSION for application $APPLICATION"
+docker run --rm -d -p 3005:3005 --label "$APPLICATION"  "$IMAGE":"$VERSION"

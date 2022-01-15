@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=$(pwd)
+UTILS="$BIN"/../../shared
+
+source "$BIN"/SET
+
+"$UTILS/docker_prepare" "$BIN"
+
+echo "Running docker container $IMAGE:$VERSION for application $APPLICATION"
+
+docker run --rm -d -p 8090:8090 \
+  --env GOOGLE_APPLICATION_CREDENTIALS=/usr/keys\
+  --env VSAC_API_KEY="$VSAC_API_KEY" \
+  --label "$APPLICATION" \
+  "$IMAGE:$VERSION"
+
+docker ps --filter label="$APPLICATION" --format={{.Ports}}

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+APPLICATION=$1
+
+function getExternalIp() {
+  IP=$(kubectl get service "$APPLICATION" -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null)
+}
+
+getExternalIp
+while [ -z "$IP" ]
+do
+   #echo "Waiting for external IP to get assigned to the service $APPLICATION...."
+   sleep 10
+   getExternalIp
+done
+
+echo "$IP"
+#kubectl get service "$APPLICATION"

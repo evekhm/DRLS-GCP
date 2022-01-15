@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: crd-request-generator-config
+data:
+  ehr_server: __FHIR_SERVER__
+  ehr_base: __FHIR_SERVER__
+  auth: __AUTH__
+  public_keys: __PUBLIC_KEYS__
+  cds_service: __CDS_SERVICE__

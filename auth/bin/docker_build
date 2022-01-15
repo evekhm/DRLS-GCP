@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=$(pwd)
+source "$BIN"/SET
+
+cd "$BIN"  || exit
+
+echo "Building image $IMAGE:$VERSION ..."
+
+sed 's|__TEST_EHR__|'"$TEST_EHR"'|g; ' "$BIN"/ClientFhirServerRealm.sample.json > "$BIN"/ClientFhirServerRealm.json
+docker build -f Dockerfile -t "$IMAGE":"$VERSION" .
+docker tag "${IMAGE}":"${VERSION}" "${IMAGE}":latest
+echo "Created image ${IMAGE}:${VERSION}"
+
+cd "$PWD" || exit

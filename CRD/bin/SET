@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$BIN"/../../shared/SET
+
+APPLICATION='crd'
+VERSION='v14jan_v2'
+IMAGE="gcr.io/$PROJECT_ID/$APPLICATION"

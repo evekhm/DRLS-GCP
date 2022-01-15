@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+APPLICATION=$1
+
+function getExternalIp() {
+  IP=$(kubectl get service "$APPLICATION" -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null)
+}
+
+function getExternalIp_Port() {
+  IP=$(kubectl get service "$APPLICATION" -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}' 2>/dev/null)
+}
+
+#IP is assigned first, while ExternalIp takes some time before is assigned.
+getExternalIp
+while [ -z "$IP" ]
+do
+   #echo "Waiting for external IP to get assigned to the service $APPLICATION...."
+   sleep 10
+   getExternalIp
+done
+
+#Now when IP is assigned we can add the port value
+getExternalIp_Port
+echo "$IP"
+#kubectl get service "$APPLICATION"

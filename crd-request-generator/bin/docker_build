@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=$(pwd)
+source "$BIN"/SET
+
+echo "Building image $IMAGE:$VERSION ..."
+cd "$BIN"/../../../crd-request-generator || exit
+
+[ -d node_modules ] && rm -rf node_modules
+[ -f package-lock.json ] && rm -f package-lock.json
+
+
+docker build -f Dockerfile.dev -t "${IMAGE}":"${VERSION}" .
+docker tag "${IMAGE}":"${VERSION}" "${IMAGE}":latest
+
+
+cd "$PWD" || exit

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+APPLICATION=$1
+docker ps --filter label="$APPLICATION"
+
+CID=$(docker ps --filter label="$APPLICATION" --format={{.ID}})
+if [ -n "$CID" ]; then
+  echo "Stopping $CID ..."
+  docker stop "$CID"
+  docker ps --filter label="$APPLICATION"
+fi

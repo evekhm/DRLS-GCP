@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: crd-config
+data:
+  google.pod.zip: /usr/share/CDS-Library.zip
+  google.pod.path: /usr/share/CDS-Library.zip/CDS-Library
+
+  google.storage.projectId: __PROJECT_ID__
+  google.storage.bucket: __BUCKET__
+  google.storage.db: __DB__
+  google.storage.examplesPath: /Examples/
+  google.storage.rulesPath: /CRD-DTR/
+
+  profile: -Dspring.profiles.active=gcp
+
+  launchUrl: __DTR__/launch
+
+  localDb.path:  /CDS-Library/CRD-DTR/
+  localDb.examplesPath:  /CDS-Library/Examples/
+
+  endpoints.crdRequestGenerator: __CRD_REQUEST_GENERATOR__
+  endpoints.dtr: __DTR__
+  endpoints.auth: __AUTH__
+  endpoints.testEhr: __TEST_EHR__
+
+  vsac_api_key: __VSAC_API_KEY__

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+BIN="$1"
+
+source "$BIN"/SET
+if docker images --format "{{.Repository}}:{{.Tag}}" | grep -q "${IMAGE}:${VERSION}"
+then
+  echo "Using already built image ${IMAGE}:${VERSION}"
+  "$BIN"/docker_stop
+else
+  "$BIN"/docker_build
+fi
+
+

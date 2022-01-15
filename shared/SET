@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ID=$(gcloud config get-value project 2> /dev/null);
+PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format='get(projectNumber)')
+ENV="$UTILS/../.env"
+
+# GCP Generic
+ZONE='us-central1-c'
+REGION='us-central1'
+NETWORK='drls'
+DB='CDS-Library.zip'
+
+# GCP Cluster
+CLUSTER='prior-auth-cluster'
+GSA_NAME='gsa-priauth-service'
+KSA_NAME='k8s-priauth-service'
+K8S_NAMESPACE='default'
+
+
+if [ -f "$ENV" ]; then
+  # Deployed Services
+  source "$ENV"
+else
+  AUTH="http://localhost:8180" #keycloak
+  CRD='http://localhost:8090'
+  TEST_EHR="http://localhost:8080"
+  DTR="http://localhost:3005"
+  CRD_REQUEST_GENERATOR_HOST="http://localhost"
+fi
+
+# DRLS
+OAUTH_TOKEN="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/token"
+OAUTH_AUTHORIZE="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/auth"
+CDS_SERVICE="${CRD}/r4/cds-services"
+FHIR_SERVER="${TEST_EHR}/test-ehr/r4"
+if [ -n "$CRD_REQUEST_GENERATOR_HOST" ]; then
+  CRD_REQUEST_GENERATOR="${CRD_REQUEST_GENERATOR_HOST}:3000"
+  PUBLIC_KEYS="${CRD_REQUEST_GENERATOR_HOST}:3001/public_keys"
+fi
+
+
+
+
+#For when running locally from IDEA to overwrite properties
+export AUTH_REDIRECT_HOST=$TEST_EHR
+export CRD_REQUEST_GENERATOR_HOST
+export GOOGLE_STORAGE_BUCKET="$PROJECT_ID"-crd
+export GOOGLE_STORAGE_PROJECTID="$PROJECT_ID"
+

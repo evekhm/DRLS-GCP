@@ -1,0 +1,85 @@
+#! /bin/bash
+
+COLOR_RED=$(tput setaf 1)
+COLOR_GREEN=$(tput setaf 2)
+COLOR_YELLOW=$(tput setaf 3)
+COLOR_BLUE=$(tput setaf 4)
+COLOR_MAGENTA=$(tput setaf 5)
+COLOR_CYAN=$(tput setaf 6)
+COLOR_WHITE=$(tput setaf 7)
+RESET=$(tput sgr0)
+
+print_default(){
+ echo "==> ${COLOR_BLUE}$text${RESET}"
+}
+
+print_error(){
+ echo "==> ${COLOR_RED}ERROR:${RESET} $text"
+}
+
+print_warning(){
+ echo "==> ${COLOR_YELLOW}WARNING:${RESET} $text"
+}
+
+print_info(){
+ #echo "==> ${COLOR_GREEN}INFO:${RESET} $text"
+ echo "==> ${COLOR_GREEN}$text${RESET}"
+}
+
+print_color(){
+  case $1 in
+    red)
+      color=$COLOR_RED
+      ;;
+    green)
+      color=$COLOR_GREEN
+      ;;
+    blue)
+      color=$COLOR_BLUE
+      ;;
+    yellow)
+      color=$COLOR_YELLOW
+      ;;
+    white)
+      color=$COLOR_WHITE
+      ;;
+    cyan)
+      color=$COLOR_CYAN
+      ;;
+    magneta)
+      color=$COLOR_MAGENTA
+      ;;
+    *)#default
+      color=$COLOR_GREEN
+      ;;
+  esac
+  echo "==> ${color}$text${RESET}"
+}
+
+###############################################
+# Print In Green Color the Header
+# Params:
+#	1 - text to show
+# 2 - level
+###############################################
+print(){
+  case $level in
+    ERROR)
+      print_error
+      ;;
+    WARNING)
+      print_warning
+      ;;
+    INFO)
+      print_info
+      ;;
+    *)#default
+      print_default
+      ;;
+  esac
+}
+
+text=$1
+level=$2
+print
+
