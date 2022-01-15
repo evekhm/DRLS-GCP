@@ -6,11 +6,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTILS="$DIR"/shared
 print="$UTILS/print"
 ZIP="$DIR/CDS-Library.zip"
-APPLICATION='crd' #Application to access Cloud Storage
-BUCKET_NAME=${PROJECT_ID}-${APPLICATION}
-BUCKET="gs://$BUCKET_NAME"
 
-source "$UTILS"/SET
+source "$DIR"/CRD/bin/SET #CRD has BUCKET defined since it uses for Cloud Storage Access
 
 enable_project_apis() {
   APIS="compute.googleapis.com \
