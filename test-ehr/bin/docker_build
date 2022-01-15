@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
+print="$BIN/../../shared/print"
+
 source "$BIN"/SET
 
 cd "$BIN"/../../../"$APPLICATION" || exit
 
-echo "Building image $IMAGE:$VERSION ..."
+$print "Building image $IMAGE:$VERSION ..."
 
 rm -rf target
 rm -rf build
@@ -13,6 +15,6 @@ rm -rf .gradle
 
 docker build -f Dockerfile.dev -t "$IMAGE":"$VERSION" .
 
-echo "Created image $IMAGE:$VERSION ..."
+$print "Created image $IMAGE:$VERSION ..." INFO
 
 cd "$PWD" || exit

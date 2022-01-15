@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
+print="$BIN/../../shared/print"
 source "$BIN"/SET
 
 cd "$BIN"  || exit
 
-echo "Building image $IMAGE:$VERSION ..."
+$print "Building image $IMAGE:$VERSION ..."
 
 sed 's|__TEST_EHR__|'"$TEST_EHR"'|g; ' "$BIN"/ClientFhirServerRealm.sample.json > "$BIN"/ClientFhirServerRealm.json
 docker build -f Dockerfile -t "$IMAGE":"$VERSION" .
 docker tag "${IMAGE}":"${VERSION}" "${IMAGE}":latest
-echo "Created image ${IMAGE}:${VERSION}"
+$print "Created image ${IMAGE}:${VERSION}" INFO
 
 cd "$PWD" || exit
