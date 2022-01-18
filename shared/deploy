@@ -6,6 +6,8 @@ GCP=$2
 source "$BIN"/SET
 echo "**** Deploying $APPLICATION to GKE $CLUSTER cluster of project $PROJECT_ID ****"
 
+"$UTILS"/../get_services.sh
+
 "$BIN"/docker_build
 
 docker push "$IMAGE":"$VERSION"

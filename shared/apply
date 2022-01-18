@@ -9,5 +9,5 @@ source "$BIN"/SET
 gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 
 "$GCP"/apply
-"$UTILS"/get_service_external_ip_port "$APPLICATION"
+"$UTILS"/get_service_external_ip_port "$APPLICATION"-service
 echo "***** Done! *****"

@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
-APPLICATION=$1
+SERVICE=$1
 
 function getExternalIp() {
-  IP=$(kubectl get service "$APPLICATION" -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null)
+  IP=$(kubectl get service "$SERVICE" -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null)
 }
+
+if ! kubectl get service "$SERVICE"  &> /dev/null; then
+  exit
+fi
 
 getExternalIp
 while [ -z "$IP" ]
