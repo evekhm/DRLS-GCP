@@ -1,9 +1,18 @@
 #!/usr/bin/env bash
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=$(pwd)
+
 source "$BIN"/../../shared/SET
 
 APPLICATION='crd'
-VERSION='v14jan_v2'
-IMAGE="gcr.io/$PROJECT_ID/$APPLICATION"
+
+cd "$BIN"/../../../CRD || exit
+VERSION=$(git log -1 --pretty=%h)
+IMAGE="$REPO/$APPLICATION"
+TAG="$IMAGE:$VERSION"
+LATEST="$IMAGE:latest"
+
 BUCKET_NAME=${PROJECT_ID}-${APPLICATION}
 BUCKET="gs://$BUCKET_NAME"
+
+cd "$PWD" || exit

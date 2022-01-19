@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+
+export USE_GKE_GCLOUD_AUTH_PLUGIN=False
 UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ID=$(gcloud config get-value project 2> /dev/null);
 PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format='get(projectNumber)')
@@ -29,6 +31,9 @@ else
 fi
 
 # DRLS
+#REPO="gcr.io/$PROJECT_ID/"
+REPO="registry.gitlab.com/evekhm/drls"
+
 OAUTH_TOKEN="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/token"
 OAUTH_AUTHORIZE="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/auth"
 CDS_SERVICE="${CRD}/r4/cds-services"

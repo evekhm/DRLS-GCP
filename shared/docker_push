@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+BIN=$1
+
+source "$BIN/SET"
+echo '-->' docker images "$TAG"
+CID=$(docker images "$TAG" --format "{{.Repository}}:{{.Tag}}")
+if [ -z "$CID" ]; then
+  echo "Building Image $TAG ..."
+  "$BIN/docker_build"
+else
+  echo "Using already built image  $TAG ..."
+fi
+
+docker push "$TAG"

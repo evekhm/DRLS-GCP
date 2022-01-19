@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
-
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=$(pwd)
+
 source "$BIN"/../../shared/SET
 
 APPLICATION='test-ehr'
-VERSION=v13jan
-IMAGE="gcr.io/$PROJECT_ID/$APPLICATION"
+cd "$BIN"/../../../"$APPLICATION" || exit
+VERSION=$(git log -1 --pretty=%h)
+
+IMAGE="$REPO/$APPLICATION"
+TAG="$IMAGE:$VERSION"
+LATEST="$IMAGE:latest"
+
+cd "$PWD" || exit

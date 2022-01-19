@@ -4,13 +4,14 @@ PWD=$(pwd)
 print="$BIN/../../shared/print"
 source "$BIN"/SET
 
-cd "$BIN"  || exit
+cd "$BIN" || exit
 
-$print "Building image $IMAGE:$VERSION ..."
+$print "Building image $TAG ..."
 
 sed 's|__TEST_EHR__|'"$TEST_EHR"'|g; ' "$BIN"/ClientFhirServerRealm.sample.json > "$BIN"/ClientFhirServerRealm.json
-docker build -f Dockerfile -t "$IMAGE":"$VERSION" .
-docker tag "${IMAGE}":"${VERSION}" "${IMAGE}":latest
-$print "Created image ${IMAGE}:${VERSION}" INFO
+BUILD_TIMESTAMP=$( date '+%F_%H:%M:%S' )
+docker build -f Dockerfile -t "$TAG" -t "$LATEST" --build-arg VERSION="$VERSION" --build-arg BUILD_TIMESTAMP="$BUILD_TIMESTAMP" .
+
+$print "Created image $TAG" INFO
 
 cd "$PWD" || exit

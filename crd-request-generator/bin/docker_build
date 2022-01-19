@@ -11,10 +11,10 @@ cd "$BIN"/../../../crd-request-generator || exit
 [ -d node_modules ] && rm -rf node_modules
 [ -f package-lock.json ] && rm -f package-lock.json
 
+#docker build -f Dockerfile.dev -t "${IMAGE}":"${VERSION}" .
+#docker tag "${IMAGE}":"${VERSION}" "${IMAGE}":latest
+docker build -f Dockerfile.dev -t "$TAG" -t "$LATEST" --build-arg VERSION="$VERSION" --build-arg BUILD_TIMESTAMP="$BUILD_TIMESTAMP" .
 
-docker build -f Dockerfile.dev -t "${IMAGE}":"${VERSION}" .
-docker tag "${IMAGE}":"${VERSION}" "${IMAGE}":latest
-
-$print  "Created image ${IMAGE}:${VERSION}" INFO
+$print  "Created image $TAG" INFO
 
 cd "$PWD" || exit
