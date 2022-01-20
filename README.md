@@ -1,4 +1,4 @@
-# DRLS-GCP
+# The Ultimate Guide to Deploying DRLS on GCP
 
 ## Prerequisites
 
@@ -8,6 +8,8 @@ Currently, this flow uses private Container Registry, so special access rights a
 Check GitLab instructions [here](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token).
 
 ### VSAC Key
+Additionally, you must have credentials (api key) access to the **[Value Set Authority Center (VSAC)](https://vsac.nlm.nih.gov/)**. These credentials are required for allowing DRLS to pull down updates to value sets that are housed in VSAC. If you don't already have VSAC credentials, you should [create them using UMLS](https://www.nlm.nih.gov/research/umls/index.html).
+
 
 ## GCP Project Setup
 
