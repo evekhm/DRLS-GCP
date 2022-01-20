@@ -3,20 +3,14 @@
 ## Prerequisites
 
 ### GitLab Container Registry Access
-Currently, this flow uses Container Registry which is not Publicly Available, so special access rights and Personal Access Token needed for GitLab registry access.
-Generate Personal Access Token with 'read_registry' scope.
+Currently, this flow uses private Container Registry, so special access rights and Personal Access Token needs to be setup for GitLab. You will need to have *read_registry* permissions for the https://gitlab.com/gcp-solutions/hcls/claims-modernization/epa Project and generated Personal Access Token with *read_registry* scope.
+
 Check GitLab instructions [here](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token).
 
-``` sh
-   docker login registry.gitlab.com -u <username> -p <token>
-```
-The login process creates or updates a config.json file that holds an authorization token required to pull images.
-View the config.json file:
-``` sh
-   cat $HOME/.docker/config.json
-```
+### VSAC Key
 
-### GCP Project Setup
+## GCP Project Setup
+
 Create new GCP project and activate Cloud Shell.
 
 Setup env variables:
@@ -29,6 +23,16 @@ Use your VSAC_API_KEY to set into system environment variable (otherwise the flo
 For more details about getting VSAC_API_KEY check [here]()
 ```sh
   export VSAC_API_KEY=<your_key>
+```
+
+Login into the GitLab Container Registry using generated token:
+``` sh
+   docker login registry.gitlab.com -u <username> -p <token>
+```
+The login process creates or updates a config.json file that holds an authorization token required to pull images.
+View the config.json file:
+``` sh
+   cat $HOME/.docker/config.json
 ```
 
 Create demo directory and clone this repository into it:
