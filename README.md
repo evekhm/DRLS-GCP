@@ -91,15 +91,19 @@ To see IPs for the deployed services:
   cat DRLS-GCP/.env
 ```
 
-In the instructions below replace <APPLICATION> with the corresponding IP.
 
+## Verify DRLS is working
+
+NOTE: Currently deployed applications have around five to seven minutes required for starting up. Make sure to wait for them to be ready, before trying the steps below.
+In the instructions below replace <APPLICATION> with the corresponding IP.
+  
 ### Register the test-ehr
 
 1. Go to http://<DTR>:3005/register.
    - Client Id: **app-login**
    - Fhir Server (iss): **http://<TEST_EHR>:8080/test-ehr/r4**
 2. Click **Submit**
-3. 
+
 ## Run the DRLS Flow 
 1. Go to <CRD_REQUEST_GENERATOR_HOST>:3000/ehr-server/reqgen.
 2. Click **Patient Select** button in upper left.
