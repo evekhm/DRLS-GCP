@@ -1,10 +1,11 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   labels:
     application: dtr
   name: dtr
 spec:
+  serviceName: dtr-service
   replicas: 1
   selector:
     matchLabels:
@@ -19,6 +20,9 @@ spec:
           name: dtr
           ports:
             - containerPort: 3005
+          volumeMounts:
+          - name: lowdb-persistent-storage
+            mountPath: /home/node/app/databaseData
           resources:
             requests:
               cpu: 1
@@ -28,4 +32,8 @@ spec:
               cpu: 2
               memory: 8Gi
               ephemeral-storage: 5Gi
+      volumes:
+      - name: lowdb-persistent-storage
+        persistentVolumeClaim:
+          claimName: lowdb-volumeclaim
       restartPolicy: Always

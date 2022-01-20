@@ -42,7 +42,7 @@ spec:
               configMapKeyRef:
                 name: crd-config
                 key: endpoints.auth
-          - name: JAVA_OPTIONS
+          - name: JAVA_OPTS
             valueFrom:
               configMapKeyRef:
                 name: crd-config

@@ -53,19 +53,33 @@ Following command will generate `.env` file which later will be used for deploym
   DRLS-GCP/deploy_services.sh
 ```
 
-Now ready to get everything BUILT as Images and Deployed to GCP.
-This operation will take some time, since real images are built from the sources and pushed to GCP Container Registry.
+Now ready to get everything Deployed to GCP.
+You will need to build/deploy keycloak image to have <TEST_EHR> service IP embedded inside.
+Later keycloak will be replaced with IAP for GCP.
+
+```sh
+  DRLS-GCP/build_keycloak.sh
+```
 
 
 ```sh
-  DRLS-GCP/deploy_workers.sh
+  DRLS-GCP/apply_workers.sh
 ```
 
-To see deployed external Ips for the services:
+To see IPs for the deployed services:
 ```sh
   cat DRLS-GCP/.env
 ```
 
+In the instructions below replace <APPLICATION> with the corresponding IP.
+
+### Register the test-ehr
+
+1. Go to http://<DTR>:3005/register.
+   - Client Id: **app-login**
+   - Fhir Server (iss): **http://<TEST_EHR>:8080/test-ehr/r4**
+2. Click **Submit**
+3. 
 ## Run the DRLS Flow 
 1. Go to <CRD_REQUEST_GENERATOR_HOST>:3000/ehr-server/reqgen.
 2. Click **Patient Select** button in upper left.

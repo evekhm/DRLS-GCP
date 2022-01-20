@@ -12,10 +12,6 @@ $print "Building image $IMAGE:$VERSION..."
 [ -f package-lock.json ] && rm -f package-lock.json
 docker build -f Dockerfile.dev -t "$TAG" -t "$LATEST" --build-arg VERSION="$VERSION" --build-arg BUILD_TIMESTAMP="$BUILD_TIMESTAMP" .
 
-sed 's|__TEST_EHR__|'"$TEST_EHR"'|g; ' "$BIN"/db.sample.json > "$BIN"/../../../dtr/databaseData/db.json
-#docker build -f Dockerfile.dev -t "$IMAGE":"$VERSION" .
-docker build -f Dockerfile.dev -t "$TAG" -t "$LATEST" --build-arg VERSION="$VERSION" --build-arg BUILD_TIMESTAMP="$BUILD_TIMESTAMP" .
-
 $print "Created image $TAG" INFO
 
 cd "$PWD" || exit

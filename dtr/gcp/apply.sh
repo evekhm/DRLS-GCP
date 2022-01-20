@@ -12,6 +12,8 @@ gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --projec
 echo "***** Applying Deployment to Cluster $CLUSTER *****"
 cd "$GCP"/../k8s/
 
+kubectl apply -f pv.yaml
+
 sed 's|__IMAGE__|'"$IMAGE"'|g; s|__VERSION__|'"$VERSION"'|g;' deployment.sample.yaml > deployment.yaml
 kubectl apply -f deployment.yaml
 

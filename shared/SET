@@ -31,7 +31,7 @@ else
 fi
 
 # DRLS
-#REPO="gcr.io/$PROJECT_ID/"
+#REPO="gcr.io/$PROJECT_ID"
 REPO="registry.gitlab.com/evekhm/drls"
 
 OAUTH_TOKEN="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/token"

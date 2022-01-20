@@ -9,8 +9,6 @@ spec:
   selector:
     matchLabels:
       application: keycloak
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
@@ -26,7 +24,7 @@ spec:
               value: admin
             - name: KEYCLOAK_IMPORT
               value: ClientFhirServerRealm.json
-          image: IMAGE:VERSION
+          image: __IMAGE__:__VERSION__
           name: pas-dev-keycloak
           ports:
             - containerPort: 8080
