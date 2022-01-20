@@ -8,7 +8,7 @@ APPLICATION='keycloak'
 
 cd "$BIN"/../.. || exit
 VERSION=$(git log -1 --pretty=%h)
-IMAGE="$REPO/$APPLICATION"
+IMAGE="gcr.io/$PROJECT_ID/$APPLICATION"
 TAG="$IMAGE:$VERSION"
 LATEST="$IMAGE:latest"
 

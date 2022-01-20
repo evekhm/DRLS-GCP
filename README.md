@@ -27,9 +27,12 @@ Use your VSAC_API_KEY to set into system environment variable (otherwise the flo
 - Create working directory WORKDIR  and clone this repository into it:
 
 ```sh
-  export WORKDIR=priauth
-  mkdir $WORKDIR && cd $WORKDIR
   git clone https://github.com/evekhm/DRLS-GCP.git
+```
+
+Authenticate Shell Console and following prompted instructions:
+```sh
+gcloud auth login
 ```
 
 Checkout required repositories for DRLS workflow:

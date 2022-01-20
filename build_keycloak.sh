@@ -3,7 +3,6 @@ set -u # This prevents running the script if any of the variables have not been 
 set -e # Exit if error is detected during pipeline execution
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-"$DIR"/get_services.sh
 "$DIR/auth/bin/docker_build"
 "$DIR/auth/bin/docker_push"
 
