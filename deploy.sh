@@ -20,4 +20,4 @@ echo "    - Client Id        : app-login"
 echo "    - Fhir Server (iss): http://$TEST_EHR:8080/test-ehr/r4"
 echo
 echo ### Run the DRLS Flow ###
-echo "Go to $CRD_REQUEST_GENERATOR_HOST:3000/ehr-server/reqgen"
+echo "Go to http://$CRD_REQUEST_GENERATOR_HOST:3000/ehr-server/reqgen"
