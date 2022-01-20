@@ -1,4 +1,4 @@
-# The Ultimate Guide to Deploying DRLS on GCP
+# The Ultimate Guide for Deploying DRLS on GCP
 
 ## Prerequisites
 
