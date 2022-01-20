@@ -8,12 +8,12 @@ source "$DIR"/.env
 $print 'You are all Done! Use following External IPs to access deployed services'
 cat "$DIR"/.env
 
-echo ### Register the test-ehr ###
-echo "Go to $DTR:3005/register"
+$print "### Register the test-ehr ###" INFO
+echo "Go to $DTR/register"
 echo "    - Client Id        : app-login"
-echo "    - Fhir Server (iss): $TEST_EHR:8080/test-ehr/r4"
+echo "    - Fhir Server (iss): $TEST_EHR/test-ehr/r4"
 echo
-echo ### Run the DRLS Flow ###
+echo "### Run the DRLS Flow ###"
 echo "Go to $CRD_REQUEST_GENERATOR_HOST:3000/ehr-server/reqgen"
 
 
