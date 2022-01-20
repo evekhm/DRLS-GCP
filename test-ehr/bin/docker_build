@@ -7,7 +7,8 @@ source "$BIN"/SET
 
 cd "$BIN"/../../../"$APPLICATION" || exit
 
-$print "Building image $IMAGE:$VERSION ..."
+BUILD_TIMESTAMP=$( date '+%F_%H:%M:%S' )
+$print "Building image $TAG with time stamp $BUILD_TIMESTAMP."
 
 rm -rf target
 rm -rf build

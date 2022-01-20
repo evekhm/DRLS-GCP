@@ -4,17 +4,14 @@ set -e # Exit if error is detected during pipeline execution
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
 print="$BIN/../../shared/print"
-
 source "$BIN"/SET
 
-$print "Building image $IMAGE:$VERSION ..."
+BUILD_TIMESTAMP=$( date '+%F_%H:%M:%S' )
+$print "Building image $TAG with timestamp $BUILD_TIMESTAMP"
 cd "$BIN"/../../../CRD || exit
 ./gradlew clean
 
-BUILD_TIMESTAMP=$( date '+%F_%H:%M:%S' )
-#docker build -f Dockerfile.dev -t "${IMAGE}":"${VERSION}" .
 docker build -f Dockerfile.dev -t "$TAG" -t "$LATEST" --build-arg VERSION="$VERSION" --build-arg BUILD_TIMESTAMP="$BUILD_TIMESTAMP" .
-#docker tag "${IMAGE}":"${VERSION}" "${IMAGE}":latest
 
 $print "Created image $TAG" INFO
 

@@ -6,6 +6,7 @@ GCP="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN="$GCP"/../bin
 PWD=$(pwd)
 source "$BIN"/../bin/SET
+VERSION="latest"
 
 gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 
@@ -18,7 +19,7 @@ sed 's|__FHIR_SERVER__|'"$FHIR_SERVER"'|g;
     s|__CDS_SERVICE__|'"$CDS_SERVICE"'|g;' config.sample.yaml > config.yaml
 kubectl apply -f config.yaml
 
-sed 's|__IMAGE__|'"$IMAGE"'|g; s|__VERSION__|'"$VERSION"'|g;' deployment.sample.yaml > deployment.yaml
+sed 's|__IMAGE__|'"$REPO/$APPLICATION"'|g; s|__VERSION__|'"$VERSION"'|g;' deployment.sample.yaml > deployment.yaml
 kubectl apply -f deployment.yaml
 
 kubectl apply -f service.yaml

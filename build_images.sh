@@ -8,7 +8,7 @@ function build_image(){
 }
 
 build_image auth
-build_image CRD
+build_image crd
 build_image dtr
 build_image test-ehr
 build_image crd-request-generator

@@ -32,7 +32,11 @@ fi
 
 # DRLS
 #REPO="gcr.io/$PROJECT_ID"
-REPO="registry.gitlab.com/evekhm/drls"
+REPO="registry.gitlab.com/gcp-solutions/hcls/claims-modernization/epa"
+IMAGE="$REPO/$APPLICATION"
+VERSION="0.1"  #TODO Make this Part of CI/CD
+TAG="$IMAGE":"$VERSION"
+LATEST="$IMAGE":"latest"
 
 OAUTH_TOKEN="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/token"
 OAUTH_AUTHORIZE="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/auth"

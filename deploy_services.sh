@@ -28,17 +28,26 @@ function deploy_service_ip(){
 
 echo "Deploying Services ..."
 
-printf "export AUTH=http://%s\n" "$(deploy_service_ip_port auth)" > "$OUT_ENV_tmp"
+IP=$(deploy_service_ip_port auth)
+printf "export AUTH=http://%s\n" "$IP" > "$OUT_ENV_tmp"
+echo "Deployed AUTH=$IP"
 
-echo "Deployed AUTH"
-printf "export CRD=http://%s\n" "$(deploy_service_ip_port CRD)" >> "$OUT_ENV_tmp"
-echo "Deployed CRD"
-printf "export DTR=http://%s\n" "$(deploy_service_ip_port dtr)" >> "$OUT_ENV_tmp"
-echo "Deployed DTR"
-printf "export TEST_EHR=http://%s\n" "$(deploy_service_ip_port test-ehr)" >> "$OUT_ENV_tmp"
-echo "Deployed TEST_EHR"
-printf "export CRD_REQUEST_GENERATOR_HOST=http://%s\n" "$(deploy_service_ip crd-request-generator)" >> "$OUT_ENV_tmp"
-echo "Deployed CRD_REQUEST_GENERATOR_HOST"
+IP=$(deploy_service_ip_port crd)
+printf "export CRD=http://%s\n" "$IP" >> "$OUT_ENV_tmp"
+echo "Deployed CRD=$IP"
+
+IP=$(deploy_service_ip_port dtr)
+printf "export DTR=http://%s\n" "$IP" >> "$OUT_ENV_tmp"
+echo "Deployed DTR=$IP"
+
+IP=$(deploy_service_ip_port test-ehr)
+printf "export TEST_EHR=http://%s\n" "$IP" >> "$OUT_ENV_tmp"
+echo "Deployed TEST_EHR=$IP"
+
+IP=$(deploy_service_ip crd-request-generator)
+printf "export CRD_REQUEST_GENERATOR_HOST=http://%s\n" "$IP" >> "$OUT_ENV_tmp"
+echo "Deployed CRD_REQUEST_GENERATOR_HOST=$IP"
+
 mv "$OUT_ENV_tmp" "$OUT_ENV"
 
 

@@ -6,10 +6,11 @@ source "$BIN"/SET
 
 cd "$BIN" || exit
 
-$print "Building image $TAG ..."
+BUILD_TIMESTAMP=$( date '+%F_%H:%M:%S' )
+$print "Building image $TAG with timestamp $BUILD_TIMESTAMP ..."
 
 sed 's|__TEST_EHR__|'"$TEST_EHR"'|g; ' "$BIN"/ClientFhirServerRealm.sample.json > "$BIN"/ClientFhirServerRealm.json
-BUILD_TIMESTAMP=$( date '+%F_%H:%M:%S' )
+
 docker build -f Dockerfile -t "$TAG" -t "$LATEST" --build-arg VERSION="$VERSION" --build-arg BUILD_TIMESTAMP="$BUILD_TIMESTAMP" .
 
 $print "Created image $TAG" INFO

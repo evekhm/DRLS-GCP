@@ -8,7 +8,7 @@ function apply_worker(){
 }
 
 apply_worker auth
-apply_worker CRD
+apply_worker crd
 apply_worker dtr
 apply_worker test-ehr
 apply_worker crd-request-generator

@@ -7,7 +7,7 @@ function push_image(){
   "$DIR/$1/bin/docker_push"
 }
 
-push_image CRD
+push_image crd
 push_image dtr
 push_image test-ehr
 push_image crd-request-generator

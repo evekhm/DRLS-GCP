@@ -27,7 +27,7 @@ function get_service_ip(){
 source "$DIR/shared/SET"
 gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 printf "export AUTH=http://%s\n" "$(get_service_ip_port auth)" > "$OUT_ENV_tmp"
-printf "export CRD=http://%s\n" "$(get_service_ip_port CRD)" >> "$OUT_ENV_tmp"
+printf "export CRD=http://%s\n" "$(get_service_ip_port crd)" >> "$OUT_ENV_tmp"
 printf "export DTR=http://%s\n" "$(get_service_ip_port dtr)" >> "$OUT_ENV_tmp"
 printf "export TEST_EHR=http://%s\n" "$(get_service_ip_port test-ehr)" >> "$OUT_ENV_tmp"
 printf "export CRD_REQUEST_GENERATOR_HOST=http://%s\n" "$(get_service_ip crd-request-generator)" >> "$OUT_ENV_tmp"

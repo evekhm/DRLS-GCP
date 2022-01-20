@@ -2,7 +2,7 @@
 BIN=$1
 
 source "$BIN/SET"
-echo '-->' docker images "$TAG"
+
 CID=$(docker images "$TAG" --format "{{.Repository}}:{{.Tag}}")
 if [ -z "$CID" ]; then
   echo "Building Image $TAG ..."
@@ -12,3 +12,4 @@ else
 fi
 
 docker push "$TAG"
+docker push "$LATEST"

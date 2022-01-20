@@ -2,9 +2,9 @@
 BIN="$1"
 
 source "$BIN"/SET
-if docker images --format "{{.Repository}}:{{.Tag}}" | grep -q "${IMAGE}:${VERSION}"
+if docker images --format "{{.Repository}}:{{.Tag}}" | grep -q "$TAG"
 then
-  echo "Using already built image ${IMAGE}:${VERSION}"
+  echo "Using already built image $TAG"
   "$BIN"/docker_stop
 else
   "$BIN"/docker_build

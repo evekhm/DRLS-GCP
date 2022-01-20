@@ -8,7 +8,7 @@ function deploy_worker(){
 }
 
 deploy_worker auth
-deploy_worker CRD
+deploy_worker crd
 deploy_worker dtr
 deploy_worker test-ehr
 deploy_worker crd-request-generator

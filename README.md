@@ -7,6 +7,14 @@ Why?
 
 ## Prerequisites
 
+### GitLab Container Registry Access
+Currently, this flow uses Container Registry which is not Publicly Available, so special access rights and Personal Access Token needed for GitLab registry access.
+Check GitLab instructions [here](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token).
+
+
+``` shell
+docker login registry.gitlab.com -u <username> -p <token>
+```
 ### GCP Project Setup
 - Create new project in `gcct-demos` folder
 - Activate Google Cloud configuration (if working locally)
@@ -27,6 +35,7 @@ Use your VSAC_API_KEY to set into system environment variable (otherwise the flo
 - Create working directory WORKDIR  and clone this repository into it:
 
 ```sh
+  mkdir priauth-demo && cd priauth-demo
   git clone https://github.com/evekhm/DRLS-GCP.git
 ```
 

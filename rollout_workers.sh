@@ -8,7 +8,7 @@ function rollout_worker(){
 }
 
 rollout_worker auth
-rollout_worker CRD
+rollout_worker crd
 rollout_worker dtr
 rollout_worker test-ehr
 rollout_worker crd-request-generator

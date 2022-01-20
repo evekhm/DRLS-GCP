@@ -2,14 +2,16 @@
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
 
+APPLICATION='keycloak'
 source "$BIN"/../../shared/SET
 
-APPLICATION='keycloak'
+# Using the locally build image since it needs changes depending on Service Host IP
+#cd "$BIN"/../.. || exit
+#VERSION=$(git log -1 --pretty=%h)
 
-cd "$BIN"/../.. || exit
-VERSION=$(git log -1 --pretty=%h)
 IMAGE="gcr.io/$PROJECT_ID/$APPLICATION"
+VERSION=0.1
 TAG="$IMAGE:$VERSION"
 LATEST="$IMAGE:latest"
 
-cd "$PWD" || exit
+#cd "$PWD" || exit

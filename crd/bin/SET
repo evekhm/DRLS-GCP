@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-APPLICATION='crd-request-generator'
+APPLICATION='crd'
+
 source "$BIN"/../../shared/SET
+BUCKET_NAME=${PROJECT_ID}-${APPLICATION}
+BUCKET="gs://$BUCKET_NAME"

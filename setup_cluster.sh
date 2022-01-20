@@ -7,7 +7,7 @@ UTILS="$DIR"/shared
 print="$UTILS/print"
 ZIP="$DIR/CDS-Library.zip"
 
-source "$DIR"/CRD/bin/SET #CRD has BUCKET defined since it uses for Cloud Storage Access
+source "$DIR"/crd/bin/SET #CRD has BUCKET defined since it uses for Cloud Storage Access
 
 enable_project_apis() {
   APIS="compute.googleapis.com \
