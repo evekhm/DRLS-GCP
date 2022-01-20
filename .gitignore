@@ -11,3 +11,4 @@
 /crd/k8s/deployment.yaml
 /test-ehr/k8s/deployment.yaml
 /crd/k8s/serviceaccount.yaml
+/dtr/k8s/deployment.yaml
