@@ -1,28 +1,30 @@
-# DRLS-GCP
+# The Ultimate Guide for Deploying DRLS on GCP
 
 ## Prerequisites
 
 ### GitLab Container Registry Access
-Currently, this flow uses private Container Registry, so special access rights and Personal Access Token needs to be setup for GitLab. You will need to have *read_registry* permissions for the https://gitlab.com/gcp-solutions/hcls/claims-modernization/epa Project and generated Personal Access Token with *read_registry* scope.
+Currently, this flow uses private Container Registry, so special access rights and Personal Access Token is needed to be setup for GitLab. You will need to have *read_registry* permissions for the https://gitlab.com/gcp-solutions/hcls/claims-modernization/epa Project and generated Personal Access Token with *read_registry* scope.
 
 Check GitLab instructions [here](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token).
 
 ### VSAC Key
+Additionally, you must have credentials (api key) access to the **[Value Set Authority Center (VSAC)](https://vsac.nlm.nih.gov/)**. These credentials are required for allowing DRLS to pull down updates to value sets that are housed in VSAC. If you don't already have VSAC credentials, you should [create them using UMLS](https://www.nlm.nih.gov/research/umls/index.html).
+
 
 ## GCP Project Setup
 
 Create new GCP project and activate Cloud Shell.
 
-Setup env variables:
-Set PROJECT_ID to the active project:
+Set the PROJECT_ID to the project in use:
+
 ```sh
   export PROJECT_ID=$DEVSHELL_PROJECT_ID
 ```
 
-Use your VSAC_API_KEY to set into system environment variable (otherwise the flow will not work):
-For more details about getting VSAC_API_KEY check [here]()
+Use your *vsac_api_key* to set VSAC credentials (otherwise the flow will not work):
+
 ```sh
-  export VSAC_API_KEY=<your_key>
+  export VSAC_API_KEY=vsac_api_key
 ```
 
 Login into the GitLab Container Registry using generated token:
@@ -79,27 +81,31 @@ kubectl create secret generic regcred \
     --type=kubernetes.io/dockerconfigjson
 ```
 
-Now ready to get everything Deployed to GCP.
+Now everything is ready to get images deployed into the GCP cluster.
 ```sh
   DRLS-GCP/apply_workers.sh
 ```
 
+
+## Verify DRLS is working
+
+NOTE: Currently deployed applications have around five to seven minutes required for starting up. Make sure to wait for them to be ready, before trying the steps below.
+In the instructions below replace <APPLICATION> with the corresponding IP.
+  
 To see IPs for the deployed services:
 ```sh
   cat DRLS-GCP/.env
 ```
-
-In the instructions below replace <APPLICATION> with the corresponding IP.
-
+  
 ### Register the test-ehr
 
-1. Go to http://<DTR>:3005/register.
+1. Go to http://DTR/register.
    - Client Id: **app-login**
-   - Fhir Server (iss): **http://<TEST_EHR>:8080/test-ehr/r4**
+   - Fhir Server (iss): **http://TEST_EHR/test-ehr/r4**
 2. Click **Submit**
-3. 
+
 ## Run the DRLS Flow 
-1. Go to <CRD_REQUEST_GENERATOR_HOST>:3000/ehr-server/reqgen.
+1. Go to http://CRD_REQUEST_GENERATOR_HOST:3000/ehr-server/reqgen.
 2. Click **Patient Select** button in upper left.
 3. Find **William Oster** in the list of patients and click the dropdown menu next to his name.
 4. Select **E0470** in the dropdown menu.
