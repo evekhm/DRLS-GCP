@@ -1,47 +1,41 @@
 # DRLS-GCP
 
-TODO:
-profile: -Dspring.profiles.active=gcp
-Not working, needs application.yml to be set for profile.
-Why?
-
 ## Prerequisites
 
 ### GitLab Container Registry Access
 Currently, this flow uses Container Registry which is not Publicly Available, so special access rights and Personal Access Token needed for GitLab registry access.
+Generate Personal Access Token with 'read_registry' scope.
 Check GitLab instructions [here](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token).
 
+``` sh
+   docker login registry.gitlab.com -u <username> -p <token>
+```
+The login process creates or updates a config.json file that holds an authorization token required to pull images.
+View the config.json file:
+``` sh
+   cat $HOME/.docker/config.json
+```
 
-``` shell
-docker login registry.gitlab.com -u <username> -p <token>
-```
 ### GCP Project Setup
-- Create new project in `gcct-demos` folder
-- Activate Google Cloud configuration (if working locally)
+Create new GCP project and activate Cloud Shell.
+
+Setup env variables:
+Set PROJECT_ID to the active project:
 ```sh
-  gcloud auth login
-```
-- Setup env variables for PROJECT_ID
-```sh
-  export PROJECT_ID=<your_project_id>
+  export PROJECT_ID=$DEVSHELL_PROJECT_ID
 ```
 
 Use your VSAC_API_KEY to set into system environment variable (otherwise the flow will not work):
-
+For more details about getting VSAC_API_KEY check [here]()
 ```sh
   export VSAC_API_KEY=<your_key>
 ```
 
-- Create working directory WORKDIR  and clone this repository into it:
+Create demo directory and clone this repository into it:
 
 ```sh
   mkdir priauth-demo && cd priauth-demo
   git clone https://github.com/evekhm/DRLS-GCP.git
-```
-
-Authenticate Shell Console and following prompted instructions:
-```sh
-gcloud auth login
 ```
 
 Checkout required repositories for DRLS workflow:
@@ -52,28 +46,36 @@ Checkout required repositories for DRLS workflow:
 
 ## Deployment
 
-Prepare the cluster and upload CDS-Library to Cloud Storage
+Prepare the cluster and upload CDS-Library to the Cloud Storage of the Project.
+When prompted, Authorize Cloud Shell for API execution.
 
 ```sh
   DRLS-GCP/setup_cluster.sh
 ```
 
-Deploy services to get their IPs required for deployment/built configuations.
-Following command will generate `.env` file which later will be used for deployments. 
+Deploy services required for the DRLS flow into the newly created cluster to get their host IPs required for further deployment configurations.
+Following command will generate `.env` file which later is used for the deployments. 
 
 ```sh
   DRLS-GCP/deploy_services.sh
 ```
 
-Now ready to get everything Deployed to GCP.
-You will need to build/deploy keycloak image to have <TEST_EHR> service IP embedded inside.
+
+You will need to build/push locally keycloak image to have <TEST_EHR> service IP embedded into it.
 Later keycloak will be replaced with IAP for GCP.
 
 ```sh
   DRLS-GCP/build_keycloak.sh
 ```
 
+Create Cluster Secret to Pull Images from the Private Registry:
+```sh
+kubectl create secret generic regcred \
+    --from-file=.dockerconfigjson=$HOME/.docker/config.json \
+    --type=kubernetes.io/dockerconfigjson
+```
 
+Now ready to get everything Deployed to GCP.
 ```sh
   DRLS-GCP/apply_workers.sh
 ```

@@ -5,7 +5,7 @@ set -e # Exit if error is detected during pipeline execution
 GCP="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN="$GCP"/../bin
 PWD=$(pwd)
-source "$BIN"/../bin/SET
+source "$BIN"/SET
 
 gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 

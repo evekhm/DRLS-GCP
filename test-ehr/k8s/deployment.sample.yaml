@@ -50,4 +50,6 @@ spec:
               configMapKeyRef:
                 name: test-ehr-config
                 key: redirect_post_launch
+      imagePullSecrets:
+      - name: regcred
       restartPolicy: Always

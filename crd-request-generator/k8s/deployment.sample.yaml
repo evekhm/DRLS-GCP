@@ -56,4 +56,6 @@ spec:
               configMapKeyRef:
                 name: crd-request-generator-config
                 key: public_keys
+      imagePullSecrets:
+      - name: regcred
       restartPolicy: Always

@@ -32,6 +32,8 @@ spec:
               cpu: 2
               memory: 8Gi
               ephemeral-storage: 5Gi
+      imagePullSecrets:
+      - name: regcred
       volumes:
       - name: lowdb-persistent-storage
         persistentVolumeClaim:
