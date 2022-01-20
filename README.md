@@ -99,13 +99,13 @@ In the instructions below replace <APPLICATION> with the corresponding IP.
   
 ### Register the test-ehr
 
-1. Go to http://<DTR>:3005/register.
+1. Go to http://DTR/register.
    - Client Id: **app-login**
-   - Fhir Server (iss): **http://<TEST_EHR>:8080/test-ehr/r4**
+   - Fhir Server (iss): **http://TEST_EHR/test-ehr/r4**
 2. Click **Submit**
 
 ## Run the DRLS Flow 
-1. Go to <CRD_REQUEST_GENERATOR_HOST>:3000/ehr-server/reqgen.
+1. Go to http://CRD_REQUEST_GENERATOR_HOST:3000/ehr-server/reqgen.
 2. Click **Patient Select** button in upper left.
 3. Find **William Oster** in the list of patients and click the dropdown menu next to his name.
 4. Select **E0470** in the dropdown menu.
