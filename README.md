@@ -3,7 +3,7 @@
 ## Prerequisites
 
 ### GitLab Container Registry Access
-Currently, this flow uses private Container Registry, so special access rights and Personal Access Token needs to be setup for GitLab. You will need to have *read_registry* permissions for the https://gitlab.com/gcp-solutions/hcls/claims-modernization/epa Project and generated Personal Access Token with *read_registry* scope.
+Currently, this flow uses private Container Registry, so special access rights and Personal Access Token is needed to be setup for GitLab. You will need to have *read_registry* permissions for the https://gitlab.com/gcp-solutions/hcls/claims-modernization/epa Project and generated Personal Access Token with *read_registry* scope.
 
 Check GitLab instructions [here](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token).
 
@@ -15,16 +15,16 @@ Additionally, you must have credentials (api key) access to the **[Value Set Aut
 
 Create new GCP project and activate Cloud Shell.
 
-Setup env variables:
-Set PROJECT_ID to the active project:
+Set the PROJECT_ID to the project in use:
+
 ```sh
   export PROJECT_ID=$DEVSHELL_PROJECT_ID
 ```
 
-Use your VSAC_API_KEY to set into system environment variable (otherwise the flow will not work):
-For more details about getting VSAC_API_KEY check [here]()
+Use your *vsac_api_key* to set VSAC credentials (otherwise the flow will not work):
+
 ```sh
-  export VSAC_API_KEY=<your_key>
+  export VSAC_API_KEY=vsac_api_key
 ```
 
 Login into the GitLab Container Registry using generated token:
@@ -81,7 +81,7 @@ kubectl create secret generic regcred \
     --type=kubernetes.io/dockerconfigjson
 ```
 
-Now ready to get everything Deployed to GCP.
+Now everything is ready to get images deployed into the GCP cluster.
 ```sh
   DRLS-GCP/apply_workers.sh
 ```
