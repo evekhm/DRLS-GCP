@@ -13,7 +13,7 @@ echo "Go to $DTR/register"
 echo "    - Client Id        : app-login"
 echo "    - Fhir Server (iss): $TEST_EHR/test-ehr/r4"
 echo
-echo "### Run the DRLS Flow ###"
+$print "### Run the DRLS Flow ###" INFO
 echo "Go to $CRD_REQUEST_GENERATOR_HOST:3000/ehr-server/reqgen"
 
 
