@@ -13,6 +13,7 @@ apply_worker dtr
 apply_worker test-ehr
 apply_worker crd-request-generator
 
+"$DIR"/print_steps.sh
 
 
 
