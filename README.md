@@ -86,16 +86,16 @@ Now everything is ready to get images deployed into the GCP cluster.
   DRLS-GCP/apply_workers.sh
 ```
 
-To see IPs for the deployed services:
-```sh
-  cat DRLS-GCP/.env
-```
-
 
 ## Verify DRLS is working
 
 NOTE: Currently deployed applications have around five to seven minutes required for starting up. Make sure to wait for them to be ready, before trying the steps below.
 In the instructions below replace <APPLICATION> with the corresponding IP.
+  
+To see IPs for the deployed services:
+```sh
+  cat DRLS-GCP/.env
+```
   
 ### Register the test-ehr
 
