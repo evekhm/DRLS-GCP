@@ -88,7 +88,25 @@ Now everything is ready to get images deployed into the GCP cluster.
   DRLS-GCP/apply_workers.sh
 ```
 
+Wait for the pods to be created and get into Running state:
+```sh
+  kubectl get pods --watch
+```
+You should be getting five pods: 
+- crd
+- crd-request-generator
+- dtr
+- keycloak
+- test-ehr
 
+Sampel Output:
+```
+crd-5f9599cb48-jdb27                     1/1     Running   0          7m32s
+crd-request-generator-6d6fdb4994-7m4fn   1/1     Running   0          7m12s
+dtr-0                                    1/1     Running   0          7m25s
+keycloak-799c968c6f-rc2ht                1/1     Running   0          7m38s
+test-ehr-768645cdf4-ntg9t                1/1     Running   0          7m19s
+```
 ## Verify DRLS is working
 
 NOTE: Currently deployed applications have around five to seven minutes required for starting up. Make sure to wait for them to be ready, before trying the steps below.
