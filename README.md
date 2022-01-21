@@ -3,7 +3,7 @@
 ## Prerequisites
 
 ### GitLab Container Registry Access
-Currently, this flow uses private Container Registry, so special access rights and Personal Access Token is needed to be setup for GitLab. You will need to have *read_registry* permissions for the https://gitlab.com/gcp-solutions/hcls/claims-modernization/epa Project and generated Personal Access Token with *read_registry* scope.
+Currently, this flow uses private Container Registry, so special access rights and Personal Access Token is needed to be setup for GitLab. You will need to have *read_registry* permissions for the [HCLS Project](https://gitlab.com/gcp-solutions/hcls/claims-modernization/epa) and generated Personal Access Token with *read_registry* scope.
 
 Check GitLab instructions [here](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token).
 
@@ -15,12 +15,14 @@ Additionally, you must have credentials (api key) access to the **[Value Set Aut
 
 Create new GCP project and activate Cloud Shell.
 
-Set the PROJECT_ID to the project in use:
+Set the PROJECT_ID to the project in use and activate the config (replace <your_project_id> below):
 
 ```sh
-  export PROJECT_ID=$DEVSHELL_PROJECT_ID
+  export PROJECT_ID=<your_project_id>
+  gcloud config set project $PROJECT_ID 
 ```
 
+This step requires a VSAC_API_KEY. Refer to prerequisite on how to get a VSAC_API_KEY.
 Use your *vsac_api_key* to set VSAC credentials (otherwise the flow will not work):
 
 ```sh
