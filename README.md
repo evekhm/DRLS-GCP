@@ -139,3 +139,10 @@ To see IPs for the deployed services:
 10. A webpage should open in a new tab, and after a few seconds, a questionnaire should appear.
 
 Congratulations! DRLS is fully installed and ready for you to use!
+
+  ## Tear Down
+Following command will delete deployment and prevent from running resources when unwanted. 
+```sh
+  DRLS-GCP/delete_deployment.sh
+```
+
