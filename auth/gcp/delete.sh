@@ -3,8 +3,9 @@ set -u # This prevents running the script if any of the variables have not been 
 set -e # Exit if error is detected during pipeline execution
 
 GCP="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BIN="$GCP"/../bin
 PWD=$(pwd)
-source "$GCP"/../bin/SET
+source "$BIN"/SET
 
 gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 
@@ -14,16 +15,10 @@ cd "$GCP"/../k8s/ || exit
 if [ -f deployment.yaml ]; then
   kubectl delete -f deployment.yaml
 fi
-
-if [ -f config.yaml ]; then
-  kubectl delete -f config.yaml
-fi
-
-if [ -f serviceaccount.yaml ]; then
-  kubectl delete -f serviceaccount.yaml
-fi
 kubectl delete -f service.yaml
-cd "$PWD" || exit
 echo "***** Deleted deployment for $APPLICATION ! *****"
+
+cd "$PWD" || exit
+
 
 

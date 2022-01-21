@@ -10,7 +10,7 @@ source "$BIN"/SET
 
 gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 
-echo "***** Applying Deployment to Cluster $CLUSTER *****"
+echo "***** Applying  $APPLICATION deployment to Cluster $CLUSTER *****"
 cd "$GCP"/../k8s/ || exit
 
 

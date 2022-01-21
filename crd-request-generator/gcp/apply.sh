@@ -6,11 +6,10 @@ GCP="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN="$GCP"/../bin
 PWD=$(pwd)
 source "$BIN"/../bin/SET
-VERSION="latest"
 
 gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 
-echo "***** Applying Deployment to Cluster $CLUSTER *****"
+echo "***** Applying  $APPLICATION deployment to Cluster $CLUSTER *****"
 cd "$GCP"/../k8s/
 
 sed 's|__FHIR_SERVER__|'"$FHIR_SERVER"'|g;
