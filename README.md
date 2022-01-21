@@ -140,7 +140,7 @@ To see IPs for the deployed services:
 
 Congratulations! DRLS is fully installed and ready for you to use!
 
-## Tear Down
+## Tear Down 
 Following command will delete deployment and prevent from running resources when unwanted. 
 ```sh
   DRLS-GCP/delete_deployment.sh
