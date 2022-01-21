@@ -15,6 +15,6 @@ delete crd-request-generator
 
 source "$DIR"/crd/bin/SET #CRD has BUCKET defined since it uses for Cloud Storage Access
 echo "Removing CDS-Library from cloud storage ..."
-gcloud alpha storage rm "$BUCKET"
+gcloud alpha storage rm "$BUCKET"/"$DB"
 
 
