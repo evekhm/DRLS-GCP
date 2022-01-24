@@ -1,6 +1,21 @@
 # The Ultimate Guide for Deploying DRLS on GCP
 
-## Prerequisites
+## Purpose of this guide
+
+This document details the installation process for the dockerized version of the **Documentation Requirements Lookup Service (DRLS) Prior Auth Workflow** system for GCP Development. 
+Be aware that each component of DRLS has its own README where you will find more detailed documentation. This document **is not designed to replace those individual READMEs**.
+
+To setup system for Local Development follow instruction [here](SetupLocalRunOnMac.md)
+
+## Table of Contents
+- [Prerequisites](#prerequisites)~~~~
+- [GCP Project Setup](#gcpsetup)
+- [Deployment](#deployment)
+- [Verify DRLS Prior Auth is working](#verify-drls-is-working)
+- [Tear Down](#teardown)
+
+## Prerequisites  <a name="prerequisites"></a>
+
 
 ### GitLab Container Registry Access
 Currently, this flow uses private Container Registry, so special access rights and Personal Access Token is needed to be setup for GitLab. You will need to have *read_registry* permissions for the [HCLS Project](https://gitlab.com/gcp-solutions/hcls/claims-modernization/epa) and generated Personal Access Token with *read_registry* scope.
@@ -11,7 +26,7 @@ Check GitLab instructions [here](https://docs.gitlab.com/ee/user/profile/persona
 Additionally, you must have credentials (api key) access to the **[Value Set Authority Center (VSAC)](https://vsac.nlm.nih.gov/)**. These credentials are required for allowing DRLS to pull down updates to value sets that are housed in VSAC. If you don't already have VSAC credentials, you should [create them using UMLS](https://www.nlm.nih.gov/research/umls/index.html).
 
 
-## GCP Project Setup
+## GCP Project Setup <a name="gcpsetup"></a>
 
 Create new GCP project and activate Cloud Shell.
 
@@ -43,7 +58,7 @@ Create demo directory and clone this repository into it:
 
 ```sh
   mkdir priauth-demo && cd priauth-demo
-  git clone https://github.com/evekhm/DRLS-GCP.git
+  git clone https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP.git
 ```
 
 Checkout required repositories for DRLS workflow:
@@ -52,7 +67,7 @@ Checkout required repositories for DRLS workflow:
   DRLS-GCP/get_projects.sh
 ```
 
-## Deployment
+## Deployment  <a name="deployment"></a>
 
 Prepare the cluster and upload CDS-Library to the Cloud Storage of the Project.
 When prompted, Authorize Cloud Shell for API execution.
@@ -140,9 +155,10 @@ To see IPs for the deployed services:
 
 Congratulations! DRLS is fully installed and ready for you to use!
 
-## Tear Down 
+## Tear Down  <a name="teardown"></a>
 Following command will delete deployment and prevent from running resources when unwanted. 
 ```sh
   DRLS-GCP/delete_deployment.sh
 ```
+
 

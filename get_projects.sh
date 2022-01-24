@@ -4,7 +4,7 @@ set -e # Exit if error is detected during pipeline execution
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
 OUT="$DIR"/../
-GIT_BASE="https://github.com/evekhm"
+GIT_BASE="https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl"
 UTILS="$DIR"/shared
 print="$UTILS/print"
 
