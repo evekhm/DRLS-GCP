@@ -8,7 +8,7 @@ Be aware that each component of DRLS has its own README where you will find more
 To setup system for Local Development follow instruction [here](SetupLocalRunOnMac.md)
 
 ## Table of Contents
-- [Prerequisites](#prerequisites)~~~~
+- [Prerequisites](#prerequisites)
 - [GCP Project Setup](#gcpsetup)
 - [Deployment](#deployment)
 - [Verify DRLS Prior Auth is working](#verify-drls-is-working)
@@ -37,7 +37,9 @@ Set the PROJECT_ID to the project in use and activate the config (replace <your_
   gcloud config set project $PROJECT_ID 
 ```
 
-This step requires a VSAC_API_KEY. Refer to prerequisite on how to get a VSAC_API_KEY.
+> At this point, you should have credentials to access VSAC. If not, please refer to [Prerequisites](#prerequisites) for how to create these credentials and return here after you have confirmed you can access VSAC.
+> To download the full ValueSets, your VSAC account will need to be added to the CMS-DRLS author group on https://vsac.nlm.nih.gov/. You will need to request membership access from an admin. If this is not configured, you will get `org.hl7.davinci.endpoint.vsac.errors.VSACValueSetNotFoundException: ValueSet 2.16.840.1.113762.1.4.1219.62 Not Found` errors.
+
 Use your *vsac_api_key* to set VSAC credentials (otherwise the flow will not work):
 
 ```sh

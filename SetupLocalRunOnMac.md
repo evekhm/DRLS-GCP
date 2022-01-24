@@ -33,9 +33,6 @@ This guide will take you through the development environment setup for each of t
 
 Your computer must have these minimum requirements:
 - Running MacOS
-    
-    > The docker synchronization strategy used by docker-sync in this guide is designed for MacOs use. The same configuration will likely not work on Windows as the synchronization strategy used by docker-sync on windows can not handle more than 30 sync files at a time. If you are using a windows device, follow along with the alternate steps when relevant. Reference documentaion: https://docker-sync.readthedocs.io/en/latest/advanced/sync-strategies.html#
-
 - x86_64 (64-bit) or equivalent processor
     * Follow these instructions to verify your machine's compliance: https://www.macobserver.com/tips/how-to/mac-32-bit-64-bit/ 
 - At least 8 GB of RAM
@@ -72,12 +69,10 @@ Additionally, you must have credentials (api key) access for the **[Value Set Au
 2. Now clone the DRLS component repositories from GitLab:
 
     ```bash
-   
     docker login registry.gitlab.com -u <username> -p <token>
     ```
    
     ```bash
-    
     cd <drlsroot>
     git clone https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP.git DRLS-GCP
     git clone https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/CRD.git CRD
