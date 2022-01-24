@@ -12,7 +12,7 @@ data:
   google.storage.examplesPath: /Examples/
   google.storage.rulesPath: /CRD-DTR/
 
-  profile: -Dspring.profiles.active=gcp
+  profile: gcp
 
   launchUrl: __DTR__/launch
 

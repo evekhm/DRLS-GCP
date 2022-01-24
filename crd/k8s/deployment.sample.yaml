@@ -47,7 +47,7 @@ spec:
               configMapKeyRef:
                 name: crd-config
                 key: profile
-          - name: JVM_OPTS
+          - name: SPRING_PROFILES_ACTIVE
             valueFrom:
               configMapKeyRef:
                 name: crd-config
