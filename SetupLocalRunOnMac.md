@@ -65,27 +65,28 @@ Additionally, you must have credentials (api key) access for the **[Value Set Au
     `<drlsroot>` will be the base directory into which all the other components will be installed. For example, CRD will be cloned to `<drlsroot>/crd`.
 
 2. Now clone the DRLS component repositories from GitLab:
+> Currently, this flow requires special access for the GitLab Repository and Container Registry, so a Personal Access Token is needed for the setup.
+You will need to have permissions for the [HCLS Project](https://gitlab.com/gcp-solutions/hcls/claims-modernization/epa) and generated Personal Access Token with `read_registry` and `read_repository` scope.
+In case of planning on contributing back, the scope needs to include `write_registry` and `write_repository`.
 
-> Since the GitLab Repository is currently private, you will need a Persona Access Token to login and get proper access.
-> Check [here](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token) on how to generate Persona Access Token for GitLab
-    
-    ```bash
-    docker login registry.gitlab.com -u <username> -p <token>
-    ```
-   
-    ```bash
+```sh
+  export TOKEN=<your_token>
+```
+
+```bash
     cd <drlsroot>
-    git clone https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP.git DRLS-GCP
-    git clone https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/CRD.git CRD
-    git clone https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/test-ehr test-ehr
-    git clone https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd-request-generator crd-request-generator
-    git clone https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/dtr dtr
-    git clone https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/CDS-Library.git CDS-Library
+    git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd-request-generator.git
+    git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP.git DRLS-GCP
+    git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/CRD.git CRD
+    git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/test-ehr test-ehr
+    git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd-request-generator crd-request-generator
+    git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/dtr dtr
+    git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/CDS-Library.git CDS-Library
     
     cd CRD/server
-    git clone https://github.com/mcode/CDS-Library.git CDS-Library
-   ```
-The step of cloning CDS-Library into crd is required for building the crd Docker image. CDS-Library needs to be in the crd context.
+    git clone https://oauth2:$TOKEN@github.com/mcode/CDS-Library.git CDS-Library
+```
+> The step of cloning CDS-Library into crd is required for building the crd Docker image. CDS-Library needs to be in the crd context.
 ## Configure DRLS PAS
 
 ### Add VSAC credentials to your development environment
@@ -122,19 +123,6 @@ You can see a list of your pre-existing environment variables on your Mac by run
     ```bash
     source .bash_profile
     ```
-
-Alternate steps:
-1. Set "COMPOSE_PROJECT_NAME" as "pas_prod" in the .env file in the DRLS-Docker Repository 
-2. `cd ~/`
-3. Open `.bash_profile` and add the following lines at the very bottom:
-    ```bash
-    export COMPOSE_PROJECT_NAME=pas_prod
-    ```
-4. Save `.bash_profile` and complete the update to `env`: 
-    ```bash
-    source .bash_profile
-    ```
-
 
 ## Run DRLS
 
