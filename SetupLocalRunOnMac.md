@@ -53,7 +53,7 @@ Additionally, you must have credentials (api key) access for the **[Value Set Au
 2. Once the installation is complete, you should see a Docker icon on your Mac's menu bar (top of the screen). Click the icon and verify that **Docker Desktop is running.**
 3. Configure Docker to have access to enough resources. To do this, open Docker Desktop and select Settings > Resources. 
 
-    The defaults for memory at 2GB and possibly CPU as well are too low to run the entire DRLS Prior Auth workflow. If not enough resources are provided, you may notice containers unexpectedly crashing and stopping. Exact requirements for these resource values will depend on your machine. That said, as a baseline starting point, the system runs relatively smoothly at 15GB memory and 7 CPU Processors on MITRE issued Mac Devices.
+    Try setting  4 CPU and 8GB for Memory as initial starting point. If not enough resources are provided, you may notice containers unexpectedly crashing and stopping. Exact requirements for these resource values will depend on your machine. That said, as a baseline starting point, the system runs relatively smoothly at 15GB memory and 7 CPU Processors on MITRE issued Mac Devices.
 
 ## Clone DRLS 
 
@@ -130,12 +130,14 @@ You can see a list of your pre-existing environment variables on your Mac by run
 Note: Initial set up will take several minutes and spin up fans with high resource use, be patient, future boots will be much quicker, quieter, and less resource intensive 
 
 ```bash
+    cd <drlsroot>/DRLS-GCP
     docker-compose build
     docker-compose up  
 ```
 
 ### Stop application and remove all containers/volumes
 ```bash
+    cd <drlsroot>/DRLS-GCP
     docker-compose down 
     docker volume prune
 ```
