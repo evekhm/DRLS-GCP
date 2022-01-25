@@ -66,7 +66,7 @@ Additionally, you must have credentials (api key) access for the **[Value Set Au
 
 2. Now clone the DRLS component repositories from GitLab:
 > Currently, this flow requires special access for the GitLab Repository and Container Registry, so a Personal Access Token is needed for the setup.
-You will need to have permissions for the [HCLS Project](https://gitlab.com/gcp-solutions/hcls/claims-modernization/epa) and generated Personal Access Token with `read_registry` and `read_repository` scope.
+You will need to have permissions for the [HCLS Project](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl) and generated Personal Access Token with `read_registry` and `read_repository` scope.
 In case of planning on contributing back, the scope needs to include `write_registry` and `write_repository`.
 
 ```sh
