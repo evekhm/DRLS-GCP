@@ -64,10 +64,11 @@ Additionally, you must have credentials (api key) access for the **[Value Set Au
 
     `<drlsroot>` will be the base directory into which all the other components will be installed. For example, CRD will be cloned to `<drlsroot>/crd`.
 
-    Note: If you are using a different project structure from the above description, you will need to change the corresponding repo paths in docker-compose-prior-auth-dev.yml, docker-sync.yml, and docker-compose.yml
-
 2. Now clone the DRLS component repositories from GitLab:
 
+> Since the GitLab Repository is currently private, you will need a Persona Access Token to login and get proper access.
+> Check [here](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token) on how to generate Persona Access Token for GitLab
+    
     ```bash
     docker login registry.gitlab.com -u <username> -p <token>
     ```
