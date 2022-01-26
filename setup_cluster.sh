@@ -18,8 +18,17 @@ enable_project_apis() {
   gcloud services enable $APIS
 }
 
+configure_container_registry_access(){
+  gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+      --member="serviceAccount:$(gcloud projects describe "$PROJECT_ID" --format='get(projectNumber)')-compute@developer.gserviceaccount.com" \
+      --role="roles/storage.admin"
+
+#  CONTAINER_BT=gs://artifacts.${PROJECT_ID}.appspot.com/
+#  gsutil iam set gs://"${CONTAINER_BT}" serviceAccount:"${PROJECT_NUMBER}"-compute@developer.gserviceaccount.com:roles/storage.objectViewer
+}
+
 configure_cloud_build(){
-  $print 'TODO enable CLoud Build'
+  $print 'TODO enable Cloud Build'
 #  gcloud projects add-iam-policy-binding $PROJECT_ID \
 #      --member="service-$PROJECT_NUMBER@gcp-sa-cloudbuild.iam.gserviceaccount.com" \
 #      --role="roles/cloudbuild.serviceAgent"
@@ -133,6 +142,8 @@ configure_kservice_account(){
   fi
   kubectl describe serviceaccount $KSA_NAME
 }
+
+configure_container_registry_access
 
 create_CDS_Library_zip
 
