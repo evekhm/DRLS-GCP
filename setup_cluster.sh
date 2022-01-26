@@ -143,8 +143,6 @@ configure_kservice_account(){
   kubectl describe serviceaccount $KSA_NAME
 }
 
-configure_container_registry_access
-
 create_CDS_Library_zip
 
 configure_cloud_build
@@ -166,6 +164,8 @@ create_gservice_account
 create_kservice_account
 
 configure_kservice_account
+
+configure_container_registry_access
 
 
 
