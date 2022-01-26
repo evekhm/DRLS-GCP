@@ -42,11 +42,6 @@ spec:
               configMapKeyRef:
                 name: crd-config
                 key: endpoints.auth
-          - name: JAVA_OPTS
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: profile
           - name: SPRING_PROFILES_ACTIVE
             valueFrom:
               configMapKeyRef:

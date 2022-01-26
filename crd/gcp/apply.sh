@@ -23,15 +23,15 @@ sed 's|__PROJECT_ID__|'"$PROJECT_ID"'|g;
 
 kubectl apply -f config.yaml
 
+sed 's|__KSA_NAME__|'"$KSA_NAME"'|g; ' serviceaccount.sample.yaml > serviceaccount.yaml
+kubectl apply -f serviceaccount.yaml
+
 sed 's|__IMAGE__|'"$IMAGE"'|g;
  s|__VERSION__|'"$VERSION"'|g;
  s|__KSA_NAME__|'"$KSA_NAME"'|g; '  deployment.sample.yaml > deployment.yaml
 kubectl apply -f deployment.yaml
 
 kubectl apply -f service.yaml
-
-sed 's|__KSA_NAME__|'"$KSA_NAME"'|g; ' serviceaccount.sample.yaml > serviceaccount.yaml
-kubectl apply -f serviceaccount.yaml
 
 cd "$PWD" || exit
 
