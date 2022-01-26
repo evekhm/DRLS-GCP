@@ -5,7 +5,7 @@
 This document details the installation process for the dockerized version of the **Documentation Requirements Lookup Service (DRLS) Prior Auth Workflow** system for GCP Development. 
 Be aware that each component of DRLS has its own README where you will find more detailed documentation. This document **is not designed to replace those individual READMEs**.
 
-To set up system for Local Development follow instruction [here](SetupLocalRunOnMac.md)
+To set up system for Local Development follow instruction [here](SetupLocalRunOnMac.md).
 
 ## Table of Contents
 - [Prerequisites](#prerequisites)
@@ -113,16 +113,7 @@ Later keycloak will be replaced with IAP for GCP.
   DRLS-GCP/build_keycloak.sh
 ```
 
- For `Argolis` Only:
-> 
-> Following step is required for permissions to pull image form the container registry:
-```sh
-   CONTAINER_BT=gs://artifacts.${PROJECT_ID}.appspot.com/
-   gsutil iam set gs://"${CONTAINER_BT}" serviceAccount:"$(gcloud projects describe "$PROJECT_ID" --format='get(projectNumber)')"-compute@developer.gserviceaccount.com:roles/storage.objectViewer
-```
-
-
-### 4. Create and Deploy Secret for GitLab Contaienr Registry Access 
+### 4. Create and Deploy Secret for GitLab Container Registry Access 
 
 All other images (except keycloak) are released and stored in the Private GitLab container registry.
 You need to create secret to allow access to those images.
