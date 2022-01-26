@@ -171,5 +171,5 @@ Congratulations! DRLS is fully installed and ready for you to use!
 
 Now you could run the full flow locally, and chose which components to run from already build containers, or which components to run from your development environment while changing it.
 Refer to [this guide](https://github.com/evekhm/CRD/blob/master/SetupGuideForMacOS.md) on how to build/setup each component required for the development.
-Use [docker-compose.yml](docker-compose.yml]) file to comment out components which not to start using built containers and run in debug mode using development environment.
+Use [docker-compose.yml](docker-compose.yml) file to comment out components which not to start using built containers and run in debug mode using development environment.
 
