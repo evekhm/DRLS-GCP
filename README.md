@@ -122,7 +122,7 @@ Later keycloak will be replaced with IAP for GCP.
 ```
 
 
-### 5. Create and Deploy Secret for GitLab Contaienr Registry Access 
+### 4. Create and Deploy Secret for GitLab Contaienr Registry Access 
 
 All other images (except keycloak) are released and stored in the Private GitLab container registry.
 You need to create secret to allow access to those images.
@@ -144,7 +144,7 @@ kubectl create secret generic regcred \
     --type=kubernetes.io/dockerconfigjson
 ```
 
-### 6. Deploy DRLS components into the GKE
+### 5. Deploy DRLS components into the GKE
 Now everything is ready to get images (both from the GitLab and the keycloak) deployed into the GCP cluster.
 ```sh
   DRLS-GCP/apply_workers.sh
