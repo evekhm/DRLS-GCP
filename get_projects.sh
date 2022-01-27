@@ -35,6 +35,7 @@ checkout dtr gcpDev
 checkout crd-request-generator gcpDev
 checkout CDS-Library master
 checkout test-ehr gcpDev
+checkout prior-auth gcpDev
 #dtr
 #crd-request-generator
 
