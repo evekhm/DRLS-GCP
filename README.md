@@ -169,16 +169,32 @@ To see IPs for the deployed services:
 ```sh
   cat DRLS-GCP/.env
 ```
+
+Print out the `steps`:
+```sh
+  DRLS-GCP/print_steps.sh
+```
+
+Sample Output:
+```
+==> ### Register the test-ehr ###
+Go to http://34.67.137.51:3005/register
+- Client Id        : app-login
+- Fhir Server (iss): http://35.224.229.97:8080/test-ehr/r4
+
+==> ### Run the DRLS Flow ###
+Go to http://34.135.12.152:3000/ehr-server/reqgen
+```
   
 ### Register the test-ehr
 
-1. Go to http://DTR/register.
+1. Go to `<DTR>`/register.
    - Client Id: **app-login**
-   - Fhir Server (iss): **http://TEST_EHR/test-ehr/r4**
+   - Fhir Server (iss): **`<TEST_EHR>`/test-ehr/r4**
 2. Click **Submit**
 
 ## Run the DRLS Flow 
-1. Go to http://CRD_REQUEST_GENERATOR_HOST:3000/ehr-server/reqgen.
+1. Go to `<CRD_REQUEST_GENERATOR_HOST:3000>`/ehr-server/reqgen.
 2. Click **Patient Select** button in upper left.
 3. Find **William Oster** in the list of patients and click the dropdown menu next to his name.
 4. Select **E0470** in the dropdown menu.
