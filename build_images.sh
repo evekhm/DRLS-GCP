@@ -11,6 +11,7 @@ build_image auth
 build_image crd
 build_image dtr
 build_image test-ehr
+build_image prior-auth
 build_image crd-request-generator
 
 

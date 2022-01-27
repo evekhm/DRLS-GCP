@@ -11,6 +11,7 @@ rollout_worker auth
 rollout_worker crd
 rollout_worker dtr
 rollout_worker test-ehr
+rollout_worker prior-auth
 rollout_worker crd-request-generator
 
 

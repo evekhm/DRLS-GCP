@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    application: prior-auth
+  name: prior-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      application: prior-auth
+  template:
+    metadata:
+      labels:
+        application: prior-auth
+    spec:
+      containers:
+        - image: __IMAGE__:__VERSION__
+          name: prior-auth
+          ports:
+            - containerPort: 9015
+          resources: {}
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always

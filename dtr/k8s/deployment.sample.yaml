@@ -17,6 +17,12 @@ spec:
     spec:
       containers:
         - image: __IMAGE__:__VERSION__
+          env:
+          - name: REACT_APP_PROVIDER_LOGO
+            valueFrom:
+              configMapKeyRef:
+                name: dtr-config
+                key: provider_logo
           name: dtr
           ports:
             - containerPort: 3005

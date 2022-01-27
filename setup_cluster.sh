@@ -143,8 +143,6 @@ configure_kservice_account(){
   kubectl describe serviceaccount $KSA_NAME
 }
 
-create_CDS_Library_zip
-
 configure_cloud_build
 
 enable_project_apis

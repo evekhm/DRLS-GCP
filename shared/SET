@@ -32,9 +32,9 @@ fi
 
 # DRLS
 #REPO="gcr.io/$PROJECT_ID"
-REPO="registry.gitlab.com/gcp-solutions/hcls/claims-modernization/epa"
+REPO="registry.gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl"
 IMAGE="$REPO/$APPLICATION"
-VERSION="0.1"  #TODO Make this Part of CI/CD
+VERSION="0.2"  #TODO Make this Part of CI/CD
 TAG="$IMAGE":"$VERSION"
 LATEST="$IMAGE":"latest"
 

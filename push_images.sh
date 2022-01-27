@@ -10,6 +10,7 @@ function push_image(){
 push_image crd
 push_image dtr
 push_image test-ehr
+push_image prior-auth
 push_image crd-request-generator
 
 

@@ -59,17 +59,32 @@ services:
       - /home/node/app/db-data
 
 
-  # Create crd container
+  # Create dtr container
   dtr: # Name of our service
     build:
       context: ../dtr
       dockerfile: Dockerfile.dev
+    environment:
+      PROVIDER_LOGO: "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350"
     container_name: dtr
     ports: # Port binding to host from docker container
       - "3005:3005" # Bind port 3000 of host to 3000 of container
     volumes:
       - /home/node/app/node_modules
       - /home/node/app/databaseData
+
+  # Create crd container
+  prior-auth: # Name of our service
+    build:
+      context: ../prior-auth
+      dockerfile: Dockerfile.dev
+    container_name: prior-auth
+    ports: # Port binding to host from docker container
+    - "9015:9015" # Bind port 3000 of host to 3000 of container
+    volumes:
+    - /prior-auth/.gradle
+    - /prior-auth/build
+    - /prior-auth/bin
 
 volumes:
   keycloak-data:

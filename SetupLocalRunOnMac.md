@@ -82,6 +82,7 @@ In case of planning on contributing back, the scope needs to include `write_regi
     git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd-request-generator crd-request-generator
     git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/dtr dtr
     git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/CDS-Library.git CDS-Library
+    git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/prior-auth.git prior-auth
     
     cd CRD/server
     git clone https://oauth2:$TOKEN@github.com/mcode/CDS-Library.git CDS-Library

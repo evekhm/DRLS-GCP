@@ -11,6 +11,7 @@ deploy_worker auth
 deploy_worker crd
 deploy_worker dtr
 deploy_worker test-ehr
+deploy_worker prior-auth
 deploy_worker crd-request-generator
 
 

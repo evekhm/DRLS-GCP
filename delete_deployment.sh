@@ -11,6 +11,7 @@ delete auth
 delete crd
 delete dtr
 delete test-ehr
+delete prior-auth
 delete crd-request-generator
 
 source "$DIR"/crd/bin/SET #CRD has BUCKET defined since it uses for Cloud Storage Access

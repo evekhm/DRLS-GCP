@@ -24,6 +24,7 @@ function get_service_ip(){
   echo "$IP"
 }
 
+APPLICATION=''
 source "$DIR/shared/SET"
 gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 printf "export AUTH=http://%s\n" "$(get_service_ip_port auth)" > "$OUT_ENV_tmp"
@@ -38,5 +39,6 @@ echo "Generated $OUT_ENV with service IP parameters"
 cat "$OUT_ENV"
 
 
+"$DIR/print_steps"
 
 

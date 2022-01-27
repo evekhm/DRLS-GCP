@@ -48,6 +48,10 @@ IP=$(deploy_service_ip crd-request-generator)
 printf "export CRD_REQUEST_GENERATOR_HOST=http://%s\n" "$IP" >> "$OUT_ENV_tmp"
 echo "Deployed CRD_REQUEST_GENERATOR_HOST=$IP"
 
+IP=$(deploy_service_ip_port prior-auth)
+printf "export PRIOR_AUTH=http://%s\n" "$IP" >> "$OUT_ENV_tmp"
+echo "Deployed PRIOR_AUTH=$IP"
+
 mv "$OUT_ENV_tmp" "$OUT_ENV"
 
 

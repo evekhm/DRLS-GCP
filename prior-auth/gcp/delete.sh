@@ -9,20 +9,17 @@ source "$BIN"/SET
 
 gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 
-echo "***** Applying  $APPLICATION  Deployment to Cluster $CLUSTER *****"
-cd "$GCP"/../k8s/
+echo "***** Deleting $APPLICATION deployment at cluster $CLUSTER *****"
+cd "$GCP"/../k8s/ || exit
 
-kubectl apply -f pv.yaml
-kubectl apply -f config.yaml
+if [ -f deployment.yaml ]; then
+  kubectl delete -f deployment.yaml
+fi
 
-sed 's|__IMAGE__|'"$IMAGE"'|g; s|__VERSION__|'"$VERSION"'|g;' deployment.sample.yaml > deployment.yaml
-kubectl apply -f deployment.yaml
-
-kubectl apply -f service.yaml
-
+kubectl delete -f service.yaml
 
 cd "$PWD" || exit
 
-echo "***** DEPLOYED! *****"
+echo "***** Deleted deployment for $APPLICATION ! *****"
 
 

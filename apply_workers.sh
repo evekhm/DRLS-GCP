@@ -12,6 +12,7 @@ apply_worker crd
 apply_worker dtr
 apply_worker test-ehr
 apply_worker crd-request-generator
+apply_worker prior-auth
 
 "$DIR"/print_steps.sh
 
