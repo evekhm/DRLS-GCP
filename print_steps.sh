@@ -5,16 +5,45 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 print=$DIR/shared/print
 
 source "$DIR"/.env
-$print 'You are all Done! Use following External IPs to access deployed services'
-cat "$DIR"/.env
+$print 'You are all Done! Use following External IPs to access deployed services' INFO
 
+$print "keycloak service     : $AUTH"
+$print "CRD service          : $CRD"
+echo   "                           $CRD/data - should reveal a few rule sets with names such as "Hospital Beds" and "Non Emergency Ambulance Transportation.""
+$print "Test-ehr service     : $TEST_EHR"
+echo   "                           $TEST_EHR/test-ehr/r4/Patient should display a 200 response with a patient resource"
+$print "crd-request-generator: $CRD_REQUEST_GENERATOR_HOST:3000/ehr-server/reqgen"
+$print "dtr                  : $DTR"
+echo "                           $DTR/register should show you a simple web page with a form to register a Client ID and Fhir Server."
+
+bold=$(tput bold)
+orange=$(tput setaf 166)
+normal=$(tput sgr0)
+BG_BLUE="$(tput setab 4)"
+FG_YELLOW="$(tput setaf 3)"
+FG_WHITE="$(tput setaf 7)"
+
+echo
+echo "********************************* DRLS FLOW STEPS *********************************"
 $print "### Register the test-ehr ###" INFO
 echo "Go to $DTR/register"
 echo "    - Client Id        : app-login"
 echo "    - Fhir Server (iss): $TEST_EHR/test-ehr/r4"
 echo
 $print "### Run the DRLS Flow ###" INFO
-echo "Go to $CRD_REQUEST_GENERATOR_HOST:3000/ehr-server/reqgen"
+echo "1. Go to $CRD_REQUEST_GENERATOR_HOST:3000/ehr-server/reqgen"
+echo "2. Click ${FG_YELLOW}Patient Select${normal} button in upper left."
+echo "3. Find ${FG_YELLOW}William Oster${normal} in the list of patients and click the dropdown menu next to his name."
+echo "4. Select ${FG_YELLOW}E0470${normal} in the dropdown menu."
+echo "5. Click anywhere in the row for William Oster."
+echo "6. Click ${FG_WHITE}Submit${normal} at the bottom of the page."
+echo "7. After several seconds you should receive a response in the form of two **CDS cards**:"
+    echo " - ${BG_BLUE}Respiratory Assist Device${normal}"
+    echo " - ${BG_BLUE}Airway Pressure Device${normal}"
+echo "8. Select ${FG_WHITE}Order Form${normal} on one of those CDS cards."
+echo "9. If you are asked for login credentials, use ${orange}${bold}alice$normal for username and ${orange}${bold}alice$normal for password."
+echo "10. A webpage should open in a new tab, and after a few seconds, a questionnaire should appear."
+echo "**************************************************************************************"
 
 
 
