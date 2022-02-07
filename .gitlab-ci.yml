@@ -1,0 +1,31 @@
+variables:
+  # Use TLS https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
+  DOCKER_IMAGE_VERSION: 19.03.1
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: "/certs"
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:test_${CI_COMMIT_SHORT_SHA}
+  CONTAINER_LATEST_IMAGE: $CI_REGISTRY_IMAGE:latest
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:release_${CI_COMMIT_SHORT_SHA}
+  STAGING_ENABLED: "1"
+  POSTGRES_ENABLED: "0"
+  ROLLOUT_RESOURCE_TYPE: deployment
+  INCREMENTAL_ROLLOUT_ENABLED: "0"
+  #KUBE_CONTEXT: "gcp-solutions/hcls/gke-deploy-env:gitlab-agent"
+  KUBE_CONTEXT: "gcp-solutions/hcls/claims-modernization/gitlab-gke:gke"
+  #KUBE_INGRESS_BASE_DOMAIN: 'papanca.com'
+  CI_KUBERNETES_ACTIVE: 'true'
+  KUBE_NAMESPACE: "${CI_PROJECT_ID}-${CI_ENVIRONMENT_SLUG}"
+
+stages:
+  - deploy  # dummy stage to follow the template guidelines
+
+deploy:
+  stage: deploy
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
+  script:
+  - echo "deployment is triggered by $ENVIRONMENT"    
+#   - kubectl config use-context $KUBE_CONTEXT
+#   - kubectl get pods
+#   - kubectl apply -f ${CI_PROJECT_DIR}/k8s/*
