@@ -20,8 +20,12 @@ deploy:
     name: bitnami/kubectl:latest
     entrypoint: [""]
   script:
-  - echo "deployment is triggered by $ENVIRONMENT, ${CI_PROJECT_ID}, ${CI_ENVIRONMENT_SLUG}" 
+  - echo "deployment is triggered by $APPLICATION" 
   - kubectl config use-context $KUBE_CONTEXT
-  - ${CI_PROJECT_DIR}/deploy_services.sh   
+  - ${CI_PROJECT_DIR}/deploy_services.sh
+  - if [ -n "$APPLICATION" ]; then
+      ${CI_PROJECT_DIR}/${APPLICATION}/gcp/apply.sh  
+    fi
+
 #   - kubectl get pods
 #   - kubectl apply -f ${CI_PROJECT_DIR}/k8s/*
