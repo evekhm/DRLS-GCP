@@ -8,6 +8,7 @@ variables:
   KUBE_CONTEXT: "gcp-solutions/hcls/claims-modernization/gitlab-gke:gke"
   #KUBE_INGRESS_BASE_DOMAIN: 'papanca.com'
   CI_KUBERNETES_ACTIVE: 'true'
+  CI_ENVIRONMENT_SLUG: "test"
   KUBE_NAMESPACE: "${CI_PROJECT_ID}-${CI_ENVIRONMENT_SLUG}"
   PROJECT_ID: "pri-auth-test"
 
@@ -22,7 +23,7 @@ deploy:
   script:
   - echo "deployment is triggered by $APPLICATION, executing on ${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, ${CF_BRANCH_TAG_NORMALIZED}"
   - kubectl config use-context $KUBE_CONTEXT
-  - kubectl describe namespace "$KUBE_NAMESPACE" || kubectl create namespace "$KUBE_NAMESPACE"
+  - kubectl get namespace "$KUBE_NAMESPACE" || kubectl create namespace "$KUBE_NAMESPACE"
   - kubectl config set-context --current --namespace=$KUBE_NAMESPACE
   - ${CI_PROJECT_DIR}/deploy_services.sh
   - |
