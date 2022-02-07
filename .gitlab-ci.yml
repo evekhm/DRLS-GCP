@@ -9,6 +9,7 @@ variables:
   #KUBE_INGRESS_BASE_DOMAIN: 'papanca.com'
   CI_KUBERNETES_ACTIVE: 'true'
   KUBE_NAMESPACE: "${CI_PROJECT_ID}-${CI_ENVIRONMENT_SLUG}"
+  PROJECT_ID: "pri-auth-test"
 
 stages:
   - deploy  # dummy stage to follow the template guidelines
