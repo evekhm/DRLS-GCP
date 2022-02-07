@@ -20,12 +20,18 @@ deploy:
     name: bitnami/kubectl:latest
     entrypoint: [""]
   script:
-  - echo "deployment is triggered by $APPLICATION" 
+  - echo "deployment is triggered by $APPLICATION, executing on ${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, ${CF_BRANCH_TAG_NORMALIZED}"
   - kubectl config use-context $KUBE_CONTEXT
+  - kubectl describe namespace "$KUBE_NAMESPACE" || kubectl create namespace "$KUBE_NAMESPACE"
+  - kubectl config set-context --current --namespace=$KUBE_NAMESPACE
   - ${CI_PROJECT_DIR}/deploy_services.sh
-  - if [ -n "$APPLICATION" ]; then
-      ${CI_PROJECT_DIR}/${APPLICATION}/gcp/apply.sh  
+  - |
+    if [ -n "$APPLICATION" ]; then
+      echo "Using the image $IMAGE built by the "$APPLICATION" pipeline"
+      "${CI_PROJECT_DIR}/$APPLICATION/gcp/apply.sh"
+    else
+      echo "Internal Changes to manifest files, need to re-deploy all applications with images corresponding to this branch"
+      echo "${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, ${CF_BRANCH_TAG_NORMALIZED}"
     fi
-
 #   - kubectl get pods
 #   - kubectl apply -f ${CI_PROJECT_DIR}/k8s/*
