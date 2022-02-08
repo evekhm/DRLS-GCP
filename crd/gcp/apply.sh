@@ -6,7 +6,7 @@ BIN="$GCP"/../bin
 PWD=$(pwd)
 source "$BIN"/SET
 
-gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
+# gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 
 echo "***** Configuring cluster $CLUSTER for $APPLICATION application *****"
 cd "$GCP"/../k8s/
