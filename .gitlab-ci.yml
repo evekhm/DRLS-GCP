@@ -5,37 +5,44 @@ variables:
   ROLLOUT_RESOURCE_TYPE: deployment
   INCREMENTAL_ROLLOUT_ENABLED: "0"
 
-  DEMO_KUBE_CONTEXT: "gcp-solutions/hcls/claims-modernization/gitlab-gke:demo"
-  DEV_KUBE_CONTEXT: "gcp-solutions/hcls/claims-modernization/gitlab-gke:development"
-  KUBE_CONTEXT: "gcp-solutions/hcls/claims-modernization/gitlab-gke:gke"
-
-  #KUBE_INGRESS_BASE_DOMAIN: 'papanca.com'
+  # Pre-req: Project with Cluster + Agent + Ingress are setup.
+  # To be changed depending on the deployment target environment
+  # 'main' branch to be deployed into the 'demo' environment
+  KUBE_CONTEXT: "gcp-solutions/hcls/claims-modernization/gitlab-gke:development"
+  #KUBE_INGRESS_BASE_DOMAIN: 'papanca.com' #TODO
 
   CI_KUBERNETES_ACTIVE: 'true'
-  CI_ENVIRONMENT_SLUG: "test"
-  KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}-${CI_ENVIRONMENT_SLUG}"
-  #KUBE_NAMESPACE: "${CI_PROJECT_ID}-${CI_ENVIRONMENT_SLUG}"
+  KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}"
 
   PROJECT_ID: "pri-auth-test"
   CRD_IMAGE_TAG: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/crd/gcpdev:latest"
 
 stages:
   - deploy
+  - cleanup
 
-deploy to production:
-  environment: production
+
+gcloud deploy:
+  environment: $CI_COMMIT_REF_SLUG
+  stage: deploy
+  image: google/cloud-sdk
+  script:
+  - ${CI_PROJECT_DIR}/setup_cluster.sh
+
+deploy to gke:
+  environment: $CI_COMMIT_REF_SLUG
   stage: deploy
   image:
     name: bitnami/kubectl:latest
     entrypoint: [""]
   script:
-  - echo "deployment is triggered by $APPLICATION, executing on ${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, ${CI_BRANCH_TAG_NORMALIZED}"
   - kubectl config use-context $KUBE_CONTEXT
   - kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"
   - kubectl config set-context --current --namespace=$KUBE_NAMESPACE
   - ${CI_PROJECT_DIR}/deploy_services.sh
   - |
     if [ -n "$APPLICATION" ]; then
+      echo "deployment is triggered by the $APPLICATION, executing on ${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, ${CI_BRANCH_TAG_NORMALIZED}"
       echo "Using the image $IMAGE_TAG built by the "$APPLICATION" pipeline"
       IMAGE_TAG=$IMAGE_TAG bash "${CI_PROJECT_DIR}/$APPLICATION/gcp/apply.sh"
     else
@@ -45,3 +52,12 @@ deploy to production:
     fi
 #   - kubectl get pods
 #   - kubectl apply -f ${CI_PROJECT_DIR}/k8s/*
+
+gcloud destroy:
+  stage: delete
+  image: google/cloud-sdk
+  when: manual
+  script:
+  - echo $SERVICE_ACCOUNT | base64 -d > ~/encoded_serviceaccount.json
+  - gcloud auth activate-service-account --key-file ~/encoded_serviceaccount.json
+  - gcloud container clusters delete cluster-for-simple-app --zone us-central1-a --project western-trilogy-254811 --quiet
