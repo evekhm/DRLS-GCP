@@ -16,7 +16,7 @@ variables:
   KUBE_NAMESPACE: "${CI_PROJECT_ID}-${CI_ENVIRONMENT_SLUG}"
 
   PROJECT_ID: "pri-auth-test"
-  CRD_IMAGE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/crd/gcpDev:latest"
+  CRD_IMAGE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/crd/$CI_COMMIT_REF_SLUG:latest"
 
 stages:
   - deploy
