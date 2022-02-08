@@ -18,13 +18,14 @@ variables:
   CRD_IMAGE_TAG: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/crd/gcpdev:latest"
 
 stages:
+  - prepare
   - deploy
   - cleanup
 
 
-gcloud deploy:
+prepare cluster:
   environment: $CI_COMMIT_REF_SLUG
-  stage: deploy
+  stage: prepare
   image: google/cloud-sdk
   script:
   - ${CI_PROJECT_DIR}/setup_cluster.sh
