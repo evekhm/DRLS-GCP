@@ -54,10 +54,8 @@ deploy to gke:
 #   - kubectl apply -f ${CI_PROJECT_DIR}/k8s/*
 
 gcloud destroy:
-  stage: delete
+  stage: cleanup
   image: google/cloud-sdk
   when: manual
   script:
-  - echo $SERVICE_ACCOUNT | base64 -d > ~/encoded_serviceaccount.json
-  - gcloud auth activate-service-account --key-file ~/encoded_serviceaccount.json
-  - gcloud container clusters delete cluster-for-simple-app --zone us-central1-a --project western-trilogy-254811 --quiet
+  - "${CI_PROJECT_DIR}/delete_deployments.sh"
