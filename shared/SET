@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 export USE_GKE_GCLOUD_AUTH_PLUGIN=False
 UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ENV="$UTILS/../.env"
@@ -33,7 +32,7 @@ fi
 REPO="registry.gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl"
 IMAGE="$REPO/$APPLICATION"
 
-if [ -z "$IMAGE_TAG" ]; then
+if [[ -z ${IMAGE_TAG} ]]; then
   IMAGE_TAG="$IMAGE:latest"
 fi
 

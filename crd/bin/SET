@@ -7,6 +7,9 @@ source "$BIN"/../../shared/SET
 BUCKET_NAME=${PROJECT_ID}-${APPLICATION}
 BUCKET="gs://$BUCKET_NAME"
 
-if [[ -v CRD_IMAGE_TAG ]]; then
-    IMAGE_TAG=$CRD_IMAGE_TAG
+if [[ -z ${CRD_IMAGE_TAG} ]]; then
+  :
+else
+  echo "Using CRD_IMAGE_TAG=$CRD_IMAGE_TAG as IMAGE_TAG"
+  IMAGE_TAG=$CRD_IMAGE_TAG
 fi
