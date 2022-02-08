@@ -18,17 +18,17 @@ variables:
   CRD_IMAGE_TAG: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/crd/gcpdev:latest"
 
 stages:
-  - prepare
+  #- prepare # TODO now doing this manually on cluster, since special service account is needed
   - deploy
   - cleanup
 
 
-prepare cluster:
-  environment: $CI_COMMIT_REF_SLUG
-  stage: prepare
-  image: google/cloud-sdk
-  script:
-  - ${CI_PROJECT_DIR}/setup_cluster.sh
+#prepare cluster:
+#  environment: $CI_COMMIT_REF_SLUG
+#  stage: prepare
+#  image: google/cloud-sdk
+#  script:
+#  - ${CI_PROJECT_DIR}/setup_cluster.sh
 
 deploy to gke:
   environment: $CI_COMMIT_REF_SLUG
