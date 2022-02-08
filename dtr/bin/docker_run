@@ -4,6 +4,5 @@ PWD=$(pwd)
 source "$BIN"/SET
 
 "$UTILS/docker_prepare" "$BIN"
-
-echo "Running docker container $TAG for application $APPLICATION"
-docker run --rm -d -p 3005:3005 -e REACT_APP_PROVIDER_LOGO="https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350" --label "$APPLICATION"  "$TAG"
+echo "Running docker container $IMAGE_TAG for application $APPLICATION"
+docker run --rm -d -p 3005:3005 --label "$APPLICATION"  "$IMAGE_TAG"

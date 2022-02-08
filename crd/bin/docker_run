@@ -6,13 +6,13 @@ UTILS="$BIN"/../../shared
 source "$BIN"/SET
 
 "$UTILS/docker_prepare" "$BIN"
-
-echo "Running docker container $TAG for application $APPLICATION"
+TAG="$IMAGE:$VERSION"
+echo "Running docker container $IMAGE_TAG for application $APPLICATION"
 
 docker run --rm -d -p 8090:8090 \
   --env GOOGLE_APPLICATION_CREDENTIALS=/usr/keys\
   --env VSAC_API_KEY="$VSAC_API_KEY" \
   --label "$APPLICATION" \
-  "$TAG"
+  "$IMAGE_TAG"
 
 docker ps --filter label="$APPLICATION" --format={{.Ports}}

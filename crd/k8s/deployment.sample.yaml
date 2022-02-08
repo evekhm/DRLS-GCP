@@ -87,7 +87,7 @@ spec:
               configMapKeyRef:
                 name: crd-config
                 key: vsac_api_key
-          image: __IMAGE__:__VERSION__
+          image: __IMAGE_TAG__
           name: crd
           ports:
             - containerPort: 8090

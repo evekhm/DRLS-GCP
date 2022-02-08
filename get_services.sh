@@ -31,6 +31,7 @@ printf "export AUTH=http://%s\n" "$(get_service_ip_port auth)" > "$OUT_ENV_tmp"
 printf "export CRD=http://%s\n" "$(get_service_ip_port crd)" >> "$OUT_ENV_tmp"
 printf "export DTR=http://%s\n" "$(get_service_ip_port dtr)" >> "$OUT_ENV_tmp"
 printf "export TEST_EHR=http://%s\n" "$(get_service_ip_port test-ehr)" >> "$OUT_ENV_tmp"
+printf "export PRIOR_AUTH=http://%s\n" "$(get_service_ip_port prior-auth)" >> "$OUT_ENV_tmp"
 printf "export CRD_REQUEST_GENERATOR_HOST=http://%s\n" "$(get_service_ip crd-request-generator)" >> "$OUT_ENV_tmp"
 mv "$OUT_ENV_tmp" "$OUT_ENV"
 
@@ -39,6 +40,6 @@ echo "Generated $OUT_ENV with service IP parameters"
 cat "$OUT_ENV"
 
 
-"$DIR/print_steps"
+"$DIR/print_steps.sh"
 
 

@@ -7,6 +7,6 @@ source "$DIR"/SET
 cd "$DIR"/../../../"$APPLICATION" || exit
 VERSION=$(git log -1 --pretty=%h)
 TAG="$IMAGE:$VERSION"
-echo "$TAG"
+echo "$IMAGE_TAG"
 
 cd "$PWD" || exit

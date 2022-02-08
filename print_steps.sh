@@ -15,6 +15,7 @@ echo   "                           $TEST_EHR/test-ehr/r4/Patient should display 
 $print "crd-request-generator: $CRD_REQUEST_GENERATOR_HOST:3000/ehr-server/reqgen"
 $print "dtr                  : $DTR"
 echo "                           $DTR/register should show you a simple web page with a form to register a Client ID and Fhir Server."
+$print "prior-auth           : $DTR"
 
 bold=$(tput bold)
 orange=$(tput setaf 166)

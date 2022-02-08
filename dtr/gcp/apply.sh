@@ -15,7 +15,7 @@ cd "$GCP"/../k8s/
 kubectl apply -f pv.yaml
 kubectl apply -f config.yaml
 
-sed 's|__IMAGE__|'"$IMAGE"'|g; s|__VERSION__|'"$VERSION"'|g;' deployment.sample.yaml > deployment.yaml
+sed 's|__IMAGE_TAG__|'"$IMAGE_TAG"'|g;' deployment.sample.yaml > deployment.yaml
 kubectl apply -f deployment.yaml
 
 kubectl apply -f service.yaml

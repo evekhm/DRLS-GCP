@@ -4,35 +4,42 @@ variables:
   POSTGRES_ENABLED: "0"
   ROLLOUT_RESOURCE_TYPE: deployment
   INCREMENTAL_ROLLOUT_ENABLED: "0"
-  #KUBE_CONTEXT: "gcp-solutions/hcls/gke-deploy-env:gitlab-agent"
+
+  DEMO_KUBE_CONTEXT: "gcp-solutions/hcls/claims-modernization/gitlab-gke:demo"
+  DEV_KUBE_CONTEXT: "gcp-solutions/hcls/claims-modernization/gitlab-gke:development"
   KUBE_CONTEXT: "gcp-solutions/hcls/claims-modernization/gitlab-gke:gke"
+
   #KUBE_INGRESS_BASE_DOMAIN: 'papanca.com'
+
   CI_KUBERNETES_ACTIVE: 'true'
   CI_ENVIRONMENT_SLUG: "test"
   KUBE_NAMESPACE: "${CI_PROJECT_ID}-${CI_ENVIRONMENT_SLUG}"
+
   PROJECT_ID: "pri-auth-test"
+  CRD_IMAGE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/crd/gcpDev:latest"
 
 stages:
-  - deploy  # dummy stage to follow the template guidelines
+  - deploy
 
-deploy:
+deploy to production:
+  environment: production
   stage: deploy
   image:
     name: bitnami/kubectl:latest
     entrypoint: [""]
   script:
-  - echo "deployment is triggered by $APPLICATION, executing on ${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, ${CF_BRANCH_TAG_NORMALIZED}"
+  - echo "deployment is triggered by $APPLICATION, executing on ${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, ${CI_BRANCH_TAG_NORMALIZED}"
   - kubectl config use-context $KUBE_CONTEXT
-  - kubectl get namespace "$KUBE_NAMESPACE" || kubectl create namespace "$KUBE_NAMESPACE"
+  - kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"
   - kubectl config set-context --current --namespace=$KUBE_NAMESPACE
   - ${CI_PROJECT_DIR}/deploy_services.sh
   - |
     if [ -n "$APPLICATION" ]; then
-      echo "Using the image $IMAGE built by the "$APPLICATION" pipeline"
-      "${CI_PROJECT_DIR}/$APPLICATION/gcp/apply.sh"
+      echo "Using the image $IMAGE_TAG built by the "$APPLICATION" pipeline"
+      IMAGE_TAG=$IMAGE_TAG bash "${CI_PROJECT_DIR}/$APPLICATION/gcp/apply.sh"
     else
       echo "Internal Changes to manifest files, need to re-deploy all applications with images corresponding to this branch"
-      echo "${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, ${CF_BRANCH_TAG_NORMALIZED}"
+      echo "${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, $ ${CF_BRANCH_TAG_NORMALIZED}:latest"
     fi
 #   - kubectl get pods
 #   - kubectl apply -f ${CI_PROJECT_DIR}/k8s/*

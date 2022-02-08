@@ -32,9 +32,10 @@ fi
 #REPO="gcr.io/$PROJECT_ID"
 REPO="registry.gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl"
 IMAGE="$REPO/$APPLICATION"
-VERSION="0.2"  #TODO Make this Part of CI/CD
-TAG="$IMAGE":"$VERSION"
-LATEST="$IMAGE":"latest"
+
+if [ -z "$IMAGE_TAG" ]; then
+  IMAGE_TAG="$IMAGE:latest"
+fi
 
 OAUTH_TOKEN="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/token"
 OAUTH_AUTHORIZE="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/auth"
@@ -44,9 +45,6 @@ if [ -n "$CRD_REQUEST_GENERATOR_HOST" ]; then
   CRD_REQUEST_GENERATOR="${CRD_REQUEST_GENERATOR_HOST}:3000"
   PUBLIC_KEYS="${CRD_REQUEST_GENERATOR_HOST}:3001/public_keys"
 fi
-
-
-
 
 #For when running locally from IDEA to overwrite properties
 export AUTH_REDIRECT_HOST=$TEST_EHR

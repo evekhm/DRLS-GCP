@@ -8,4 +8,4 @@ source "$BIN"/SET
 
 echo "Running docker container $IMG_TAG for application $APPLICATION"
 docker run -d -p 3000:3000 -p 3001:3001 --env-file "$BIN"/.env --label "$APPLICATION"  \
-  -v /home/node/app/node_modules -v /home/node/app/databaseData "$IMAGE:$VERSION"
+  -v /home/node/app/node_modules -v /home/node/app/databaseData "$IMAGE_TAG"

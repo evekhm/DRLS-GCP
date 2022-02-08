@@ -2,14 +2,16 @@
 BIN=$1
 
 source "$BIN/SET"
+TAG="$IMAGE":"$VERSION"
+LATEST="$IMAGE":"latest"
 
-CID=$(docker images "$TAG" --format "{{.Repository}}:{{.Tag}}")
+CID=$(docker images "$IMAGE_TAG" --format "{{.Repository}}:{{.Tag}}")
 if [ -z "$CID" ]; then
-  echo "Building Image $TAG ..."
+  echo "Building Image $IMAGE_TAG ..."
   "$BIN/docker_build"
 else
-  echo "Using already built image  $TAG ..."
+  echo "Using already built image  $IMAGE_TAG ..."
 fi
 
-docker push "$TAG"
+docker push "$IMAGE_TAG"
 docker push "$LATEST"

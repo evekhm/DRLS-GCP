@@ -7,7 +7,7 @@ source "$BIN"/SET
 
 "$UTILS/docker_prepare" "$BIN"
 
-echo "Running docker container $IMAGE:$VERSION for application $APPLICATION"
+echo "Running docker container $IMAGE_TAG for application $APPLICATION"
 
 docker run --rm -d \
    --name keycloak -p 8180:8080 -d \
@@ -16,6 +16,6 @@ docker run --rm -d \
   -e KEYCLOAK_USER=admin \
   -e KEYCLOAK_PASSWORD=admin \
   -e KEYCLOAK_IMPORT=\ClientFhirServerRealm.json \
-  "$IMAGE":"$VERSION"
+  "$IMAGE_TAG"
 
 docker ps --filter label="$APPLICATION" --format={{.Ports}}

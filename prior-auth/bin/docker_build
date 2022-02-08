@@ -7,10 +7,11 @@ source "$BIN"/SET
 
 cd "$BIN/../../../$APPLICATION" || exit
 BUILD_TIMESTAMP=$( date '+%F_%H:%M:%S' )
-$print "Building image $TAG with timestamp $BUILD_TIMESTAMP"
 
-docker build -f Dockerfile.dev -t "$TAG" -t "$LATEST" --build-arg VERSION="$VERSION" --build-arg BUILD_TIMESTAMP="$BUILD_TIMESTAMP" .
+$print "Building image $IMAGE_TAG with timestamp $BUILD_TIMESTAMP"
 
-$print "Created image $TAG" INFO
+docker build -f Dockerfile.dev -t "$IMAGE_TAG" -t "$LATEST" --build-arg BUILD_TIMESTAMP="$BUILD_TIMESTAMP" .
+
+$print "Created image $IMAGE_TAG" INFO
 
 cd "$PWD" || exit

@@ -6,3 +6,7 @@ APPLICATION='crd'
 source "$BIN"/../../shared/SET
 BUCKET_NAME=${PROJECT_ID}-${APPLICATION}
 BUCKET="gs://$BUCKET_NAME"
+
+if [ -n "$CRD_IMAGE_TAG" ]; then
+  IMAGE_TAG=$CRD_IMAGE_TAG
+fi

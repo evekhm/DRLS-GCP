@@ -12,3 +12,4 @@
 /test-ehr/k8s/deployment.yaml
 /crd/k8s/serviceaccount.yaml
 /dtr/k8s/deployment.yaml
+/prior-auth/k8s/deployment.yaml

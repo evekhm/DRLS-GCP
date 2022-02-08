@@ -26,8 +26,7 @@ kubectl apply -f config.yaml
 sed 's|__KSA_NAME__|'"$KSA_NAME"'|g; ' serviceaccount.sample.yaml > serviceaccount.yaml
 kubectl apply -f serviceaccount.yaml
 
-sed 's|__IMAGE__|'"$IMAGE"'|g;
- s|__VERSION__|'"$VERSION"'|g;
+sed 's|__IMAGE_TAG__|'"$IMAGE_TAG"'|g;
  s|__KSA_NAME__|'"$KSA_NAME"'|g; '  deployment.sample.yaml > deployment.yaml
 kubectl apply -f deployment.yaml
 
