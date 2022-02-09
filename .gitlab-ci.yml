@@ -38,8 +38,8 @@ deploy to gke:
   image:
     name: google/cloud-sdk
   script:
-  - echo $SERVICE_ACCOUNT | base64 -d > ~/encoded_serviceaccount.json
   - echo $SERVICE_ACCOUNT
+  - echo $SERVICE_ACCOUNT | base64 -d > ~/encoded_serviceaccount.json
   - gcloud auth activate-service-account --key-file ~/encoded_serviceaccount.json
   - gcloud projects describe "$PROJECT_ID"
   - rm ~/encoded_serviceaccount.json
