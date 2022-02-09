@@ -36,13 +36,16 @@ deploy to gke:
   environment: $CI_COMMIT_REF_SLUG
   stage: deploy
   image:
-    name: bitnami/kubectl:latest
-    entrypoint: [""]
+    name: google/cloud-sdk
   script:
+  - echo $SERVICE_ACCOUNT | base64 -d > ~/encoded_serviceaccount.json
+  - echo $SERVICE_ACCOUNT
+  - gcloud auth activate-service-account --key-file ~/encoded_serviceaccount.json
+  - gcloud projects describe "$PROJECT_ID"
+  - rm ~/encoded_serviceaccount.json
   - kubectl config use-context $KUBE_CONTEXT
   - kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"
   - kubectl config set-context --current --namespace=$KUBE_NAMESPACE
-  - |
     if kubectl get serviceaccounts --namespace=$KUBE_NAMESPACE | grep -q "$KSA_NAME"; then
         :
       else
@@ -69,3 +72,15 @@ gcloud destroy:
   when: manual
   script:
   - "${CI_PROJECT_DIR}/delete_deployments.sh"
+
+#deploy_review:
+#  stage: deploy
+#  script:
+#  - echo "Deploy a review app"
+#  environment:
+#    name: review/$CI_COMMIT_REF_SLUG
+#    url: https://$CI_ENVIRONMENT_SLUG.example.com
+#  rules:
+#  - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+#    when: never
+#  - if: $CI_COMMIT_BRANCH
