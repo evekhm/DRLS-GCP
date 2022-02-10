@@ -9,25 +9,6 @@ ZIP="$DIR/CDS-Library.zip"
 
 source "$DIR"/crd/bin/SET #CRD has BUCKET defined since it uses for Cloud Storage Access
 
-enable_project_apis() {
-  APIS="compute.googleapis.com \
-    storage.googleapis.com \
-    container.googleapis.com"
-
-  $print "Enabling APIs on the project..."
-  gcloud services enable $APIS
-}
-
-configure_container_registry_access(){
-  gcloud projects add-iam-policy-binding "$PROJECT_ID" \
-      --member="serviceAccount:$(gcloud projects describe "$PROJECT_ID" --format='get(projectNumber)')-compute@developer.gserviceaccount.com" \
-      --role="roles/storage.admin"
-
-#  CONTAINER_BT=gs://artifacts.${PROJECT_ID}.appspot.com/
-#  gsutil iam set gs://"${CONTAINER_BT}" serviceAccount:"${PROJECT_NUMBER}"-compute@developer.gserviceaccount.com:roles/storage.objectViewer
-}
-
-
 create_CDS_Library_zip(){
   $print "Creating new CDS-Library Archive ... "
   PWD=$(pwd)
@@ -108,8 +89,6 @@ configure_kservice_account(){
   kubectl describe serviceaccount $KSA_NAME
 }
 
-# TODO to be provisioned by DTP
-enable_project_apis
 
 #Assign Workload Identity https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#kubectl
 
@@ -123,7 +102,6 @@ create_kservice_account
 
 configure_kservice_account
 
-configure_container_registry_access
 
 
 

@@ -12,13 +12,13 @@ variables:
   # Project Environment Settings NEEDS Update for new environment setup
   PROJECT_ID: "pri-auth-test"    #
   CLUSTER: "development" #TODO to be provisioned by DTP
-  GSA_NAME: "gsa-priauth-service"
-  KSA_NAME: "k8s-priauth-service"
-  KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}"
+  KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}" #Namespace is defined by the branch name
   ZONE: "us-central1-c"
   REGION: "us-central1"
-  NETWORK: "drls"               #TODO to be provisioned by DTP
+  NETWORK: "drls"
 
+  GSA_NAME: "gsa-priauth-service" # Service Account Name to be created for crd application required for Cloud Storage Access for CDS-Library Access
+  KSA_NAME: "k8s-priauth-service" # kubernetes service account for workload Identity for crd application
 
   # Pre-req: Project with Cluster + Agent + Ingress are setup.
   # To be changed depending on the deployment target environment
@@ -27,9 +27,6 @@ variables:
   #KUBE_INGRESS_BASE_DOMAIN: 'papanca.com' #TODO
 
   CI_KUBERNETES_ACTIVE: 'true'
-
-
-
   CRD_IMAGE_TAG: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/crd/gcpdev:latest"
 
 stages:
@@ -41,7 +38,7 @@ stages:
 # Needed to generate secret at cluster (one-time) to download images from GitLab repositories
 # Alternative to consider is to add image pull secret to service account imagePullSecret TODO
 # https://towardsdatascience.com/multiple-ways-to-create-kubernetes-secrets-33f97feaa499
-gitlab prep token: #TODO: Maybe can be skipped? Generating token to pass it as a secret to GCP cluster to download Images from Gitlab private repositories
+prep token: #TODO: Maybe can be skipped? Generating token to pass it as a secret to GCP cluster to download Images from Gitlab private repositories
   environment: $CI_COMMIT_REF_SLUG
   stage: prepare_token
   image: docker:${DOCKER_IMAGE_VERSION}
@@ -55,14 +52,16 @@ gitlab prep token: #TODO: Maybe can be skipped? Generating token to pass it as a
     - ${CI_PROJECT_DIR}/config.json
     expire_in: 1 day
 
+
+
+# Using docker token from `prepare_token` step creates namespace, secret and deploys CDS-Library to Cloud Storage.
+# The latest steps requires setting up Workload Identity in the given namespace
 prepare cluster:
   environment: $CI_COMMIT_REF_SLUG
   stage: prepare_cluster
   image: google/cloud-sdk
   script:
   - apk update && apk add git
-  # Get CDS-Library to upload into the GCP Cloud Storage Bucket
-  - git clone https://oauth2:$GR_TOKEN@gitlab.com/$CI_PROJECT_NAMESPACE/CDS-Library.git ${CI_PROJECT_DIR}/../CDS-Library
   # Get into the Cluster NAMESPACE context using GitLab Agent
   - kubectl config use-context $KUBE_CONTEXT
   - kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"
@@ -71,15 +70,12 @@ prepare cluster:
   - kubectl get secret regcred --namespace=$KUBE_NAMESPACE 2>/dev/null ||
     kubectl create secret generic regcred --from-file=.dockerconfigjson=${CI_PROJECT_DIR}/config.json
     --type=kubernetes.io/dockerconfigjson --namespace=$KUBE_NAMESPACE
-  - ${CI_PROJECT_DIR}/check_cluster.sh
+  # Deploys CDS-Library
+  # Get CDS-Library to upload into the GCP Cloud Storage Bucket, GR_TOKEN is defined as a GitLab Runner toked with access to API inside Project Settings->CI/CD
+  - git clone https://oauth2:$GR_TOKEN@gitlab.com/$CI_PROJECT_NAMESPACE/CDS-Library.git ${CI_PROJECT_DIR}/../CDS-Library
+  - KSA_NAME=$KSA_NAME, GSA_NAME=$GSA_NAME, CLUSTER=$CLUSTER, PROJECT_ID=$PROJECT_ID, KUBE_NAMESPACE=$KUBE_NAMESPACE
+    bash ${CI_PROJECT_DIR}/deploy_CDS_Library.sh
 
-
-#prepare cluster:
-#  environment: $CI_COMMIT_REF_SLUG
-#  stage: prepare
-#  image: google/cloud-sdk
-#  script:
-#  - ${CI_PROJECT_DIR}/setup_cluster.sh
 
 deploy to gke:
   environment: $CI_COMMIT_REF_SLUG
@@ -90,7 +86,6 @@ deploy to gke:
   - gcloud auth activate-service-account --key-file ${SERVICE_ACCOUNT} --project=$PROJECT_ID
   - gcloud projects describe "$PROJECT_ID"
   - kubectl config use-context $KUBE_CONTEXT
-  - kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"
   - kubectl config set-context --current --namespace=$KUBE_NAMESPACE
   - ${CI_PROJECT_DIR}/deploy_services.sh
   - |
@@ -101,7 +96,8 @@ deploy to gke:
     else
       echo "Internal Changes to manifest files, need to re-deploy all applications with images corresponding to this branch"
       echo "${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, $ ${CF_BRANCH_TAG_NORMALIZED}:latest"
-      CRD_IMAGE_TAG=$CRD_IMAGE_TAG bash "${CI_PROJECT_DIR}/crd/gcp/apply.sh"
+      CRD_IMAGE_TAG=$CRD_IMAGE_TAG, VSAC_API_KEY=$VSAC_API_KEY, KSA_NAME=$KSA_NAME bash "${CI_PROJECT_DIR}/crd/gcp/apply.sh"
+      cat ${CI_PROJECT_DIR}/crd/k8s/deployment.yaml
     fi
 
 
