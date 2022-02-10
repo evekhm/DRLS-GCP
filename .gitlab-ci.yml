@@ -61,13 +61,16 @@ prepare cluster:
   image: google/cloud-sdk
   script:
   - apk update && apk add git
+  # Get CDS-Library to upload into the GCP Cloud Storage Bucket
   - git clone https://oauth2:$GR_TOKEN@gitlab.com/$CI_PROJECT_NAMESPACE/CDS-Library.git ${CI_PROJECT_DIR}/../CDS-Library
+  # Get into the Cluster NAMESPACE context using GitLab Agent
   - kubectl config use-context $KUBE_CONTEXT
   - kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"
   - kubectl config set-context --current --namespace=$KUBE_NAMESPACE
+  # Create Secret if not existing to PullImages from GitLab
   - kubectl get secret regcred --namespace=$KUBE_NAMESPACE 2>/dev/null ||
     kubectl create secret generic regcred --from-file=.dockerconfigjson=${CI_PROJECT_DIR}/config.json
-    --type=kubernetes.io/dockerconfigjson --namespace=test
+    --type=kubernetes.io/dockerconfigjson --namespace=$KUBE_NAMESPACE
   - ${CI_PROJECT_DIR}/check_cluster.sh
 
 
