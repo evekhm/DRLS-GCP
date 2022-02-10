@@ -2,18 +2,36 @@
 export USE_GKE_GCLOUD_AUTH_PLUGIN=False
 UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ENV="$UTILS/../.env"
+VARS="$UTILS/vars"
 
-# GCP Generic
-ZONE='us-central1-c'
-REGION='us-central1'
-NETWORK='drls'
-DB='CDS-Library.zip'
+source "$VARS"
 
-# GCP Cluster
-CLUSTER='prior-auth-cluster'
-GSA_NAME='gsa-priauth-service'
-KSA_NAME='k8s-priauth-service'
-K8S_NAMESPACE='default'
+# For GitLab CI/CD Integration, only set defaults when env variables not already set
+if [[ -z ${IMAGE_TAG} ]]; then
+  IMAGE="$DF_REPO/$APPLICATION"
+  IMAGE_TAG="$IMAGE:latest"
+fi
+
+function set_def(){
+  val=$1
+  varname=DF_$1
+  default=${!varname}
+  if [[ -z ${!val} ]]; then
+    val=$default
+  else
+    val=${!val}
+  fi
+  echo "$val"
+}
+
+
+ZONE=$(set_def ZONE) #Using DF_ZONE when ZONE not set
+REGION=$(set_def REGION)
+NETWORK=$(set_def NETWORK)
+CLUSTER=$(set_def CLUSTER)
+GSA_NAME=$(set_def GSA_NAME)
+KSA_NAME=$(set_def KSA_NAME)
+KUBE_NAMESPACE=$(set_def KUBE_NAMESPACE)
 
 
 if [ -f "$ENV" ]; then
@@ -28,14 +46,7 @@ else
 fi
 
 # DRLS
-#REPO="gcr.io/$PROJECT_ID"
-REPO="registry.gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl"
-IMAGE="$REPO/$APPLICATION"
-
-if [[ -z ${IMAGE_TAG} ]]; then
-  IMAGE_TAG="$IMAGE:latest"
-fi
-
+DB='CDS-Library.zip'
 OAUTH_TOKEN="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/token"
 OAUTH_AUTHORIZE="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/auth"
 CDS_SERVICE="${CRD}/r4/cds-services"

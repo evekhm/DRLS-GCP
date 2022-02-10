@@ -4,8 +4,21 @@ variables:
   POSTGRES_ENABLED: "0"
   ROLLOUT_RESOURCE_TYPE: deployment
   INCREMENTAL_ROLLOUT_ENABLED: "0"
+
+  DOCKER_IMAGE_VERSION: 19.03.1
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: "/certs"
+
+  # Project Environment Settings NEEDS Update for new environment setup
+  PROJECT_ID: "pri-auth-test"    #
+  CLUSTER: "development" #TODO to be provisioned by DTP
   GSA_NAME: "gsa-priauth-service"
-  KSA_NAME: " "
+  KSA_NAME: "k8s-priauth-service"
+  KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}"
+  ZONE: "us-central1-c"
+  REGION: "us-central1"
+  NETWORK: "drls"               #TODO to be provisioned by DTP
+
 
   # Pre-req: Project with Cluster + Agent + Ingress are setup.
   # To be changed depending on the deployment target environment
@@ -14,15 +27,48 @@ variables:
   #KUBE_INGRESS_BASE_DOMAIN: 'papanca.com' #TODO
 
   CI_KUBERNETES_ACTIVE: 'true'
-  KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}"
 
-  PROJECT_ID: "pri-auth-test"
+
+
   CRD_IMAGE_TAG: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/crd/gcpdev:latest"
 
 stages:
-  #- prepare # TODO now doing this manually on cluster, since special service account is needed
+  - prepare_token
+  - prepare_cluster
   - deploy
   - cleanup
+
+# Needed to generate secret at cluster (one-time) to download images from GitLab repositories
+# Alternative to consider is to add image pull secret to service account imagePullSecret TODO
+# https://towardsdatascience.com/multiple-ways-to-create-kubernetes-secrets-33f97feaa499
+gitlab prep token: #TODO: Maybe can be skipped? Generating token to pass it as a secret to GCP cluster to download Images from Gitlab private repositories
+  environment: $CI_COMMIT_REF_SLUG
+  stage: prepare_token
+  image: docker:${DOCKER_IMAGE_VERSION}
+  services:
+  - docker:${DOCKER_IMAGE_VERSION}-dind
+  script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - cat $HOME/.docker/config.json > ${CI_PROJECT_DIR}/config.json
+  artifacts:
+    paths:
+    - ${CI_PROJECT_DIR}/config.json
+    expire_in: 1 day
+
+prepare cluster:
+  environment: $CI_COMMIT_REF_SLUG
+  stage: prepare_cluster
+  image: google/cloud-sdk
+  script:
+  - apk update && apk add git
+  - git clone https://oauth2:$GR_TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/CDS-Library.git ${CI_PROJECT_DIR}/../
+  - kubectl config use-context $KUBE_CONTEXT
+  - kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"
+  - kubectl config set-context --current --namespace=$KUBE_NAMESPACE
+  - kubectl get secret regcred --namespace=$KUBE_NAMESPACE 2>/dev/null ||
+    kubectl create secret generic regcred --from-file=.dockerconfigjson=${CI_PROJECT_DIR}/config.json
+    --type=kubernetes.io/dockerconfigjson --namespace=test
+  - ${CI_PROJECT_DIR}/check_cluster.sh
 
 
 #prepare cluster:
@@ -38,21 +84,11 @@ deploy to gke:
   image:
     name: google/cloud-sdk
   script:
-  - echo $SERVICE_ACCOUNT
-  - echo $SERVICE_ACCOUNT | base64 -d > ${CI_PROJECT_DIR}/encoded_serviceaccount.json
-  - gcloud auth activate-service-account --key-file ${CI_PROJECT_DIR}/encoded_serviceaccount.json
+  - gcloud auth activate-service-account --key-file ${SERVICE_ACCOUNT} --project=$PROJECT_ID
   - gcloud projects describe "$PROJECT_ID"
-  - rm ${CI_PROJECT_DIR}/encoded_serviceaccount.json
   - kubectl config use-context $KUBE_CONTEXT
   - kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"
   - kubectl config set-context --current --namespace=$KUBE_NAMESPACE
-  - |
-    if kubectl get serviceaccounts --namespace=$KUBE_NAMESPACE | grep -q "$KSA_NAME"; then
-        :
-      else
-        echo "Creating kubernetes service account [$KSA_NAME] in namespace [$KUBE_NAMESPACE]..." INFO
-        kubectl create serviceaccount "$KSA_NAME" --namespace "$KUBE_NAMESPACE"
-    fi
   - ${CI_PROJECT_DIR}/deploy_services.sh
   - |
     if [ -n "$APPLICATION" ]; then
@@ -64,8 +100,7 @@ deploy to gke:
       echo "${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, $ ${CF_BRANCH_TAG_NORMALIZED}:latest"
       CRD_IMAGE_TAG=$CRD_IMAGE_TAG bash "${CI_PROJECT_DIR}/crd/gcp/apply.sh"
     fi
-#   - kubectl get pods
-#   - kubectl apply -f ${CI_PROJECT_DIR}/k8s/*
+
 
 gcloud destroy:
   stage: cleanup

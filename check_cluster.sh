@@ -27,12 +27,6 @@ configure_container_registry_access(){
 #  gsutil iam set gs://"${CONTAINER_BT}" serviceAccount:"${PROJECT_NUMBER}"-compute@developer.gserviceaccount.com:roles/storage.objectViewer
 }
 
-configure_cloud_build(){
-  $print 'TODO enable Cloud Build'
-#  gcloud projects add-iam-policy-binding $PROJECT_ID \
-#      --member="service-$PROJECT_NUMBER@gcp-sa-cloudbuild.iam.gserviceaccount.com" \
-#      --role="roles/cloudbuild.serviceAgent"
-}
 
 create_CDS_Library_zip(){
   $print "Creating new CDS-Library Archive ... "
@@ -43,18 +37,6 @@ create_CDS_Library_zip(){
   cd "$PWD" || exit
 }
 
-setup_network(){
-  network=$(gcloud compute networks list --filter="name=( $NETWORK )" --format='get(NAME)' 2>/dev/null)
-  if [ -z "$network" ]; then
-      $print "Setting up [$NETWORK] network... "
-      gcloud compute networks create "$NETWORK" --project="$PROJECT_ID" \
-      --subnet-mode=auto --mtu=1460 --bgp-routing-mode=regional
-      gcloud compute firewall-rules create default-allow-internal-"$NETWORK" --project="$PROJECT_ID" \
-            --network=projects/"$PROJECT_ID"/global/networks/"$NETWORK" \
-            --description=Allows\ connections\ from\ any\ source\ in\ the\ network\ IP\ range\ to\ any\ instance\ on\ the\ network\ using\ all\ protocols. \
-            --direction=INGRESS --priority=65534 --source-ranges=10.128.0.0/9 --action=ALLOW --rules=all
-  fi
-}
 
 create_kservice_account(){
   $print "Preparing KSA service account [$KSA_NAME] in [$KUBE_NAMESPACE] namespace ..."
@@ -87,23 +69,6 @@ create_bucket(){
 #  gcloud projects add-iam-policy-binding "$PROJECT_ID" \
 #    --member="serviceAccount:$SA_DATAFLOW" \
 #    --role="roles/storage.admin"
-}
-
-setup_cluster() {
-  $print "Setting up [$CLUSTER] cluster..."
-  if gcloud container clusters list --region="$REGION" --format "value(NAME)" | grep "$CLUSTER" > /dev/null;
-  then
-    $print "Cluster [$CLUSTER] already up and running in [$REGION]" INFO
-  else
-    $print "Creating  [$CLUSTER] cluster in [$REGION] region..." INFO
-    gcloud container clusters create-auto "$CLUSTER" \
-        --region "$REGION" \
-        --network "$NETWORK" \
-        --project="$PROJECT_ID"
-  fi
-
-  #gcloud container clusters create CLUSTER --workload-pool=PROJECT_ID.svc.id.goog
-  gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 }
 
 create_gservice_account() {
@@ -143,13 +108,8 @@ configure_kservice_account(){
   kubectl describe serviceaccount $KSA_NAME
 }
 
-configure_cloud_build
-
+# TODO to be provisioned by DTP
 enable_project_apis
-
-setup_network
-
-setup_cluster
 
 #Assign Workload Identity https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#kubectl
 

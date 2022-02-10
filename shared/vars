@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Default Variables, when running from Git/Lab those are defined in GitLab
+# GCP Generic
+DF_ZONE='us-central1-c'
+DF_REGION='us-central1'
+DF_NETWORK='drls'
+
+# GCP Cluster
+DF_CLUSTER='prior-auth-cluster'
+DF_GSA_NAME='gsa-priauth-service'
+DF_KSA_NAME='k8s-priauth-service'
+DF_KUBE_NAMESPACE='default'
+
+DF_REPO="registry.gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl"
+
+
+
+
