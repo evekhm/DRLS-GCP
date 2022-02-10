@@ -23,7 +23,7 @@ variables:
   # Pre-req: Project with Cluster + Agent + Ingress are setup.
   # To be changed depending on the deployment target environment
   # 'main' branch to be deployed into the 'demo' environment
-  KUBE_CONTEXT: "gcp-solutions/hcls/claims-modernization/gitlab-gke:development"
+  KUBE_CONTEXT: "gcp-solutions/hcls/claims-modernization/gke-deploy-env:development"
   #KUBE_INGRESS_BASE_DOMAIN: 'papanca.com' #TODO
 
   CI_KUBERNETES_ACTIVE: 'true'
