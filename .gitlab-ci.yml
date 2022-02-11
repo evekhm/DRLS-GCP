@@ -8,7 +8,8 @@ variables:
   DOCKER_IMAGE_VERSION: 19.03.1
   DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: "/certs"
-
+  SERVICE_ACCOUNT_FILE: SERVICE_ACCOUNT_gcpDev
+  #SERVICE_ACCOUNT_FILE: SERVICE_ACCOUNT_$CI_COMMIT_BRANCH     #TODO CI_COMMIT_BRANCH not available om Merge Request
   # Project Environment Settings NEEDS Update for new environment setup
   PROJECT_ID: "pri-auth-test"    #
   CLUSTER: "development" #TODO to be provisioned by DTP
@@ -59,7 +60,7 @@ prep token: #TODO: Maybe can be skipped? Generating token to pass it as a secret
 #- echo $GCLOUD_SERVICE_KEY | base64 --decode -i > ~/gcloud-service-key.json
 #- gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
 #- gcloud --quiet container clusters get-credentials $CLOUDSDK_CONTAINER_CLUSTER
-- gcloud auth activate-service-account --key-file ${SERVICE_ACCOUNT} --project=$PROJECT_ID
+- gcloud auth activate-service-account --key-file ${SERVICE_ACCOUNT_FILE} --project=$PROJECT_ID
 # Get into the Cluster NAMESPACE context using GitLab Agent
 - kubectl config use-context $KUBE_CONTEXT
 - kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"
