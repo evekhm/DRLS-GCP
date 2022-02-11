@@ -61,7 +61,8 @@ prepare cluster:
   stage: prepare_cluster
   image: google/cloud-sdk
   script:
-  - apk update && apk add git
+  - apt-get update && apt-get install git
+  - apt-get install zip unzip -q
   # Get into the Cluster NAMESPACE context using GitLab Agent
   - kubectl config use-context $KUBE_CONTEXT
   - kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"
@@ -93,6 +94,8 @@ deploy to gke:
       echo "deployment is triggered by the $APPLICATION, executing on ${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, ${CI_BRANCH_TAG_NORMALIZED}"
       echo "Using the image $IMAGE_TAG built by the "$APPLICATION" pipeline"
       IMAGE_TAG=$IMAGE_TAG bash "${CI_PROJECT_DIR}/$APPLICATION/gcp/apply.sh"
+      #patch instead
+      #- kubectl patch deployment $PRODUCTION_SERVICE_NAME -p '{"spec":{"template":{"spec":{"containers":[{"name":"'"$PRODUCTION_SERVICE_NAME"'","image":"'"$CI_REGISTRY_IMAGE:$CI_BUILD_REF"'"}]}}}}'
     else
       echo "Internal Changes to manifest files, need to re-deploy all applications with images corresponding to this branch"
       echo "${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, $ ${CF_BRANCH_TAG_NORMALIZED}:latest"
