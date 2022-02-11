@@ -2,12 +2,9 @@
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 APPLICATION='crd'
-echo "PROJECT_ID=$PROJECT_ID"
 source "$BIN"/../../shared/SET
 BUCKET_NAME=${PROJECT_ID}-${APPLICATION}
 BUCKET="gs://$BUCKET_NAME"
-echo "BUCKET=$BUCKET"
-echo "PROJECT_ID=$PROJECT_ID"
 if [[ -z ${CRD_IMAGE_TAG} ]]; then
   :
 else

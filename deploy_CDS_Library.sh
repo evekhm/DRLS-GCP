@@ -92,7 +92,6 @@ configure_kservice_account(){
 
 #Assign Workload Identity https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#kubectl
 
-echo 'starting...'
 create_CDS_Library_zip
 
 create_bucket

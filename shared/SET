@@ -4,7 +4,6 @@ UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ENV="$UTILS/../.env"
 VARS="$UTILS/vars"
 
-echo 'SET start'
 source "$VARS"
 # For GitLab CI/CD Integration, only set defaults when env variables not already set
 if [[ -z ${IMAGE_TAG} ]]; then
@@ -24,7 +23,6 @@ function set_def(){
 }
 
 ZONE=$(set_def ZONE) #Using DF_ZONE when ZONE not set
-
 REGION=$(set_def REGION)
 NETWORK=$(set_def NETWORK)
 CLUSTER=$(set_def CLUSTER)
@@ -60,5 +58,3 @@ export AUTH_REDIRECT_HOST=$TEST_EHR
 export CRD_REQUEST_GENERATOR_HOST
 export GOOGLE_STORAGE_BUCKET="$PROJECT_ID"-crd
 export GOOGLE_STORAGE_PROJECTID="$PROJECT_ID"
-
-echo 'SET end'
