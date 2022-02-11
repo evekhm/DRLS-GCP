@@ -81,7 +81,7 @@ prepare cluster:
   # Deploys CDS-Library
   # Get CDS-Library to upload into the GCP Cloud Storage Bucket, GR_TOKEN is defined as a GitLab Runner toked with access to API inside Project Settings->CI/CD
   - git clone https://oauth2:$GR_TOKEN@gitlab.com/$CI_PROJECT_NAMESPACE/CDS-Library.git ${CI_PROJECT_DIR}/../CDS-Library
-  - KSA_NAME=$KSA_NAME, GSA_NAME=$GSA_NAME, CLUSTER=$CLUSTER, PROJECT_ID=$PROJECT_ID, KUBE_NAMESPACE=$KUBE_NAMESPACE
+  - KSA_NAME=$KSA_NAME GSA_NAME=$GSA_NAME CLUSTER=$CLUSTER PROJECT_ID=$PROJECT_ID KUBE_NAMESPACE=$KUBE_NAMESPACE
     bash ${CI_PROJECT_DIR}/deploy_CDS_Library.sh
 
 
@@ -103,7 +103,7 @@ deploy to gke:
     else
       echo "Internal Changes to manifest files, need to re-deploy all applications with images corresponding to this branch"
       echo "${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, $ ${CF_BRANCH_TAG_NORMALIZED}:latest"
-      CRD_IMAGE_TAG=$CRD_IMAGE_TAG, VSAC_API_KEY=$VSAC_API_KEY, KSA_NAME=$KSA_NAME bash "${CI_PROJECT_DIR}/crd/gcp/apply.sh"
+      CRD_IMAGE_TAG=$CRD_IMAGE_TAG VSAC_API_KEY=$VSAC_API_KEY KSA_NAME=$KSA_NAME bash "${CI_PROJECT_DIR}/crd/gcp/apply.sh"
       cat ${CI_PROJECT_DIR}/crd/k8s/deployment.yaml
     fi
 
