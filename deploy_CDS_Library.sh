@@ -10,7 +10,7 @@ ZIP="$DIR/CDS-Library.zip"
 source "$DIR"/crd/bin/SET #CRD has BUCKET defined since it uses for Cloud Storage Access
 
 create_CDS_Library_zip(){
-  $print "Creating new CDS-Library Archive ... "
+  echo "Creating new CDS-Library Archive ... "
   PWD=$(pwd)
 
   cd "$DIR"/..
@@ -92,6 +92,7 @@ configure_kservice_account(){
 
 #Assign Workload Identity https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#kubectl
 
+echo 'starting...'
 create_CDS_Library_zip
 
 create_bucket

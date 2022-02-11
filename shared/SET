@@ -6,13 +6,11 @@ VARS="$UTILS/vars"
 
 echo 'SET start'
 source "$VARS"
-echo 'SET start2'
 # For GitLab CI/CD Integration, only set defaults when env variables not already set
 if [[ -z ${IMAGE_TAG} ]]; then
   IMAGE="$DF_REPO/$APPLICATION"
   IMAGE_TAG="$IMAGE:latest"
 fi
-echo 'SET start3'
 function set_def(){
   val=$1
   varname=DF_$1
@@ -25,9 +23,8 @@ function set_def(){
   echo "$val"
 }
 
-echo 'SET start4'
 ZONE=$(set_def ZONE) #Using DF_ZONE when ZONE not set
-echo 'SET start5'
+
 REGION=$(set_def REGION)
 NETWORK=$(set_def NETWORK)
 CLUSTER=$(set_def CLUSTER)
