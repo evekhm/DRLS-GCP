@@ -56,7 +56,10 @@ prep token:
   - cat $HOME/.docker/config.json > ${GITLAB_TOKEN_FILE}
   # GCP Service Account Token
   #- echo ${SERVICE_ACCOUNT} | base64 --decode -i > ${SERVICE_ACCOUNT_FILE} #TODO save encoded
+  - echo ${SERVICE_ACCOUNT}
   - echo ${SERVICE_ACCOUNT} > ${SERVICE_ACCOUNT_FILE}
+  - echo "SERVICE_ACCOUNT_FILE=$SERVICE_ACCOUNT_FILE"
+  - cat ${SERVICE_ACCOUNT_FILE}
   artifacts:
     paths:
     - ${GITLAB_TOKEN_FILE}
