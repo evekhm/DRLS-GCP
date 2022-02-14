@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 
 set -e # Exit if error is detected during pipeline execution
+#Expects: BUCKET, PROJECT_ID
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTILS="$DIR"/shared
 print="$UTILS/print"
 ZIP="$DIR/CDS-Library.zip"
-BUCKET="gs://${PROJECT_ID}-${APPLICATION}"
-#source "$DIR"/crd/bin/SET #CRD has BUCKET defined since it uses for Cloud Storage Access
 
 create_CDS_Library_zip(){
   echo "Creating new CDS-Library Archive ... "
@@ -27,10 +26,6 @@ create_bucket(){
       gsutil mb -p "$PROJECT_ID" "${BUCKET}"/
   fi
   gsutil cp "${ZIP}" "$BUCKET"/"$DB"
-
-#  gcloud projects add-iam-policy-binding "$PROJECT_ID" \
-#    --member="serviceAccount:$SA_DATAFLOW" \
-#    --role="roles/storage.admin"
 }
 
 create_CDS_Library_zip

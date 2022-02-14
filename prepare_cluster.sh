@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 set -e # Exit if error is detected during pipeline execution
+#Expects: KUBE_NAMESPACE, KSA_NAME, GSA_NAME, BUCKET, PROJECT_ID
+
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTILS="$DIR"/shared
@@ -34,8 +36,8 @@ create_gservice_account() {
   else
     $print "Creating service account [$GSA_NAME] ..." INFO
     gcloud iam service-accounts create "$GSA_NAME" \
-        --description="Runs $APPLICATION jobs" \
-        --display-name="$APPLICATION-service-account"
+        --description="Runs priorauth jobs" \
+        --display-name="priorauth-service-account"
   fi
 
   gsutil iam ch  "serviceAccount:$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com":objectViewer "${BUCKET}"
