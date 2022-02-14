@@ -6,7 +6,7 @@ BIN="$GCP"/../bin
 PWD=$(pwd)
 source "$BIN"/SET
 
-echo 'Test'
+echo 'Test > ' kubectx
 #gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 
 echo "***** Configuring cluster $CLUSTER for $APPLICATION application *****"
