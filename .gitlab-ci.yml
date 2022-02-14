@@ -11,7 +11,7 @@ variables:
 
   #SERVICE_ACCOUNT_FILE: SERVICE_ACCOUNT_$CI_COMMIT_BRANCH     #TODO CI_COMMIT_BRANCH not available om Merge Request
   # Project Environment Settings NEEDS Update for new environment setup
-  PROJECT_ID: "pri-auth-test"    #
+  PROJECT_ID: "pri-auth-cicd"    #
   CLUSTER: "development" #TODO to be provisioned by DTP
   KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}" #Namespace is defined by the branch name
   ZONE: "us-central1-c"
