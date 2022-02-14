@@ -39,6 +39,7 @@ stages:
   - prepare_token
   - prepare_cluster
   - deploy
+  - production
   - cleanup
 
 # Needed to generate secret at cluster (one-time) to download images from GitLab repositories
