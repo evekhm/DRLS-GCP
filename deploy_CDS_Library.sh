@@ -6,7 +6,8 @@ set -e # Exit if error is detected during pipeline execution
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTILS="$DIR"/shared
 print="$UTILS/print"
-ZIP="$DIR/CDS-Library.zip"
+DB="CDS-Library.zip"
+ZIP="${DIR}/$DB"
 
 create_CDS_Library_zip(){
   echo "Creating new CDS-Library Archive ... "
