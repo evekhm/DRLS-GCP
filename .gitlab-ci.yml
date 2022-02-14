@@ -9,28 +9,23 @@ variables:
   DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: "/certs"
 
-  #SERVICE_ACCOUNT_FILE: SERVICE_ACCOUNT_$CI_COMMIT_BRANCH     #TODO CI_COMMIT_BRANCH not available om Merge Request
-  # Project Environment Settings NEEDS Update for new environment setup
-  PROJECT_ID: "pri-auth-cicd"    #
-  CLUSTER: "development" #TODO to be provisioned by DTP
-  KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}" #Namespace is defined by the branch name
+  ######### Per Environment #############
+  PROJECT_ID: "pri-auth-cicd"
+  CLUSTER: "development"
   ZONE: "us-central1-c"
   REGION: "us-central1"
   NETWORK: "drls"
+  KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}" #Namespace is defined by the branch name
+  KUBE_AGENT: "development"
+  KUBE_CONTEXT: $CI_PROJECT_NAMESPACE/gke-deploy-env:$KUBE_AGENT
+  #KUBE_INGRESS_BASE_DOMAIN: 'papanca.com' #TODO
+  CRD_IMAGE_TAG: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/crd/gcpdev:latest"
+  #$SERVICE_ACCOUNT
 
   GSA_NAME: "gsa-priauth-service" # Service Account Name to be created for crd application required for Cloud Storage Access for CDS-Library Access
   KSA_NAME: "k8s-priauth-service" # kubernetes service account for workload Identity for crd application
-
-  # Pre-req: Project with Cluster + Agent + Ingress are setup.
-  # To be changed depending on the deployment target environment
-  # 'main' branch to be deployed into the 'demo' environment
-  KUBE_AGENT: "development"
-
-  KUBE_CONTEXT: $CI_PROJECT_NAMESPACE/gke-deploy-env:$KUBE_AGENT
-  #KUBE_INGRESS_BASE_DOMAIN: 'papanca.com' #TODO
-
   CI_KUBERNETES_ACTIVE: 'true'
-  CRD_IMAGE_TAG: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/crd/gcpdev:latest"
+
 
   SERVICE_ACCOUNT_FILE: ${CI_PROJECT_DIR}/gcloud-service-key.json
   GITLAB_TOKEN_FILE: ${CI_PROJECT_DIR}/config.json
@@ -91,13 +86,13 @@ prepare cluster:
   before_script: *gcloud
   script:
   # Create Secret if not existing to PullImages from GitLab
-  - kubectl get secret regcred --namespace=$KUBE_NAMESPACE 2>/dev/null ||
-    kubectl create secret generic regcred --from-file=.dockerconfigjson=${GITLAB_TOKEN_FILE}
-    --type=kubernetes.io/dockerconfigjson --namespace=$KUBE_NAMESPACE
+  - echo '==>Step1'
+  - echo "kubectl get secret regcred --namespace=$KUBE_NAMESPACE 2>/dev/null || kubectl create secret generic regcred --from-file=.dockerconfigjson=${GITLAB_TOKEN_FILE} --type=kubernetes.io/dockerconfigjson --namespace=$KUBE_NAMESPACE"
+  - kubectl get secret regcred --namespace=$KUBE_NAMESPACE 2>/dev/null || kubectl create secret generic regcred --from-file=.dockerconfigjson=${GITLAB_TOKEN_FILE} --type=kubernetes.io/dockerconfigjson --namespace=$KUBE_NAMESPACE
   # Create KSA Service account and Workload Identity required for CRD application to access Cloud Storage
-  - KSA_NAME=$KSA_NAME GSA_NAME=$GSA_NAME CLUSTER=$CLUSTER PROJECT_ID=$PROJECT_ID KUBE_NAMESPACE=$KUBE_NAMESPACE
-    bash ${CI_PROJECT_DIR}/prepare_cluster.sh
-
+  - echo '==>Step2'
+  - KSA_NAME=$KSA_NAME GSA_NAME=$GSA_NAME CLUSTER=$CLUSTER PROJECT_ID=$PROJECT_ID KUBE_NAMESPACE=$KUBE_NAMESPACE bash ${CI_PROJECT_DIR}/prepare_cluster.sh
+  - echo '==>Done'
 # Depends on GR_TOKEN - Gitlab Runner Token variables with access to API - defined inside Project Settings->CI/CD
 deploy CDS-Library:
   image: google/cloud-sdk
