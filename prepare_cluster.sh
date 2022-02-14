@@ -40,8 +40,6 @@ create_gservice_account() {
         --display-name="priorauth-service-account"
   fi
 
-  gsutil iam ch  "serviceAccount:$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com":objectViewer "${BUCKET}"
-
   gcloud iam service-accounts get-iam-policy \
       $GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
 

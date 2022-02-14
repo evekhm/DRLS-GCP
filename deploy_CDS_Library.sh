@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e # Exit if error is detected during pipeline execution
-#Expects: BUCKET, PROJECT_ID
+#Expects: BUCKET, PROJECT_ID, GSA_NAME
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTILS="$DIR"/shared
@@ -26,6 +26,7 @@ create_bucket(){
       $print "Creating GCS bucket for pipeline: [$BUCKET]..." INFO
       gsutil mb -p "$PROJECT_ID" "${BUCKET}"/
   fi
+  gsutil iam ch  "serviceAccount:$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com":objectViewer "${BUCKET}"
   gsutil cp "${ZIP}" "$BUCKET"/"$DB"
 }
 

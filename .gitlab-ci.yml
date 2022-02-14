@@ -41,24 +41,19 @@ stages:
 # Needed to generate secret at cluster (one-time) to download images from GitLab repositories
 # Alternative to consider is to add image pull secret to service account imagePullSecret TODO
 # https://towardsdatascience.com/multiple-ways-to-create-kubernetes-secrets-33f97feaa499
-prep token:
+prepare tokens:
   environment: $CI_COMMIT_REF_SLUG
   stage: prepare_token
   image: docker:${DOCKER_IMAGE_VERSION}
   services:
   - docker:${DOCKER_IMAGE_VERSION}-dind
   script:
-  - echo $TEST_VAR
-  - echo $SA_development
   # GitLab Token
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - cat $HOME/.docker/config.json > ${GITLAB_TOKEN_FILE}
   # GCP Service Account Token
   #- echo ${SERVICE_ACCOUNT} | base64 --decode -i > ${SERVICE_ACCOUNT_FILE} #TODO save encoded
-  - echo ${SERVICE_ACCOUNT}
   - echo ${SERVICE_ACCOUNT} > ${SERVICE_ACCOUNT_FILE}
-  - echo "SERVICE_ACCOUNT_FILE=$SERVICE_ACCOUNT_FILE"
-  - cat ${SERVICE_ACCOUNT_FILE}
   artifacts:
     paths:
     - ${GITLAB_TOKEN_FILE}
@@ -71,7 +66,6 @@ prep token:
 #- echo $GCLOUD_SERVICE_KEY | base64 --decode -i > ~/gcloud-service-key.json
 #- gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
 #- gcloud --quiet container clusters get-credentials $CLOUDSDK_CONTAINER_CLUSTER
-- cat ${SERVICE_ACCOUNT_FILE}
 - gcloud auth activate-service-account --key-file ${SERVICE_ACCOUNT_FILE} --project=$PROJECT_ID
 # Get into the Cluster NAMESPACE context using GitLab Agent
 - kubectl config use-context $KUBE_CONTEXT
@@ -106,7 +100,7 @@ deploy CDS-Library:
   # Deploys CDS-Library
   # Get CDS-Library from GitLab repo, zips and uploads into the GCP Cloud Storage Bucket
   - git clone https://oauth2:$GR_TOKEN@gitlab.com/$CI_PROJECT_NAMESPACE/CDS-Library.git ${CI_PROJECT_DIR}/../CDS-Library
-  - PROJECT_ID=$PROJECT_ID BUCKET=$BUCKET bash ${CI_PROJECT_DIR}/deploy_CDS_Library.sh
+  - GSA_NAME=$GSA_NAME PROJECT_ID=$PROJECT_ID BUCKET=$BUCKET bash ${CI_PROJECT_DIR}/deploy_CDS_Library.sh
 
 deploy applications:
   environment: $CI_COMMIT_REF_SLUG
