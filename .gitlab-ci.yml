@@ -8,7 +8,7 @@ variables:
   DOCKER_IMAGE_VERSION: 19.03.1
   DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: "/certs"
-  SERVICE_ACCOUNT_FILE: SERVICE_ACCOUNT_gcpDev
+  SERVICE_ACCOUNT_FILE: SERVICE_ACCOUNT
   #SERVICE_ACCOUNT_FILE: SERVICE_ACCOUNT_$CI_COMMIT_BRANCH     #TODO CI_COMMIT_BRANCH not available om Merge Request
   # Project Environment Settings NEEDS Update for new environment setup
   PROJECT_ID: "pri-auth-test"    #
@@ -54,6 +54,7 @@ prep token: #TODO: Maybe can be skipped? Generating token to pass it as a secret
     paths:
     - ${CI_PROJECT_DIR}/config.json
     expire_in: 1 day
+
 
 # Depends on CLOUDSDK_CORE_PROJECT, CLOUDSDK_CONTAINER_CLUSTER, and CLOUDSDK_COMPUTE_ZONE SERVICE_ACCOUNT being set
 .gcloud: &gcloud
