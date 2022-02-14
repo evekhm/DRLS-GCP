@@ -51,6 +51,8 @@ prep token:
   services:
   - docker:${DOCKER_IMAGE_VERSION}-dind
   script:
+  - echo $TEST_VAR
+  - echo $SA_development
   # GitLab Token
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - cat $HOME/.docker/config.json > ${GITLAB_TOKEN_FILE}
