@@ -69,6 +69,7 @@ prep token:
 #- echo $GCLOUD_SERVICE_KEY | base64 --decode -i > ~/gcloud-service-key.json
 #- gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
 #- gcloud --quiet container clusters get-credentials $CLOUDSDK_CONTAINER_CLUSTER
+- cat ${SERVICE_ACCOUNT_FILE}
 - gcloud auth activate-service-account --key-file ${SERVICE_ACCOUNT_FILE} --project=$PROJECT_ID
 # Get into the Cluster NAMESPACE context using GitLab Agent
 - kubectl config use-context $KUBE_CONTEXT
