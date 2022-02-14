@@ -8,7 +8,7 @@ variables:
   DOCKER_IMAGE_VERSION: 19.03.1
   DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: "/certs"
-  SERVICE_ACCOUNT_FILE: SERVICE_ACCOUNT
+
   #SERVICE_ACCOUNT_FILE: SERVICE_ACCOUNT_$CI_COMMIT_BRANCH     #TODO CI_COMMIT_BRANCH not available om Merge Request
   # Project Environment Settings NEEDS Update for new environment setup
   PROJECT_ID: "pri-auth-test"    #
@@ -32,6 +32,9 @@ variables:
   CI_KUBERNETES_ACTIVE: 'true'
   CRD_IMAGE_TAG: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/crd/gcpdev:latest"
 
+  SERVICE_ACCOUNT_FILE: ${CI_PROJECT_DIR}/gcloud-service-key.json
+  GITLAB_TOKEN_FILE: ${CI_PROJECT_DIR}/config.json
+
 stages:
   - prepare_token
   - prepare_cluster
@@ -41,18 +44,23 @@ stages:
 # Needed to generate secret at cluster (one-time) to download images from GitLab repositories
 # Alternative to consider is to add image pull secret to service account imagePullSecret TODO
 # https://towardsdatascience.com/multiple-ways-to-create-kubernetes-secrets-33f97feaa499
-prep token: #TODO: Maybe can be skipped? Generating token to pass it as a secret to GCP cluster to download Images from Gitlab private repositories
+prep token:
   environment: $CI_COMMIT_REF_SLUG
   stage: prepare_token
   image: docker:${DOCKER_IMAGE_VERSION}
   services:
   - docker:${DOCKER_IMAGE_VERSION}-dind
   script:
+  # GitLab Token
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  - cat $HOME/.docker/config.json > ${CI_PROJECT_DIR}/config.json
+  - cat $HOME/.docker/config.json > ${GITLAB_TOKEN_FILE}
+  # GCP Service Account Token
+  #- echo ${SERVICE_ACCOUNT} | base64 --decode -i > ${SERVICE_ACCOUNT_FILE} #TODO save encoded
+  - echo ${SERVICE_ACCOUNT} > ${SERVICE_ACCOUNT_FILE}
   artifacts:
     paths:
-    - ${CI_PROJECT_DIR}/config.json
+    - ${GITLAB_TOKEN_FILE}
+    - ${SERVICE_ACCOUNT_FILE}
     expire_in: 1 day
 
 
@@ -61,8 +69,7 @@ prep token: #TODO: Maybe can be skipped? Generating token to pass it as a secret
 #- echo $GCLOUD_SERVICE_KEY | base64 --decode -i > ~/gcloud-service-key.json
 #- gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
 #- gcloud --quiet container clusters get-credentials $CLOUDSDK_CONTAINER_CLUSTER
-- echo ${SERVICE_ACCOUNT_FILE} | base64 --decode -i > ${CI_PROJECT_DIR}/gcloud-service-key.json
-- gcloud auth activate-service-account --key-file ${CI_PROJECT_DIR}/gcloud-service-key.json --project=$PROJECT_ID
+- gcloud auth activate-service-account --key-file ${SERVICE_ACCOUNT_FILE} --project=$PROJECT_ID
 # Get into the Cluster NAMESPACE context using GitLab Agent
 - kubectl config use-context $KUBE_CONTEXT
 - kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"
@@ -78,7 +85,7 @@ prepare cluster:
   script:
   # Create Secret if not existing to PullImages from GitLab
   - kubectl get secret regcred --namespace=$KUBE_NAMESPACE 2>/dev/null ||
-    kubectl create secret generic regcred --from-file=.dockerconfigjson=${CI_PROJECT_DIR}/config.json
+    kubectl create secret generic regcred --from-file=.dockerconfigjson=${GITLAB_TOKEN_FILE}
     --type=kubernetes.io/dockerconfigjson --namespace=$KUBE_NAMESPACE
 
 # Depends on GR_TOKEN - Gitlab Runner Token variables with access to API - defined inside Project Settings->CI/CD
