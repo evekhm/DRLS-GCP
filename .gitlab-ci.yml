@@ -140,7 +140,7 @@ gcloud destroy:
   image: google/cloud-sdk
   when: manual
   script:
-  - "${CI_PROJECT_DIR}/delete_deployments.sh"
+  - PROJECT_ID=$PROJECT_ID BUCKET=$BUCKET bash "${CI_PROJECT_DIR}/delete_deployment.sh"
 
 #deploy_review:
 #  stage: deploy
@@ -169,3 +169,4 @@ deploy demo:
   when: manual
   only:
   - master
+
