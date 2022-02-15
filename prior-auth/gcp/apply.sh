@@ -13,9 +13,9 @@ echo "***** Applying $APPLICATION Deployment to Cluster $CLUSTER *****"
 cd "$GCP"/../k8s/
 
 sed 's|__IMAGE_TAG__|'"$IMAGE_TAG"'|g;' deployment.sample.yaml > deployment.yaml
-kubectl apply -f deployment.yaml
+kubectl apply -f deployment.yaml --namespace="$KUBE_NAMESPACE"
 
-kubectl apply -f service.yaml
+kubectl apply -f service.yaml --namespace="$KUBE_NAMESPACE"
 
 
 cd "$PWD" || exit

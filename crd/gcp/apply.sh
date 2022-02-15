@@ -22,18 +22,18 @@ sed 's|__PROJECT_ID__|'"$PROJECT_ID"'|g;
       s|__TEST_EHR__|'"$TEST_EHR"'|g; ' config.sample.yaml > config.yaml
 
 cat config.yaml
-kubectl apply -f config.yaml
+kubectl apply -f config.yaml --namespace="$KUBE_NAMESPACE"
 
-kubectl apply -f service.yaml
+kubectl apply -f service.yaml --namespace="$KUBE_NAMESPACE"
 
 sed 's|__KSA_NAME__|'"$KSA_NAME"'|g; ' serviceaccount.sample.yaml > serviceaccount.yaml
-cat serviceaccount.yaml
-kubectl apply -f serviceaccount.yaml
+
+kubectl apply -f serviceaccount.yaml --namespace="$KUBE_NAMESPACE"
 
 sed 's|__IMAGE_TAG__|'"$IMAGE_TAG"'|g;
  s|__KSA_NAME__|'"$KSA_NAME"'|g; '  deployment.sample.yaml > deployment.yaml
-cat deployment.yaml
-kubectl apply -f deployment.yaml
+
+kubectl apply -f deployment.yaml --namespace="$KUBE_NAMESPACE"
 
 cd "$PWD" || exit
 
