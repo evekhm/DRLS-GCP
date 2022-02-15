@@ -7,7 +7,7 @@ DF_REGION='us-central1'
 DF_NETWORK='drls'
 
 # GCP Cluster
-DF_CLUSTER='prior-auth-cluster'
+DF_CLUSTER='development'
 DF_GSA_NAME='gsa-priauth-service'
 DF_KSA_NAME='k8s-priauth-service'
 DF_KUBE_NAMESPACE='default'

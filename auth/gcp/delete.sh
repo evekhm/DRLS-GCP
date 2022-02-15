@@ -13,8 +13,11 @@ echo "***** Deleting $APPLICATION deployment at cluster $CLUSTER *****"
 cd "$GCP"/../k8s/ || exit
 
 if [ -f deployment.yaml ]; then
-  kubectl delete -f deployment.yaml
+  if kubectl get deployment $APPLICATION; then
+    kubectl delete -f deployment.yaml
+  fi
 fi
+
 kubectl delete -f service.yaml
 echo "***** Deleted deployment for $APPLICATION ! *****"
 

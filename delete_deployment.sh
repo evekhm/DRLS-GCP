@@ -18,4 +18,10 @@ source "$DIR"/crd/bin/SET #CRD has BUCKET defined since it uses for Cloud Storag
 echo "Removing CDS-Library from cloud storage ..."
 gcloud alpha storage rm "$BUCKET"/"$DB"
 
+if [ -n "$SECRET" ]; then
+  if kubectl get secrets --namespace=$KUBE_NAMESPACE | grep $SECRET; then
+    kubectl delete secret $SECRET --namespace=$KUBE_NAMESPACE
+  fi
+fi
+
 

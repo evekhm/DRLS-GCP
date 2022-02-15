@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e # Exit if error is detected during pipeline execution
+set -x
 
 GCP="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN="$GCP"/../bin
