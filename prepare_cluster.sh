@@ -69,7 +69,12 @@ configure_kservice_account(){
 
   echo "-----"
   echo "Creating annotation ..."
-  annotation=$(kubectl get serviceaccount $KSA_NAME -n $KUBE_NAMESPACE -o jsonpath='{.metadata.annotations.iam\.gke\.io\/gcp-service-account}')
+
+  kubectx
+  kubectl get serviceaccount "$KSA_NAME"
+  kubectl get serviceaccount "$KSA_NAME" -n "$KUBE_NAMESPACE"
+
+  annotation=$(kubectl get serviceaccount "$KSA_NAME" -n "$KUBE_NAMESPACE" -o jsonpath='{.metadata.annotations.iam\.gke\.io\/gcp-service-account}')
   echo "Annotation in the namespace [$KUBE_NAMESPACE] = $annotation"
 
   if [ -z "$annotation" ]; then
