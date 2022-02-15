@@ -82,9 +82,7 @@ prepare cluster:
   before_script: *gcloud
   script:
   # Create Secret if not existing to PullImages from GitLab
-  - kubectl get namespace "$KUBE_NAMESPACE" || kubectl create namespace "$KUBE_NAMESPACE"
   - kubectl get secret $SECRET --namespace=$KUBE_NAMESPACE
-  - kubectl get secret --namespace=$KUBE_NAMESPACE
   - kubectl get secret $SECRET --namespace=$KUBE_NAMESPACE || kubectl create secret generic $SECRET --from-file=.dockerconfigjson=${GITLAB_TOKEN_FILE} --type=kubernetes.io/dockerconfigjson --namespace=$KUBE_NAMESPACE
 
   # Create KSA Service account and Workload Identity required for CRD application to access Cloud Storage
