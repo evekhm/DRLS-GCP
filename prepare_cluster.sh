@@ -72,9 +72,9 @@ configure_kservice_account(){
 
   kubectl config current-context
   kubectl get serviceaccount "$KSA_NAME"
-  kubectl get serviceaccount "$KSA_NAME" -n "$KUBE_NAMESPACE"
+  kubectl get serviceaccount "$KSA_NAME" --namespace "$KUBE_NAMESPACE"
 
-  annotation=$(kubectl get serviceaccount "$KSA_NAME" -n "$KUBE_NAMESPACE" -o jsonpath='{.metadata.annotations.iam\.gke\.io\/gcp-service-account}')
+  annotation=$(kubectl get serviceaccount "$KSA_NAME" --namespace "$KUBE_NAMESPACE" -o jsonpath='{.metadata.annotations.iam\.gke\.io\/gcp-service-account}')
   echo "Annotation in the namespace [$KUBE_NAMESPACE] = $annotation"
 
   if [ -z "$annotation" ]; then
@@ -84,6 +84,7 @@ configure_kservice_account(){
   else
     $print "Annotation already exists - $annotation" INFO
   fi
+  echo "Almost at the end...."
   kubectl describe serviceaccount $KSA_NAME --namespace $KUBE_NAMESPACE
 }
 
