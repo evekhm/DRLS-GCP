@@ -36,6 +36,7 @@ variables:
 stages:
   - prepare_token
   - prepare_cluster
+  - deploy_library
   - deploy
   - production
   - cleanup
@@ -95,7 +96,7 @@ prepare cluster:
 # Depends on GR_TOKEN - Gitlab Runner Token variables with access to API - defined inside Project Settings->CI/CD
 deploy CDS-Library:
   image: google/cloud-sdk
-  stage: deploy
+  stage: deploy_library
   environment: $CI_COMMIT_REF_SLUG
   before_script: *gcloud
   script:
