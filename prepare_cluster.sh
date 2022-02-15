@@ -2,7 +2,7 @@
 
 set -e # Exit if error is detected during pipeline execution
 #Expects: KUBE_NAMESPACE, KSA_NAME, GSA_NAME, PROJECT_ID
-
+set -x
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTILS="$DIR"/shared
@@ -10,6 +10,7 @@ print="$UTILS/print"
 GSA_EMAIL=$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
 
 echo "Using Project_ID=$PROJECT_ID, KUBE_NAMESPACE=$KUBE_NAMESPACE, KSA_NAME=$KSA_NAME, GSA_NAME=$GSA_NAME"
+kubectl config current-context
 
 create_namespace(){
   if kubectl get namespaces | grep "$KUBE_NAMESPACE"; then
@@ -23,7 +24,7 @@ create_namespace(){
 create_kservice_account(){
   $print "Preparing KSA service account [$KSA_NAME] in [$KUBE_NAMESPACE] namespace ..."
   kubectl get serviceaccount "$KSA_NAME" --namespace "$KUBE_NAMESPACE"
-  if kubectl get serviceaccount "$KSA_NAME" --namespace "$KUBE_NAMESPACE" | grep "$KSA_NAME"; then
+  if kubectl get serviceaccounts --namespace "$KUBE_NAMESPACE" | grep "$KSA_NAME"; then
     $print "Kubernetes Service account [$KSA_NAME] has been found." INFO
   else
     $print "Creating kubernetes service account [$KSA_NAME]..." INFO
@@ -71,7 +72,6 @@ configure_kservice_account(){
   echo "-----"
   echo "Creating annotation ..."
 
-  kubectl config current-context
   kubectl get serviceaccount "$KSA_NAME"
   kubectl get serviceaccount "$KSA_NAME" --namespace "$KUBE_NAMESPACE"
 

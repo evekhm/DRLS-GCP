@@ -15,7 +15,8 @@ variables:
   ZONE: "us-central1-c"
   REGION: "us-central1"
   NETWORK: "drls"
-  KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}" #Namespace is defined by the branch name
+  #KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}" #Namespace is defined by the branch name
+  KUBE_NAMESPACE: "default" #Namespace is defined by the branch name
   KUBE_AGENT: "development"
   KUBE_CONTEXT: $CI_PROJECT_NAMESPACE/gke-deploy-env:$KUBE_AGENT
   #KUBE_INGRESS_BASE_DOMAIN: 'papanca.com' #TODO
