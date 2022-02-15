@@ -30,7 +30,7 @@ variables:
 
   SERVICE_ACCOUNT_FILE: ${CI_PROJECT_DIR}/gcloud-service-key.json
   GITLAB_TOKEN_FILE: ${CI_PROJECT_DIR}/config.json
-  BUCKET: "gs://${PROJECT_ID}-prior-auth" #For CDS-Library
+  BUCKET: "gs://${PROJECT_ID}-crd" #For CDS-Library
   SECRET: regcred
 
 stages:
