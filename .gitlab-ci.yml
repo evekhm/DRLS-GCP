@@ -14,7 +14,7 @@ variables:
   CLUSTER: "development"
   ZONE: "us-central1-c"
   REGION: "us-central1"
-  NETWORK: "drls"
+
   #KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}" #Namespace is defined by the branch name
   KUBE_NAMESPACE: "default" #Namespace is defined by the branch name
   KUBE_AGENT: "development"
@@ -88,13 +88,12 @@ prepare cluster:
   # Create Secret if not existing to PullImages from GitLab
   - |
     if kubectl get secrets --namespace=$KUBE_NAMESPACE | grep $SECRET; then
-      :
+      echo "$SECRET exists in namespace $KUBE_NAMESPACE, skipping..."
     else
       kubectl create secret generic $SECRET --from-file=.dockerconfigjson=${GITLAB_AUTH} --type=kubernetes.io/dockerconfigjson --namespace=$KUBE_NAMESPACE
     fi
   # Create KSA Service account and Workload Identity required for CRD application to access Cloud Storage
   - KSA_NAME=$KSA_NAME GSA_NAME=$GSA_NAME CLUSTER=$CLUSTER PROJECT_ID=$PROJECT_ID KUBE_NAMESPACE=$KUBE_NAMESPACE BUCKET=$BUCKET bash ${CI_PROJECT_DIR}/prepare_cluster.sh
-  - echo '==>Done'
 # Depends on GR_TOKEN - Gitlab Runner Token variables with access to API - defined inside Project Settings->CI/CD
 deploy CDS-Library:
   image: google/cloud-sdk
@@ -140,7 +139,7 @@ gcloud destroy:
   image: google/cloud-sdk
   when: manual
   script:
-  - PROJECT_ID=$PROJECT_ID BUCKET=$BUCKET bash "${CI_PROJECT_DIR}/delete_deployment.sh"
+  - PROJECT_ID=$PROJECT_ID BUCKET=$BUCKET bash "${CI_PROJECT_DIR}/crd/gcp/delete.sh"
 
 #deploy_review:
 #  stage: deploy
