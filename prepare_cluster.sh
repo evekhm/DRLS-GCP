@@ -1,22 +1,24 @@
 #!/usr/bin/env bash
 
 set -e # Exit if error is detected during pipeline execution
-#Expects: KUBE_NAMESPACE, KSA_NAME, GSA_NAME, BUCKET, PROJECT_ID
+#Expects: KUBE_NAMESPACE, KSA_NAME, GSA_NAME, PROJECT_ID
 
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTILS="$DIR"/shared
 print="$UTILS/print"
 
-create_kservice_account(){
-  $print "Preparing KSA service account [$KSA_NAME] in [$KUBE_NAMESPACE] namespace ..."
+create_namespace(){
   if kubectl get namespaces | grep "$KUBE_NAMESPACE"; then
     $print "[$KUBE_NAMESPACE] namespace already exists" INFO
   else
     $print "Creating [$KUBE_NAMESPACE] namespace" INFO
     kubectl create namespace "$KUBE_NAMESPACE"
   fi
+}
 
+create_kservice_account(){
+  $print "Preparing KSA service account [$KSA_NAME] in [$KUBE_NAMESPACE] namespace ..."
   if kubectl get serviceaccounts --namespace "$KUBE_NAMESPACE" | grep -q "$KSA_NAME"; then
     $print "Kubernetes Service account [$KSA_NAME] has been found." INFO
   else
@@ -37,7 +39,8 @@ create_gservice_account() {
     $print "Creating service account [$GSA_NAME] ..." INFO
     gcloud iam service-accounts create "$GSA_NAME" \
         --description="Runs priorauth jobs" \
-        --display-name="priorauth-service-account"
+        --display-name="priorauth-service-account" \
+        --project="${PROJECT_ID}"
   fi
 
   gcloud iam service-accounts get-iam-policy \
@@ -62,6 +65,7 @@ configure_kservice_account(){
   kubectl describe serviceaccount $KSA_NAME
 }
 
+create_namespace
 
 #Assign Workload Identity https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#kubectl
 
