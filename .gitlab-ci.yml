@@ -14,12 +14,13 @@ variables:
   CLUSTER: "development"
   ZONE: "us-central1-c"
   REGION: "us-central1"
-  #KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}" #Namespace is defined by the branch name
-  KUBE_NAMESPACE: "default" #Namespace is defined by the branch name
+  KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}" #Namespace is defined by the branch name
+  #KUBE_NAMESPACE: "default" #Namespace is defined by the branch name
   KUBE_AGENT: "development"
   KUBE_CONTEXT: $CI_PROJECT_NAMESPACE/gke-deploy-env:$KUBE_AGENT
   #KUBE_INGRESS_BASE_DOMAIN: 'papanca.com' #TODO
   CRD_IMAGE_TAG: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/crd/gcpdev:latest"
+  CRD_IMAGE_TAG_TEST: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/crd/${CI_COMMIT_REF_SLUG}:latest"
   #$SERVICE_ACCOUNT
 
   GSA_NAME: "gsa-priauth-service" # Service Account Name to be created for crd application required for Cloud Storage Access for CDS-Library Access
@@ -63,21 +64,23 @@ stages:
 #    expire_in: 1 day
 
 
-# Depends on CLOUDSDK_CORE_PROJECT, CLOUDSDK_CONTAINER_CLUSTER, and CLOUDSDK_COMPUTE_ZONE SERVICE_ACCOUNT being set
+# Depends on SERVICE_ACCOUNT_FILE - JSON KEY File from ServiceAccount downloaded from GCP and saved as FILE Variable CI/CD Settings
 .gcloud: &gcloud
 #- echo $GCLOUD_SERVICE_KEY | base64 --decode -i > ~/gcloud-service-key.json
 #- gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
 #- gcloud --quiet container clusters get-credentials $CLOUDSDK_CONTAINER_CLUSTER
 - gcloud auth activate-service-account --key-file ${SERVICE_ACCOUNT_FILE} --project=$PROJECT_ID
-# Get into the Cluster NAMESPACE context using GitLab Agent
 - kubectl config use-context $KUBE_CONTEXT
 - kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"
 - kubectl config set-context --current --namespace=$KUBE_NAMESPACE
 - kubectl config current-context
 - gcloud --quiet container clusters get-credentials $CLUSTER --region $REGION
 
-# Using docker token from `prepare_token` step creates namespace, secret and deploys CDS-Library to Cloud Storage.
-# The latest steps requires setting up Workload Identity in the given namespace
+
+# Depends on GITLAB_AUTH - File defined inside Project Settings->CI/CD
+# Generated using:
+# docker login -u <user_name> -p <gitlab_access_token> registry.gitlab.com
+# cat $HOME/.docker/config.json
 prepare cluster:
   image: google/cloud-sdk
   stage: prepare_cluster
@@ -94,7 +97,10 @@ prepare cluster:
     fi
   # Create KSA Service account and Workload Identity required for CRD application to access Cloud Storage
   - KSA_NAME=$KSA_NAME GSA_NAME=$GSA_NAME CLUSTER=$CLUSTER PROJECT_ID=$PROJECT_ID KUBE_NAMESPACE=$KUBE_NAMESPACE BUCKET=$BUCKET bash ${CI_PROJECT_DIR}/prepare_cluster.sh
-# Depends on GR_TOKEN - Gitlab Runner Token variables with access to API - defined inside Project Settings->CI/CD
+
+
+# Depends on GITLAB - Gitlab Token with access to API - Variable defined inside Project Settings->CI/CD
+# Generated using Gitlab Settings https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token
 deploy CDS-Library:
   image: google/cloud-sdk
   stage: deploy_library
@@ -105,7 +111,7 @@ deploy CDS-Library:
   - apt-get install zip unzip -q
   # Deploys CDS-Library
   # Get CDS-Library from GitLab repo, zips and uploads into the GCP Cloud Storage Bucket
-  - git clone https://oauth2:$GR_TOKEN@gitlab.com/$CI_PROJECT_NAMESPACE/CDS-Library.git ${CI_PROJECT_DIR}/../CDS-Library
+  - git clone https://oauth2:$GITLAB_TOKEN@gitlab.com/$CI_PROJECT_NAMESPACE/CDS-Library.git ${CI_PROJECT_DIR}/../CDS-Library
   - GSA_NAME=$GSA_NAME PROJECT_ID=$PROJECT_ID BUCKET=$BUCKET bash ${CI_PROJECT_DIR}/deploy_CDS_Library.sh
 
 deploy applications:
