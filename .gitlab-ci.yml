@@ -128,7 +128,10 @@ deploy applications:
       CRD_IMAGE_TAG=$CRD_IMAGE_TAG VSAC_API_KEY=$VSAC_API_KEY KSA_NAME=$KSA_NAME bash "${CI_PROJECT_DIR}/crd/gcp/apply.sh"
       cat ${CI_PROJECT_DIR}/crd/k8s/deployment.yaml
     fi
-
+  artifacts:
+    paths:
+    - ${CI_PROJECT_DIR}/crd/k8s/*
+    expire_in: 1 day
 
 gcloud destroy:
   stage: cleanup

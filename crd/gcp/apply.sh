@@ -6,7 +6,6 @@ BIN="$GCP"/../bin
 PWD=$(pwd)
 source "$BIN"/SET
 
-echo 'Test > ' kubectx
 #gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 
 echo "***** Configuring cluster $CLUSTER for $APPLICATION application *****"
@@ -21,16 +20,19 @@ sed 's|__PROJECT_ID__|'"$PROJECT_ID"'|g;
       s|__CRD_REQUEST_GENERATOR__|'"$CRD_REQUEST_GENERATOR"'|g;
       s|__TEST_EHR__|'"$TEST_EHR"'|g; ' config.sample.yaml > config.yaml
 
+cat config.yaml
 kubectl apply -f config.yaml
 
+kubectl apply -f service.yaml
+
 sed 's|__KSA_NAME__|'"$KSA_NAME"'|g; ' serviceaccount.sample.yaml > serviceaccount.yaml
+cat serviceaccount.yaml
 kubectl apply -f serviceaccount.yaml
 
 sed 's|__IMAGE_TAG__|'"$IMAGE_TAG"'|g;
  s|__KSA_NAME__|'"$KSA_NAME"'|g; '  deployment.sample.yaml > deployment.yaml
+cat deployment.yaml
 kubectl apply -f deployment.yaml
-
-kubectl apply -f service.yaml
 
 cd "$PWD" || exit
 

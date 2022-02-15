@@ -47,32 +47,26 @@ create_gservice_account() {
         --display-name="priorauth-service-account" \
         --project="${PROJECT_ID}"
   fi
-
-
   echo "Created service account [$GSA_NAME]"
-
   #gcloud iam service-accounts get-iam-policy $GSA_EMAIL
 
 }
 
 configure_kservice_account(){
   $print "Configuring KSA [$KSA_NAME]..."
-  echo "Creating Binding .... "
-  echo "gcloud iam service-accounts add-iam-policy-binding $GSA_EMAIL \
-              --role roles/iam.workloadIdentityUser \
-              --member "serviceAccount:$PROJECT_ID.svc.id.goog[$KUBE_NAMESPACE/$KSA_NAME]""
-  echo "Check that $GSA_EMAIL exists:"
-  gcloud iam service-accounts describe $GSA_EMAIL
+#  echo "Creating Binding .... "
+#  echo "gcloud iam service-accounts add-iam-policy-binding $GSA_EMAIL \
+#              --role roles/iam.workloadIdentityUser \
+#              --member "serviceAccount:$PROJECT_ID.svc.id.goog[$KUBE_NAMESPACE/$KSA_NAME]""
+#  echo "Check that $GSA_EMAIL exists:"
+#  gcloud iam service-accounts describe $GSA_EMAIL
 
-  echo "......."
   gcloud iam service-accounts add-iam-policy-binding $GSA_EMAIL \
       --role roles/iam.workloadIdentityUser \
       --member "serviceAccount:$PROJECT_ID.svc.id.goog[$KUBE_NAMESPACE/$KSA_NAME]"
 
-  echo "-----"
   echo "Creating annotation ..."
 
-  kubectl get serviceaccount "$KSA_NAME"
   kubectl get serviceaccount "$KSA_NAME" --namespace "$KUBE_NAMESPACE"
 
   annotation=$(kubectl get serviceaccount "$KSA_NAME" --namespace "$KUBE_NAMESPACE" -o jsonpath='{.metadata.annotations.iam\.gke\.io\/gcp-service-account}')
