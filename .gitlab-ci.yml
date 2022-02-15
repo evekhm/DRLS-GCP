@@ -33,8 +33,8 @@ variables:
 stages:
   - prepare_cluster
   - upload_library
-  - deploy
-  - demo
+  - deploy_applications
+  - deploy_demo
   - cleanup
 
 # Needed to generate secret at cluster (one-time) to download images from GitLab repositories
@@ -129,17 +129,18 @@ before_script: *gcloud
     - ${CI_PROJECT_DIR}/crd/k8s/*
     expire_in: 1 day
 
-.prod_deploy: &prod_deploy
-  image: google/cloud-sdk
-  stage: demo
-  environment: production
-  before_script: *gcloud
-  script:
-  - echo 'TODO still..'
-  #- kubectl patch deployment $PRODUCTION_SERVICE_NAME -p '{"spec":{"template":{"spec":{"containers":[{"name":"'"$PRODUCTION_SERVICE_NAME"'","image":"'"$CI_REGISTRY_IMAGE:$CI_BUILD_REF"'"}]}}}}'
+#.prod_deploy: &prod_deploy
+#  image: google/cloud-sdk
+#  stage: demo
+#  environment: production
+#  before_script: *gcloud
+#  script:
+#  - echo 'TODO still..'
+#  #- kubectl patch deployment $PRODUCTION_SERVICE_NAME -p '{"spec":{"template":{"spec":{"containers":[{"name":"'"$PRODUCTION_SERVICE_NAME"'","image":"'"$CI_REGISTRY_IMAGE:$CI_BUILD_REF"'"}]}}}}'
 
 
 deploy demo:
+  stage: deploy_demo
   <<: *prepare_cluster
   <<: *deploy_cds_library
   <<: *deploy_applications
@@ -159,7 +160,7 @@ prepare cluster:
 
 deploy applications:
   environment: $CI_COMMIT_REF_SLUG
-  stage: deploy
+  stage: deploy_applications
   <<: *deploy_applications
 
 gcloud destroy:
