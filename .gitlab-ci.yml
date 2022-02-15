@@ -14,7 +14,6 @@ variables:
   CLUSTER: "development"
   ZONE: "us-central1-c"
   REGION: "us-central1"
-
   #KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}" #Namespace is defined by the branch name
   KUBE_NAMESPACE: "default" #Namespace is defined by the branch name
   KUBE_AGENT: "development"
@@ -69,14 +68,13 @@ stages:
 #- echo $GCLOUD_SERVICE_KEY | base64 --decode -i > ~/gcloud-service-key.json
 #- gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
 #- gcloud --quiet container clusters get-credentials $CLOUDSDK_CONTAINER_CLUSTER
-- cat ${SERVICE_ACCOUNT_FILE}
-- echo ${SERVICE_ACCOUNT_FILE}
 - gcloud auth activate-service-account --key-file ${SERVICE_ACCOUNT_FILE} --project=$PROJECT_ID
 # Get into the Cluster NAMESPACE context using GitLab Agent
 - kubectl config use-context $KUBE_CONTEXT
 - kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"
 - kubectl config set-context --current --namespace=$KUBE_NAMESPACE
 - kubectl config current-context
+- gcloud --quiet container clusters get-credentials $CLUSTER --region $REGION
 
 # Using docker token from `prepare_token` step creates namespace, secret and deploys CDS-Library to Cloud Storage.
 # The latest steps requires setting up Workload Identity in the given namespace
