@@ -22,7 +22,7 @@ create_namespace(){
 
 create_kservice_account(){
   $print "Preparing KSA service account [$KSA_NAME] in [$KUBE_NAMESPACE] namespace ..."
-  if kubectl get serviceaccounts --namespace "$KUBE_NAMESPACE" | grep -q "$KSA_NAME"; then
+  if kubectl get serviceaccount "$KSA_NAME" --namespace "$KUBE_NAMESPACE" | grep -q "$KSA_NAME"; then
     $print "Kubernetes Service account [$KSA_NAME] has been found." INFO
   else
     $print "Creating kubernetes service account [$KSA_NAME]..." INFO
@@ -70,7 +70,7 @@ configure_kservice_account(){
   echo "-----"
   echo "Creating annotation ..."
 
-  kubectx
+  kubectl config current-context
   kubectl get serviceaccount "$KSA_NAME"
   kubectl get serviceaccount "$KSA_NAME" -n "$KUBE_NAMESPACE"
 
