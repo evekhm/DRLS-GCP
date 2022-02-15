@@ -84,11 +84,11 @@ prepare cluster:
   script:
   # Create Secret if not existing to PullImages from GitLab
   - |
-  if kubectl get secrets --namespace=$KUBE_NAMESPACE | grep $SECRET; then
-    :
-  else
-    kubectl create secret generic $SECRET --from-file=.dockerconfigjson=${GITLAB_TOKEN_FILE} --type=kubernetes.io/dockerconfigjson --namespace=$KUBE_NAMESPACE
-  fi
+    if kubectl get secrets --namespace=$KUBE_NAMESPACE | grep $SECRET; then
+      :
+    else
+      kubectl create secret generic $SECRET --from-file=.dockerconfigjson=${GITLAB_TOKEN_FILE} --type=kubernetes.io/dockerconfigjson --namespace=$KUBE_NAMESPACE
+    fi
   # Create KSA Service account and Workload Identity required for CRD application to access Cloud Storage
   - KSA_NAME=$KSA_NAME GSA_NAME=$GSA_NAME CLUSTER=$CLUSTER PROJECT_ID=$PROJECT_ID KUBE_NAMESPACE=$KUBE_NAMESPACE BUCKET=$BUCKET bash ${CI_PROJECT_DIR}/prepare_cluster.sh
   - echo '==>Done'
