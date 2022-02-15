@@ -34,7 +34,7 @@ variables:
   SECRET: regcred
 
 stages:
-  - prepare_token
+#  - prepare_token
   - prepare_cluster
   - deploy_library
   - deploy
@@ -44,24 +44,24 @@ stages:
 # Needed to generate secret at cluster (one-time) to download images from GitLab repositories
 # Alternative to consider is to add image pull secret to service account imagePullSecret TODO
 # https://towardsdatascience.com/multiple-ways-to-create-kubernetes-secrets-33f97feaa499
-prepare tokens:
-  environment: $CI_COMMIT_REF_SLUG
-  stage: prepare_token
-  image: docker:${DOCKER_IMAGE_VERSION}
-  services:
-  - docker:${DOCKER_IMAGE_VERSION}-dind
-  script:
-  # GitLab Token
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  - cat $HOME/.docker/config.json > ${GITLAB_TOKEN_FILE}
-  # GCP Service Account Token
-  #- echo ${SERVICE_ACCOUNT} | base64 --decode -i > ${SERVICE_ACCOUNT_FILE} #TODO save encoded
-  - echo ${SERVICE_ACCOUNT} > ${SERVICE_ACCOUNT_FILE}
-  artifacts:
-    paths:
-    - ${GITLAB_TOKEN_FILE}
-    - ${SERVICE_ACCOUNT_FILE}
-    expire_in: 1 day
+#prepare tokens:
+#  environment: $CI_COMMIT_REF_SLUG
+#  stage: prepare_token
+#  image: docker:${DOCKER_IMAGE_VERSION}
+#  services:
+#  - docker:${DOCKER_IMAGE_VERSION}-dind
+#  script:
+#  # GitLab Token
+#  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#  - cat $HOME/.docker/config.json > ${GITLAB_TOKEN_FILE}
+#  # GCP Service Account Token
+#  #- echo ${SERVICE_ACCOUNT} | base64 --decode -i > ${SERVICE_ACCOUNT_FILE} #TODO save encoded
+#  - echo ${SERVICE_ACCOUNT} > ${SERVICE_ACCOUNT_FILE}
+#  artifacts:
+#    paths:
+#    - ${GITLAB_TOKEN_FILE}
+#    - ${SERVICE_ACCOUNT_FILE}
+#    expire_in: 1 day
 
 
 # Depends on CLOUDSDK_CORE_PROJECT, CLOUDSDK_CONTAINER_CLUSTER, and CLOUDSDK_COMPUTE_ZONE SERVICE_ACCOUNT being set
@@ -69,6 +69,8 @@ prepare tokens:
 #- echo $GCLOUD_SERVICE_KEY | base64 --decode -i > ~/gcloud-service-key.json
 #- gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
 #- gcloud --quiet container clusters get-credentials $CLOUDSDK_CONTAINER_CLUSTER
+- cat ${SERVICE_ACCOUNT_FILE}
+- echo ${SERVICE_ACCOUNT_FILE}
 - gcloud auth activate-service-account --key-file ${SERVICE_ACCOUNT_FILE} --project=$PROJECT_ID
 # Get into the Cluster NAMESPACE context using GitLab Agent
 - kubectl config use-context $KUBE_CONTEXT
@@ -88,7 +90,7 @@ prepare cluster:
     if kubectl get secrets --namespace=$KUBE_NAMESPACE | grep $SECRET; then
       :
     else
-      kubectl create secret generic $SECRET --from-file=.dockerconfigjson=${GITLAB_TOKEN_FILE} --type=kubernetes.io/dockerconfigjson --namespace=$KUBE_NAMESPACE
+      kubectl create secret generic $SECRET --from-file=.dockerconfigjson=${GITLAB_AUTH} --type=kubernetes.io/dockerconfigjson --namespace=$KUBE_NAMESPACE
     fi
   # Create KSA Service account and Workload Identity required for CRD application to access Cloud Storage
   - KSA_NAME=$KSA_NAME GSA_NAME=$GSA_NAME CLUSTER=$CLUSTER PROJECT_ID=$PROJECT_ID KUBE_NAMESPACE=$KUBE_NAMESPACE BUCKET=$BUCKET bash ${CI_PROJECT_DIR}/prepare_cluster.sh
