@@ -8,6 +8,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTILS="$DIR"/shared
 print="$UTILS/print"
 
+echo "Using Project_ID=$PROJECT_ID, KUBE_NAMESPACE=$KUBE_NAMESPACE, KSA_NAME=$KSA_NAME, GSA_NAME=$GSA_NAME"
+
 create_namespace(){
   if kubectl get namespaces | grep "$KUBE_NAMESPACE"; then
     $print "[$KUBE_NAMESPACE] namespace already exists" INFO
@@ -43,18 +45,22 @@ create_gservice_account() {
         --project="${PROJECT_ID}"
   fi
 
+  echo "Created service account [$GSA_NAME]"
   gcloud iam service-accounts get-iam-policy \
       $GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
 
 }
 
 configure_kservice_account(){
-  $print 'Configuring KSA...'
+  $print "Configuring KSA [$KSA_NAME]..."
+  gcloud iam service-accounts describe $GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
   gcloud iam service-accounts add-iam-policy-binding $GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
       --role roles/iam.workloadIdentityUser \
       --member "serviceAccount:$PROJECT_ID.svc.id.goog[$KUBE_NAMESPACE/$KSA_NAME]"
 
   annotation=$(kubectl get serviceaccount $KSA_NAME -o jsonpath='{.metadata.annotations.iam\.gke\.io\/gcp-service-account}')
+  echo "Annotation = $annotation"
+
   if [ -z "$annotation" ]; then
     kubectl annotate serviceaccount $KSA_NAME \
         --namespace $KUBE_NAMESPACE \
