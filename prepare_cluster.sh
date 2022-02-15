@@ -7,6 +7,7 @@ set -e # Exit if error is detected during pipeline execution
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTILS="$DIR"/shared
 print="$UTILS/print"
+GSA_EMAIL=$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
 
 echo "Using Project_ID=$PROJECT_ID, KUBE_NAMESPACE=$KUBE_NAMESPACE, KSA_NAME=$KSA_NAME, GSA_NAME=$GSA_NAME"
 
@@ -35,8 +36,8 @@ create_gservice_account() {
   $print "Preparing GSA service account [$GSA_NAME] ..."
 
   # shellcheck disable=SC2153
-  if gcloud iam service-accounts list --project "$PROJECT_ID" | grep -q "$GSA_NAME"; then
-    $print "Service account [$GSA_NAME] has been found." INFO
+  if gcloud iam service-accounts list --filter="EMAIL=$GSA_EMAIL" --project "$PROJECT_ID" | grep $GSA_EMAIL; then
+    $print "Service account [$GSA_EMAIL] has been found." INFO
   else
     $print "Creating service account [$GSA_NAME] ..." INFO
     gcloud iam service-accounts create "$GSA_NAME" \
@@ -45,21 +46,31 @@ create_gservice_account() {
         --project="${PROJECT_ID}"
   fi
 
+
   echo "Created service account [$GSA_NAME]"
-  gcloud iam service-accounts get-iam-policy \
-      $GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
+
+  #gcloud iam service-accounts get-iam-policy $GSA_EMAIL
 
 }
 
 configure_kservice_account(){
   $print "Configuring KSA [$KSA_NAME]..."
-  gcloud iam service-accounts describe $GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
-  gcloud iam service-accounts add-iam-policy-binding $GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+  echo "Creating Binding .... "
+  echo "gcloud iam service-accounts add-iam-policy-binding $GSA_EMAIL \
+              --role roles/iam.workloadIdentityUser \
+              --member "serviceAccount:$PROJECT_ID.svc.id.goog[$KUBE_NAMESPACE/$KSA_NAME]""
+  echo "Check that $GSA_EMAIL exists:"
+  gcloud iam service-accounts describe $GSA_EMAIL
+
+  echo "......."
+  gcloud iam service-accounts add-iam-policy-binding $GSA_EMAIL \
       --role roles/iam.workloadIdentityUser \
       --member "serviceAccount:$PROJECT_ID.svc.id.goog[$KUBE_NAMESPACE/$KSA_NAME]"
 
-  annotation=$(kubectl get serviceaccount $KSA_NAME -o jsonpath='{.metadata.annotations.iam\.gke\.io\/gcp-service-account}')
-  echo "Annotation = $annotation"
+  echo "-----"
+  echo "Creating annotation ..."
+  annotation=$(kubectl get serviceaccount $KSA_NAME -n $KUBE_NAMESPACE -o jsonpath='{.metadata.annotations.iam\.gke\.io\/gcp-service-account}')
+  echo "Annotation in the namespace [$KUBE_NAMESPACE] = $annotation"
 
   if [ -z "$annotation" ]; then
     kubectl annotate serviceaccount $KSA_NAME \
