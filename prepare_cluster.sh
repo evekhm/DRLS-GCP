@@ -62,7 +62,7 @@ configure_kservice_account(){
   else
     $print "Annotation already exists - $annotation" INFO
   fi
-  kubectl describe serviceaccount $KSA_NAME
+  kubectl describe serviceaccount $KSA_NAME --namespace $KUBE_NAMESPACE
 }
 
 create_namespace
