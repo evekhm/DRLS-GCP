@@ -38,7 +38,7 @@ with automatic CI/CD pipeline .
 - Deploy and test potential merge request inside the Test environment,
 - Request feature to be released (includes releasing of the new application image(s)).  
 
-###Steps:
+### Steps:
 - (One time only) :
   - Developer creates new GCP Project, installs GitLab Agent (requires changes to [gke-deploy-env](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/gke-deploy-env))
     and prepares personal Development environment following [these steps](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/gke-deploy-env/-/blob/main/README.md).
@@ -47,19 +47,20 @@ with automatic CI/CD pipeline .
   - When multiple applications need to be changed, same *myFeature* name is used as a branch name on all other repositories. 
 - Developer branches off from the `main` [DRLS-GCP](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP) branch as *myFeature* branch.
   - Developer modifies [.gitlab-ci.yml](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP/-/blob/main/.gitlab-ci.yml)
-  - It is up to developer to decide which namespace to use during the deployment into the Development environment and decide on additional configurations. 
+  - It is up to developer to decide which namespace to use during the deployment into the Development environment and decide on additional configurations.
   to include GCP Project settings and set CI/CD to work with the *myFeature* branch changes.  [TODO Add Instructions and Examples]
+  - The initial commit of the *myFeature* branch of DRLS-GCP triggers deployment into the Development Environment.
+    - This uses if available *myFeature* branched application images, or if not, the released image versions.
 - Developer commits changes to the Application feature branch.
-  - This triggers CI/CD to build and push new `test` image into the Application Container Registry with `application_name/branch_name:latest` tag (logic handled inside the Application .gitlab-ci.yml).
+  - This triggers CI/CD to build and push new `QA` image into the Application Container Registry with `application_name/qa:branch_name` and `application_name/qa:CI_COMMIT_SHA` tags (logic handled inside the Application .gitlab-ci.yml).
   - This in turn triggers downstream deployment and patching of the image into the Development environment. (logic handled inside the branched-off DRLS-GCP [.gitlab-ci.yml](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP/-/blob/main/.gitlab-ci.yml)
 - Developer tests changes using the Deployment environment, when successfully tested, proceeds with the next steps.
-- Developer initiates Merge Request(s) for the Application(s) `main` branch(es):
-  - This triggers deployment into the Test environment using *myFeature* as a namespace.
+- Developer initiates Merge Request(s) into the Application(s) `main` branch(es):
+  - This triggers deployment of the `QA` Images into the Test environment using *myFeature* as a namespace. 
   - If there are multiple applications changed (thus multiple merge requested on each application branch), all of that would result in the updated Test environment with *myFeature* namespace and required images patched. 
 - Developer uses Test environment for the final integration test.  
 - Assigned reviewer approves merge request:
-  - Performs QA of the Test environment  [*myFeature*] namespace and does code review. 
-  - (Manual? in case we need to verify later)
+  - Performs QA of the Test environment  [*myFeature*] namespace and does code review.
 - Automatic release on the merge request approval:
   - As soon as code is pushed to the `main` of the application branch, the image is automatically built and released as `application_name:latest` inside the Application project Container Registry.
   - This triggers deployment into the Demo environment with the latest released images.
@@ -80,22 +81,23 @@ Following pre-requisites are required for the CI/CD to work:
     - Exception is `keycloak`, since it needs to be built per deployment.
 
 #### Initial Deployment
-Initial deployment into the personal Development environment can be done either manually from the CI/CD Pipeline on the branched-off 
-[DRLS-GCP](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP) project, or will happen automatically on a commit to the registered *myFeature* branch.
+Initial deployment into the personal Development environment happens when the [DRLS-GCP](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP) repository is branched off as *myFeature*, on the initial commit. 
+After that pipeline is triggered either on the commits to the branch or by commits to the Application *myFeature* branches. 
 
 #### Feature Deployment
 Commits into the `feature` **application** branch with *<branch_name>*:
-- Will trigger new image to be built and pushed into the Application Container Registry with `application_name/branch_name:latest` and `application_name/branch_name_:test_COMMIT_SHA` tags.
+- Will trigger new image to be built and pushed into the Application Container Registry with `application_name/qa:branch_name` and `application_name/qa:COMMIT_SHA` tags.
   - E.g.:
-    - `registry.gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd/gcpdev:latest`
-    - `registry.gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd/gcpdev:test_4tHSG586`
+    - `registry.gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd/qa:gcpdev`
+    - `registry.gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd/qa:4tHSG586...`
   - Note, that in reality it will be using 'normalized' branch name, such as CI_COMMIT_REF_SLUG
 - Then this  triggers downstream deployment (with APPLICATION and IMAGE_TAG as variables) and patching of the image into the development environment. 
 - The officially released application image will be used for those applications that do not have  *<branch_name>*.
 
 ### Test Environment
 Merge Request into the `main` **application** branch from  *<branch_name>*:
-- Will trigger `application_name/branch_name:latest` to be used in the Test environment inside <branch_name> namespace.
+- Will trigger building of the image `application_name/mr/branch_name` 
+- Will trigger downstream Pipeline for to [DRLS-GCP](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP) and deployment into the Test environment with  <branch_name> as the namespace.
 
 ### Demo Environment
 Demo environment only uses Application released stable images with `application_name:latest` tag.
