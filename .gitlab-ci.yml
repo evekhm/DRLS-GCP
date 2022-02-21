@@ -66,6 +66,7 @@ stages:
 #- gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
 #- gcloud --quiet container clusters get-credentials $CLOUDSDK_CONTAINER_CLUSTER
 - gcloud auth activate-service-account --key-file ${SERVICE_ACCOUNT_FILE} --project=$PROJECT_ID
+- echo $KUBE_CONTEXT
 - kubectl config use-context $KUBE_CONTEXT
 - kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"
 - kubectl config set-context --current --namespace=$KUBE_NAMESPACE
