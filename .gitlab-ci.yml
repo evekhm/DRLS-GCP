@@ -11,9 +11,9 @@ variables:
 
   #Sharing same Agent, but could use different agents per environment
   #GITLAB_AGENT: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:development
-  KUBE_CONTEXT_DEMO: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:development
-  KUBE_CONTEXT_TEST: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:development
-  KUBE_CONTEXT_DEV: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:development
+  KUBE_CONTEXT_DEMO: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:gitlab-agent
+  KUBE_CONTEXT_TEST: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:gitlab-agent
+  KUBE_CONTEXT_DEV: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:gitlab-agent
 
   ######### Per Environment #############
   CLUSTER: "development"
