@@ -89,6 +89,8 @@ configure_kservice_account(){
 
 #Assign Workload Identity https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#kubectl
 
+gcloud auth activate-service-account --key-file ${SERVICE_ACCOUNT_FILE} --project=$PROJECT_ID
+
 create_gservice_account
 
 create_kservice_account
