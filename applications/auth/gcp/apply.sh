@@ -3,7 +3,7 @@ set -e # Exit if error is detected during pipeline execution
 
 GCP="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN="$GCP"/../bin
-UTILS="$GCP"/../../shared
+UTILS="$GCP"/../../../shared
 PWD=$(pwd)
 source "$BIN"/SET
 

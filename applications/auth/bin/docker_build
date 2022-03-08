@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
-print="$BIN/../../shared/print"
+print="$BIN/../../../shared/print"
 source "$BIN"/SET
 
 cd "$BIN" || exit
