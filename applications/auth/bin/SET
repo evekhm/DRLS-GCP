@@ -3,7 +3,7 @@ BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
 
 APPLICATION='keycloak'
-source "$BIN"/../../shared/SET
+source "$BIN"/../../../shared/SET
 
 # Using the locally build image since it needs changes depending on Service Host IP
 #cd "$BIN"/../.. || exit

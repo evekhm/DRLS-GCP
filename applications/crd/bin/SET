@@ -2,7 +2,7 @@
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 APPLICATION='crd'
-source "$BIN"/../../shared/SET
+source "$BIN"/../../../shared/SET
 BUCKET_NAME=${PROJECT_ID}-${APPLICATION}
 BUCKET="gs://$BUCKET_NAME"
 if [[ -z ${CRD_IMAGE_TAG} ]]; then
