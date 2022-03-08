@@ -4,7 +4,7 @@ set -e # Exit if error is detected during pipeline execution
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 function push_image(){
-  "$DIR/$1/bin/docker_push"
+  "$DIR/applications/$1/bin/docker_push"
 }
 
 push_image crd

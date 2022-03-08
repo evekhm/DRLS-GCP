@@ -1,64 +1,31 @@
-variables:
-  # Use TLS https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
-  STAGING_ENABLED: "1"
-  POSTGRES_ENABLED: "0"
-  ROLLOUT_RESOURCE_TYPE: deployment
-  INCREMENTAL_ROLLOUT_ENABLED: "0"
+include:
+  project: gcp-solutions/hcls/claims-modernization/gitlab-ci
+  file: /.gitlab/ci/.deploy.gitlab-ci.yml
 
-  DOCKER_IMAGE_VERSION: 19.03.1
-  DOCKER_HOST: tcp://docker:2376
-  DOCKER_TLS_CERTDIR: "/certs"
+variables:
+  GSA_NAME: "gsa-priauth-service" # Service Account Name to be created for crd application required for Cloud Storage Access for CDS-Library Access
+  KSA_NAME: "k8s-priauth-service" # kubernetes service account for workload Identity for crd application
+  GSA_EMAIL: $GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
+
+  APPLICATION_NAMESPACE: ${CI_PROJECT_NAMESPACE}
+
+  #Sharing same Agent, but could use different agents per environment
+  #GITLAB_AGENT: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:development
+  KUBE_CONTEXT_DEMO: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:development
+  KUBE_CONTEXT_TEST: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:development
+  KUBE_CONTEXT_DEV: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:development
 
   ######### Per Environment #############
-  PROJECT_ID: "pri-auth-cicd"
   CLUSTER: "development"
   ZONE: "us-central1-c"
   REGION: "us-central1"
-  KUBE_NAMESPACE: "${CI_COMMIT_REF_SLUG}" #Namespace is defined by the branch name
-  #KUBE_NAMESPACE: "default" #Namespace is defined by the branch name
-  KUBE_AGENT: "development"
-  KUBE_CONTEXT: $CI_PROJECT_NAMESPACE/gke-deploy-env:$KUBE_AGENT
-  #KUBE_INGRESS_BASE_DOMAIN: 'papanca.com' #TODO
-  CRD_IMAGE_TAG: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/crd:latest"
-  CRD_IMAGE_TAG_TEST: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/crd/${CI_COMMIT_REF_SLUG}:latest"
-  #$SERVICE_ACCOUNT
-
-  GSA_NAME: "gsa-priauth-service" # Service Account Name to be created for crd application required for Cloud Storage Access for CDS-Library Access
-  KSA_NAME: "k8s-priauth-service" # kubernetes service account for workload Identity for crd application
-  CI_KUBERNETES_ACTIVE: 'true'
-
-  BUCKET: "gs://${PROJECT_ID}-crd" #For CDS-Library
-  SECRET: regcred
+  PROJECT_ID_TEST: "pri-auth-cicd"
+  PROJECT_ID_DEMO: "pri-auth-cicd"
+  PROJECT_ID_DEV: "pri-auth-cicd"
 
 stages:
-  - prepare_cluster
-  - upload_library
-  - deploy_applications
-  - deploy_demo
-  - cleanup
-
-# Needed to generate secret at cluster (one-time) to download images from GitLab repositories
-# Alternative to consider is to add image pull secret to service account imagePullSecret TODO
-# https://towardsdatascience.com/multiple-ways-to-create-kubernetes-secrets-33f97feaa499
-#prepare tokens:
-#  environment: $CI_COMMIT_REF_SLUG
-#  stage: prepare_token
-#  image: docker:${DOCKER_IMAGE_VERSION}
-#  services:
-#  - docker:${DOCKER_IMAGE_VERSION}-dind
-#  script:
-#  # GitLab Token
-#  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-#  - cat $HOME/.docker/config.json > ${GITLAB_TOKEN_FILE}
-#  # GCP Service Account Token
-#  #- echo ${SERVICE_ACCOUNT} | base64 --decode -i > ${SERVICE_ACCOUNT_FILE} #TODO save encoded
-#  - echo ${SERVICE_ACCOUNT} > ${SERVICE_ACCOUNT_FILE}
-#  artifacts:
-#    paths:
-#    - ${GITLAB_TOKEN_FILE}
-#    - ${SERVICE_ACCOUNT_FILE}
-#    expire_in: 1 day
-
+- deploy
+- destroy
 
 # Depends on SERVICE_ACCOUNT_FILE - JSON KEY File from ServiceAccount downloaded from GCP and saved as FILE Variable CI/CD Settings
 .gcloud: &gcloud
@@ -67,101 +34,11 @@ stages:
 #- gcloud --quiet container clusters get-credentials $CLOUDSDK_CONTAINER_CLUSTER
 - gcloud auth activate-service-account --key-file ${SERVICE_ACCOUNT_FILE} --project=$PROJECT_ID
 - kubectl config use-context $KUBE_CONTEXT
-- kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"
-- kubectl config set-context --current --namespace=$KUBE_NAMESPACE
+- kubectl get namespace "$NAMESPACE" 2>/dev/null || kubectl create namespace "$NAMESPACE"
+- kubectl config set-context --current --namespace=$NAMESPACE
 - kubectl config current-context
 - gcloud --quiet container clusters get-credentials $CLUSTER --region $REGION
 
-before_script: *gcloud
-
-# Depends on GITLAB_AUTH - File defined inside Project Settings->CI/CD
-# Generated using:
-# docker login -u <user_name> -p <gitlab_access_token> registry.gitlab.com
-# cat $HOME/.docker/config.json
-.prepare_cluster: &prepare_cluster
-  image: google/cloud-sdk
-  #before_script: *gcloud
-  script:
-  # Create Secret if not existing to PullImages from GitLab
-  - kubectl get secrets
-  - |
-    if kubectl get secrets --namespace=$KUBE_NAMESPACE | grep $SECRET; then
-      echo "$SECRET exists in namespace $KUBE_NAMESPACE, skipping..."
-    else
-      kubectl create secret generic $SECRET --from-file=.dockerconfigjson=${GITLAB_AUTH} --type=kubernetes.io/dockerconfigjson --namespace=$KUBE_NAMESPACE
-    fi
-  # Create KSA Service account and Workload Identity required for CRD application to access Cloud Storage
-  - KSA_NAME=$KSA_NAME GSA_NAME=$GSA_NAME CLUSTER=$CLUSTER PROJECT_ID=$PROJECT_ID KUBE_NAMESPACE=$KUBE_NAMESPACE BUCKET=$BUCKET bash ${CI_PROJECT_DIR}/prepare_cluster.sh
-
-# Depends on GITLAB - Gitlab Token with access to API - Variable defined inside Project Settings->CI/CD
-# Generated using Gitlab Settings https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token
-.deploy_cds_library: &deploy_cds_library
-  image: google/cloud-sdk
-  #before_script: *gcloud
-  script:
-  - apt-get update && apt-get install git
-  - apt-get install zip unzip -q
-  # Deploys CDS-Library
-  # Get CDS-Library from GitLab repo, zips and uploads into the GCP Cloud Storage Bucket
-  - git clone https://oauth2:$GITLAB_TOKEN@gitlab.com/$CI_PROJECT_NAMESPACE/CDS-Library.git ${CI_PROJECT_DIR}/../CDS-Library
-  - GSA_NAME=$GSA_NAME PROJECT_ID=$PROJECT_ID BUCKET=$BUCKET bash ${CI_PROJECT_DIR}/deploy_CDS_Library.sh
-
-.deploy_applications: &deploy_applications
-  image:
-    name: google/cloud-sdk
-  script:
-  - ${CI_PROJECT_DIR}/deploy_services.sh
-  - |
-    if [ -n "$APPLICATION" ]; then
-      echo "deployment is triggered by the $APPLICATION, executing on ${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, ${CI_BRANCH_TAG_NORMALIZED}"
-      echo "Using the image $IMAGE_TAG built by the "$APPLICATION" pipeline"
-      IMAGE_TAG=$IMAGE_TAG bash "${CI_PROJECT_DIR}/$APPLICATION/gcp/apply.sh"
-      #patch instead
-      #- kubectl patch deployment $PRODUCTION_SERVICE_NAME -p '{"spec":{"template":{"spec":{"containers":[{"name":"'"$PRODUCTION_SERVICE_NAME"'","image":"'"$CI_REGISTRY_IMAGE:$CI_BUILD_REF"'"}]}}}}'
-    else
-      echo "Internal Changes to manifest files, need to re-deploy all applications with images corresponding to this branch"
-      echo "${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}, $ ${CF_BRANCH_TAG_NORMALIZED}:latest"
-      CRD_IMAGE_TAG=$CRD_IMAGE_TAG VSAC_API_KEY=$VSAC_API_KEY KSA_NAME=$KSA_NAME bash "${CI_PROJECT_DIR}/crd/gcp/apply.sh"
-      cat ${CI_PROJECT_DIR}/crd/k8s/deployment.yaml
-    fi
-  artifacts:
-    paths:
-    - ${CI_PROJECT_DIR}/crd/k8s/*
-    expire_in: 1 day
-
-#.prod_deploy: &prod_deploy
-#  image: google/cloud-sdk
-#  stage: demo
-#  environment: production
-#  before_script: *gcloud
-#  script:
-#  - echo 'TODO still..'
-#  #- kubectl patch deployment $PRODUCTION_SERVICE_NAME -p '{"spec":{"template":{"spec":{"containers":[{"name":"'"$PRODUCTION_SERVICE_NAME"'","image":"'"$CI_REGISTRY_IMAGE:$CI_BUILD_REF"'"}]}}}}'
-
-
-deploy demo:
-  stage: deploy_demo
-  <<: *prepare_cluster
-  <<: *deploy_cds_library
-  <<: *deploy_applications
-  when: manual
-  only:
-  - master
-
-deploy CDS-Library:
-  stage: upload_library
-  environment: $CI_COMMIT_REF_SLUG
-  <<: *deploy_cds_library
-
-prepare cluster:
-  stage: prepare_cluster
-  environment: $CI_COMMIT_REF_SLUG
-  <<: *prepare_cluster
-
-deploy applications:
-  environment: $CI_COMMIT_REF_SLUG
-  stage: deploy_applications
-  <<: *deploy_applications
 
 gcloud destroy:
   stage: cleanup
@@ -170,17 +47,6 @@ gcloud destroy:
   script:
   - PROJECT_ID=$PROJECT_ID BUCKET=$BUCKET bash "${CI_PROJECT_DIR}/crd/gcp/delete.sh"
 
-#deploy_review:
-#  stage: deploy
-#  script:
-#  - echo "Deploy a review app"
-#  environment:
-#    name: review/$CI_COMMIT_REF_SLUG
-#    url: https://$CI_ENVIRONMENT_SLUG.example.com
-#  rules:
-#  - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-#    when: never
-#  - if: $CI_COMMIT_BRANCH
 
 
 

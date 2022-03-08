@@ -4,7 +4,7 @@ set -e # Exit if error is detected during pipeline execution
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 function build_image(){
-  "$DIR/$1/bin/docker_build"
+  "$DIR/applications/$1/bin/docker_build"
 }
 
 build_image auth

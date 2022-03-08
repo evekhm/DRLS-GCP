@@ -4,7 +4,7 @@ set -e # Exit if error is detected during pipeline execution
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 function apply_worker(){
-  "$DIR/$1/gcp/apply.sh"
+  "$DIR/applications/$1/gcp/apply.sh"
 }
 
 apply_worker auth

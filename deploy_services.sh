@@ -12,16 +12,16 @@ fi
 
 function deploy_service_ip_port(){
   DD=$1
-  source "$DIR/$DD/bin/SET"
-  kubectl apply -f "$DIR/$DD/k8s/service.yaml" --namespace="$KUBE_NAMESPACE" &> /dev/null
+  source "$DIR/applications/$DD/bin/SET"
+  kubectl apply -f "$DIR/applications/$DD/k8s/service.yaml" --namespace="$KUBE_NAMESPACE" &> /dev/null
   IP=$("$UTILS/get_service_external_ip_port" "$APPLICATION"-service)
   echo "$IP"
 }
 
 function deploy_service_ip(){
   DD=$1
-  source "$DIR/$DD/bin/SET"
-  kubectl apply -f "$DIR/$DD/k8s/service.yaml" --namespace="$KUBE_NAMESPACE" &> /dev/null
+  source "$DIR/applications/$DD/bin/SET"
+  kubectl apply -f "$DIR/applications/$DD/k8s/service.yaml" --namespace="$KUBE_NAMESPACE" &> /dev/null
   IP=$("$UTILS/get_service_external_ip" "$APPLICATION"-service)
   echo "$IP"
 }

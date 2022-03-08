@@ -12,14 +12,14 @@ fi
 
 function get_service_ip_port(){
   DD=$1
-  source "$DIR/$DD/bin/SET"
+  source "$DIR/applications/$DD/bin/SET"
   IP=$("$UTILS/get_service_external_ip_port" "$APPLICATION"-service)
   echo "$IP"
 }
 
 function get_service_ip(){
   DD=$1
-  source "$DIR/$DD/bin/SET"
+  source "$DIR/applications/$DD/bin/SET"
   IP=$("$UTILS/get_service_external_ip" "$APPLICATION"-service)
   echo "$IP"
 }

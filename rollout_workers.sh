@@ -4,7 +4,7 @@ set -e # Exit if error is detected during pipeline execution
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 function rollout_worker(){
-  "$DIR/$1/gcp/rollout.sh"
+  "$DIR/applications/$1/gcp/rollout.sh"
 }
 
 rollout_worker auth
