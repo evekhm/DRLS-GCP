@@ -2,4 +2,4 @@
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 APPLICATION='test-ehr'
-source "$BIN"/../../shared/SET
+source "$BIN"/../../../shared/SET
