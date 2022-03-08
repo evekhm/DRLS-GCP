@@ -25,7 +25,7 @@ variables:
 
 stages:
 - deploy
-- destroy
+#- destroy
 
 # Depends on SERVICE_ACCOUNT_FILE - JSON KEY File from ServiceAccount downloaded from GCP and saved as FILE Variable CI/CD Settings
 .gcloud: &gcloud
