@@ -10,6 +10,7 @@ if [[ -z ${IMAGE_TAG} ]]; then
   IMAGE="$DF_REPO/$APPLICATION"
   IMAGE_TAG="$IMAGE:latest"
 fi
+
 function set_def(){
   val=$1
   varname=DF_$1

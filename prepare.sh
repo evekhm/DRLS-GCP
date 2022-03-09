@@ -15,7 +15,7 @@ set -x
 # Create KSA, secret (done part of .deploy template)
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "${DIR}/vars"
+source "${DIR}/shared/vars"
 print="$DIR/shared/print"
 
 # Create KSA Service account and Workload Identity required for CRD application to access Cloud Storage

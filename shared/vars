@@ -14,6 +14,37 @@ DF_KUBE_NAMESPACE='default'
 
 DF_REPO="registry.gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl"
 
+get_service_file(){
+  ENVIRONMENT=$1
+  case "$ENVIRONMENT" in
+    demo) echo "$SERVICE_ACCOUNT_FILE_DEMO"
+       ;;
+    test) echo "$SERVICE_ACCOUNT_FILE_TEST"
+       ;;
+    development) echo "$SERVICE_ACCOUNT_FILE_DEV"
+      ;;
+  esac
+}
 
+get_bucket(){
+  ENVIRONMENT=$1
+  case "$ENVIRONMENT" in
+    demo) echo "gs://${PROJECT_ID}-cql"
+       ;;
+    test) echo "gs://${PROJECT_ID}-cql-test"
+       ;;
+    development) echo "gs://${PROJECT_ID}-cql-dev"
+      ;;
+  esac
+}
+
+SERVICE_ACCOUNT_FILE=${SERVICE_ACCOUNT_FILE:-$(get_service_file "$ENVIRONMENT")}
+export SERVICE_ACCOUNT_FILE
+
+KUBE_NAMESPACE=$NAMESPACE
+export KUBE_NAMESPACE
+
+BUCKET=${BUCKET:-$(get_bucket "$ENVIRONMENT")}
+export BUCKET
 
 
