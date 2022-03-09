@@ -40,6 +40,6 @@ echo "Generated $OUT_ENV with service IP parameters"
 cat "$OUT_ENV"
 
 
-"$DIR/print_steps.sh"
+#"$DIR/print_steps.sh"
 
 
