@@ -24,8 +24,9 @@ variables:
   PROJECT_ID_DEV: "pri-auth-cicd"
 
 stages:
+- prepare
+- build-keycloak
 - deploy
-- build_keycloak
 - destroy
 
 # Depends on SERVICE_ACCOUNT_FILE - JSON KEY File from ServiceAccount downloaded from GCP and saved as FILE Variable CI/CD Settings
@@ -40,7 +41,6 @@ stages:
 - kubectl config current-context
 - gcloud --quiet container clusters get-credentials $CLUSTER --region $REGION
 
-
 gcloud destroy:
   stage: destroy
   image: google/cloud-sdk
@@ -48,8 +48,9 @@ gcloud destroy:
   script:
   - PROJECT_ID=$PROJECT_ID BUCKET=$BUCKET bash "${CI_PROJECT_DIR}/CRD/gcp/delete.sh"
 
-
-
+# keycloak Fhir realm created by Da Vinci uses H2 and needs TEST-EHR IP
+# We use a wirkaround and embed TEST-EHR into the image.
+# Later this could be resolved by replacing keycloak or moving from h2 to postgress
 build_keycloak:
   stage: build_keycloak
   image: docker:${DOCKER_IMAGE_VERSION}
@@ -64,8 +65,10 @@ build_keycloak:
   before_script:
   - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
   script:
-  - TEST_EHR='test_ehr'
-  - IMAGE="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/keycloak/released"
-  - IMAGE_TAG=$IMAGE:"$ENVIRONMENT"-"$NAMESPACE"
+  - TEST_EHR=http://$("{CI_PROJECT_DIR}/bin/get_service_external_ip_port"  test-ehr-service)
+  - echo $TEST-EHR
+  - IMAGE="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/auth/${IMAGE_TYPE}"
+  - IMAGE_TAG=${IMAGE}:${CI-JOB-ID}
+  - echo $IMAGE, $IMAGE_TAG
   - ${CI_PROJECT_DIR}/build_keycloak.sh
 
