@@ -9,7 +9,7 @@ cd "$BIN" || exit
 BUILD_TIMESTAMP=$( date '+%F_%H:%M:%S' )
 $print "Building image $IMAGE_TAG with timestamp $BUILD_TIMESTAMP ..."
 
-sed 's|__TEST_EHR__|'"$TEST_EHR"'|g; ' "$BIN"/ClientFhirServerRealm.sample.json > "$BIN"/ClientFhirServerRealm.json
+``#sed 's|__TEST_EHR__|'"$TEST_EHR"'|g; ' "$BIN"/ClientFhirServerRealm.sample.json > "$BIN"/ClientFhirServerRealm.json
 
 docker build -f Dockerfile -t "$IMAGE_TAG" -t "$LATEST" --build-arg BUILD_TIMESTAMP="$BUILD_TIMESTAMP" .
 

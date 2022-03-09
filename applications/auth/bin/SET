@@ -9,9 +9,10 @@ source "$BIN"/../../../shared/SET
 #cd "$BIN"/../.. || exit
 #VERSION=$(git log -1 --pretty=%h)
 
-IMAGE="gcr.io/$PROJECT_ID/$APPLICATION"
+IMAGE=${IMAGE:-"gcr.io/$PROJECT_ID/$APPLICATION"}
+
 VERSION=0.1
-IMAGE_TAG="$IMAGE:$VERSION"
+IMAGE_TAG=${$IMAGE_TAG:-"$IMAGE:$VERSION"}
 LATEST="$IMAGE:latest"
 
 #cd "$PWD" || exit
