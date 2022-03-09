@@ -52,7 +52,7 @@ gcloud destroy:
 # We use a wirkaround and embed TEST-EHR into the image.
 # Later this could be resolved by replacing keycloak or moving from h2 to postgress
 build_keycloak:
-  stage: build_keycloak
+  stage: build-keycloak
   image: docker:${DOCKER_IMAGE_VERSION}
   services:
   - docker:${DOCKER_IMAGE_VERSION}-dind
