@@ -66,7 +66,7 @@ build_keycloak:
     DOCKER_TLS_CERTDIR: "/certs"
   #  BRANCH_NAME: "" #Workaround for Gitlab not coping with un-set variables in the rules
   before_script:
-  - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+  - docker login -u ${CI_DEPLOY_USER} -p ${CI_DEPLOY_PASSWORD} ${CI_REGISTRY}
   script:
   - set -x
   - ls ${VARIABLES_FILE}
