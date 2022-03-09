@@ -29,11 +29,11 @@ get_service_file(){
 get_bucket(){
   ENVIRONMENT=$1
   case "$ENVIRONMENT" in
-    demo) echo "gs://${PROJECT_ID}-cql"
+    demo) echo "${PROJECT_ID}-cql"
        ;;
-    test) echo "gs://${PROJECT_ID}-cql-test"
+    test) echo "${PROJECT_ID}-cql-test"
        ;;
-    development) echo "gs://${PROJECT_ID}-cql-dev"
+    development) echo "${PROJECT_ID}-cql-dev"
       ;;
   esac
 }
@@ -44,7 +44,9 @@ export SERVICE_ACCOUNT_FILE
 KUBE_NAMESPACE=$NAMESPACE
 export KUBE_NAMESPACE
 
-BUCKET=${BUCKET:-$(get_bucket "$ENVIRONMENT")}
+BUCKET_NAME=${BUCKET_NAME:-$(get_bucket "$ENVIRONMENT")}
+export BUCKET_NAME
+BUCKET="gs://$BUCKET_NAME"
 export BUCKET
 
 
