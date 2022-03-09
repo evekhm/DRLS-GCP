@@ -75,12 +75,15 @@ build_keycloak:
   - echo $TEST_EHR
   - IMAGE="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/auth/${IMAGE_TYPE}"
   - IMAGE_TAG="${IMAGE}":"${CI_JOB_ID}"
+  - LATEST="${IMAGE}":"latest"
   - echo $IMAGE, $IMAGE_TAG
   - apk update
   - apk add git
   - APPLICATION=auth
-  #- git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@gitlab.com/${CI_SERVER_HOST}/${APPLICATION_NAMESPACE}/$APPLICATION.git $APPLICATION
-  - git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/auth.git $APPLICATION
+  #- git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@${CI_SERVER_HOST}/${APPLICATION_NAMESPACE}/$APPLICATION.git $APPLICATION
+  - echo ${APPLICATION_NAMESPACE}
+  - echo ${CI_SERVER_HOST}/${APPLICATION_NAMESPACE}/${APPLICATION}.git
+  - git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@${CI_SERVER_HOST}/gcp-solutions/hcls/claims-modernization/pa-ref-impl/${APPLICATION}.git $APPLICATION
   - cd $APPLICATION
   - docker build -f Dockerfile -t "$IMAGE_TAG" -t "$LATEST" .
   - docker push "$IMAGE_TAG"
