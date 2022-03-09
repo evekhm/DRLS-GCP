@@ -79,7 +79,7 @@ build_keycloak:
   - apk update
   - apk add git
   - APPLICATION=auth
-  - git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@gitlab.com/{CI_SERVER_HOST}/${APPLICATION_NAMESPACE}/$APPLICATION.git $APPLICATION
+  - git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@gitlab.com/${CI_SERVER_HOST}/${APPLICATION_NAMESPACE}/$APPLICATION.git $APPLICATION
   - cd $APPLICATION
   - docker build -f Dockerfile -t "$IMAGE_TAG" -t "$LATEST" .
   - docker push "$IMAGE_TAG"
