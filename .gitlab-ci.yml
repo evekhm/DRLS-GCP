@@ -85,7 +85,7 @@ build_keycloak:
   - echo ${CI_SERVER_HOST}/${APPLICATION_NAMESPACE}/${APPLICATION}.git
   - git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@${CI_SERVER_HOST}/gcp-solutions/hcls/claims-modernization/pa-ref-impl/${APPLICATION}.git $APPLICATION
   - cd $APPLICATION
-  - sed -i 's/__TEST_EHR__/'"$TEST_EHR"'/g;' config/ClientFhirServerRealm.json
+  - sed  's|__TEST_EHR__|'"'$TEST_EHR'"'|g; ' config/ClientFhirServerRealm.sample.json > config/ClientFhirServerRealm.json
   - docker build -f Dockerfile -t "$IMAGE_TAG" -t "$LATEST" .
   - docker push "$IMAGE_TAG"
   - docker push "$LATEST"
