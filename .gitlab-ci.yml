@@ -74,7 +74,15 @@ build_keycloak:
   - source ${VARIABLES_FILE}
   - echo $TEST_EHR
   - IMAGE="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/auth/${IMAGE_TYPE}"
-  - IMAGE_TAG=${IMAGE}:${CI-JOB-ID}
+  - IMAGE_TAG="${IMAGE}":"${CI_JOB_ID}"
   - echo $IMAGE, $IMAGE_TAG
-  - ${CI_PROJECT_DIR}/build_keycloak.sh
-
+  - apk update
+  - apk add git
+  - APPLICATION=auth
+  - git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@gitlab.com/{CI_SERVER_HOST}/${APPLICATION_NAMESPACE}/$APPLICATION.git $APPLICATION
+  - cd $APPLICATION
+  - docker build -f Dockerfile -t "$IMAGE_TAG" -t "$LATEST" .
+  - docker push "$IMAGE_TAG"
+  - docker push "$LATEST"
+  rules:
+  - !reference [.build_vars, rules]
