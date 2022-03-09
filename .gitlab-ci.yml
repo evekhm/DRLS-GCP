@@ -65,8 +65,7 @@ build_keycloak:
   before_script:
   - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
   script:
-  - TEST_EHR_IP=$("$CI_PROJECT_DIR/shared/get_service_external_ip_port"  test-ehr-service)
-  - TEST_EHR="http://"${TEST_EHR_IP}"
+  - TEST_EHR=$(kubectl get service "test-ehr-service" -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}' 2>/dev/null)
   - echo $TEST_EHR
   - IMAGE="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/auth/${IMAGE_TYPE}"
   - IMAGE_TAG=${IMAGE}:${CI-JOB-ID}
