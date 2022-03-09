@@ -23,6 +23,9 @@ variables:
   PROJECT_ID_DEMO: "pri-auth-cicd"
   PROJECT_ID_DEV: "pri-auth-cicd"
 
+  # System Variables Temp Files
+  OUT_ENV: ${CI_PROJECT_DIR}/.env
+
 stages:
 - prepare
 - build-keycloak
@@ -66,9 +69,9 @@ build_keycloak:
   - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
   script:
   - set -x
-  - ls "${CI_PROJECT_DIR}/.env"
-  - cat ${CI_PROJECT_DIR}/.env
-  - source ${CI_PROJECT_DIR}/.env
+  - ls ${VARIABLES_FILE}
+  - cat ${VARIABLES_FILE}
+  - source ${VARIABLES_FILE}
   - echo $TEST_EHR
   - IMAGE="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/auth/${IMAGE_TYPE}"
   - IMAGE_TAG=${IMAGE}:${CI-JOB-ID}
