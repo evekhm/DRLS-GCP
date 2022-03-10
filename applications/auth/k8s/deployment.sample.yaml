@@ -25,8 +25,9 @@ spec:
             - name: KEYCLOAK_IMPORT
               value: ClientFhirServerRealm.json
           image: __IMAGE__
-          name: pas-dev-keycloak
+          name: keycloak
           ports:
             - containerPort: 8080
-          resources: {}
+      imagePullSecrets:
+      - name: regcred
       restartPolicy: Always
