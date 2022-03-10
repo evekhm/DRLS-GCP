@@ -15,7 +15,7 @@ spec:
         application: prior-auth
     spec:
       containers:
-        - image: __IMAGE_TAG__
+        - image: __IMAGE__
           name: prior-auth
           ports:
             - containerPort: 9015

@@ -13,7 +13,7 @@ echo "***** Applying  $APPLICATION deployment to Cluster $CLUSTER *****"
 cd "$GCP"/../k8s/ || exit
 
 
-sed 's|__IMAGE_TAG__|'"$IMAGE_TAG"'|g;'  deployment.sample.yaml > deployment.yaml
+sed 's|__IMAGE__|'"$IMAGE"'|g;'  deployment.sample.yaml > deployment.yaml
 kubectl apply -f deployment.yaml --namespace="$KUBE_NAMESPACE"
 
 kubectl apply -f service.yaml --namespace="$KUBE_NAMESPACE"

@@ -16,7 +16,7 @@ spec:
         application: dtr
     spec:
       containers:
-        - image: __IMAGE_TAG__
+        - image: __IMAGE__
           env:
           - name: REACT_APP_PROVIDER_LOGO
             valueFrom:

@@ -30,7 +30,7 @@ sed 's|__KSA_NAME__|'"$KSA_NAME"'|g; ' serviceaccount.sample.yaml > serviceaccou
 
 kubectl apply -f serviceaccount.yaml --namespace="$KUBE_NAMESPACE"
 
-sed 's|__IMAGE_TAG__|'"$IMAGE_TAG"'|g;
+sed 's|__IMAGE__|'"$IMAGE"'|g;
  s|__KSA_NAME__|'"$KSA_NAME"'|g; '  deployment.sample.yaml > deployment.yaml
 
 kubectl apply -f deployment.yaml --namespace="$KUBE_NAMESPACE"

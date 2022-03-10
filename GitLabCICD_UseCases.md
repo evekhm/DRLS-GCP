@@ -91,7 +91,7 @@ Commits into the `feature` **application** branch with *<branch_name>*:
     - `registry.gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd/qa:gcpdev`
     - `registry.gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd/qa:4tHSG586...`
   - Note, that in reality it will be using 'normalized' branch name, such as CI_COMMIT_REF_SLUG
-- Then this  triggers downstream deployment (with APPLICATION and IMAGE_TAG as variables) and patching of the image into the development environment. 
+- Then this  triggers downstream deployment (with APPLICATION and IMAGE as variables) and patching of the image into the development environment. 
 - The officially released application image will be used for those applications that do not have  *<branch_name>*.
 
 ### Test Environment

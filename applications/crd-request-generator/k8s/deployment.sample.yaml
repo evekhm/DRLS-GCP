@@ -16,7 +16,7 @@ spec:
         application: crd-request-generator
     spec:
       containers:
-        - image: __IMAGE_TAG__
+        - image: __IMAGE__
           name: crd-request-generator
           ports:
             - containerPort: 3000

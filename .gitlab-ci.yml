@@ -73,10 +73,10 @@ build_keycloak:
   - cat ${VARIABLES_FILE}
   - source ${VARIABLES_FILE}
   - echo $TEST_EHR
-  - IMAGE="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/auth/${IMAGE_TYPE}"
-  - IMAGE_TAG="${IMAGE}":"${CI_JOB_ID}"
-  - LATEST="${IMAGE}":"latest"
-  - echo $IMAGE, $IMAGE_TAG
+  - IMAGE_REPO="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/auth/${IMAGE_TYPE}"
+  - IMAGE="${IMAGE_REPO}":"${CI_JOB_ID}"
+  - LATEST="${IMAGE_REPO}":"latest"
+  - echo $IMAGE, $LATEST
   - apk update
   - apk add git
   - APPLICATION=auth
@@ -86,8 +86,8 @@ build_keycloak:
   - git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@${CI_SERVER_HOST}/gcp-solutions/hcls/claims-modernization/pa-ref-impl/${APPLICATION}.git $APPLICATION
   - cd $APPLICATION
   - sed  's|__TEST_EHR__|'"'$TEST_EHR'"'|g; ' config/ClientFhirServerRealm.sample.json > config/ClientFhirServerRealm.json
-  - docker build -f Dockerfile -t "$IMAGE_TAG" -t "$LATEST" .
-  - docker push "$IMAGE_TAG"
+  - docker build -f Dockerfile -t "$IMAGE" -t "$LATEST" .
+  - docker push "$IMAGE"
   - docker push "$LATEST"
   rules:
   - !reference [.build_vars, rules]

@@ -15,7 +15,7 @@ spec:
         application: test-ehr
     spec:
       containers:
-        - image: __IMAGE_TAG__
+        - image: __IMAGE__
           name: test-ehr
           ports:
             - containerPort: 8080

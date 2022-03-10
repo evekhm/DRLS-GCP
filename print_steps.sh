@@ -3,6 +3,7 @@
 set -e # Exit if error is detected during pipeline execution
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 print=$DIR/shared/print
+export TERM=vt100
 
 source "$DIR"/.env
 $print 'You are all Done! Use following External IPs to access deployed services' INFO

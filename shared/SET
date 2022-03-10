@@ -6,9 +6,9 @@ VARS="$UTILS/vars"
 
 source "$VARS"
 # For GitLab CI/CD Integration, only set defaults when env variables not already set
-if [[ -z ${IMAGE_TAG} ]]; then
-  IMAGE="$DF_REPO/$APPLICATION"
-  IMAGE_TAG="$IMAGE:latest"
+if [[ -z ${IMAGE} ]]; then
+  IMAGE_REPO="$DF_REPO/$APPLICATION"
+  IMAGE="$IMAGE_REPO:latest"
 fi
 
 function set_def(){

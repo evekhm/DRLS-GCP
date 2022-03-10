@@ -24,7 +24,7 @@ spec:
               value: admin
             - name: KEYCLOAK_IMPORT
               value: ClientFhirServerRealm.json
-          image: __IMAGE_TAG__
+          image: __IMAGE__
           name: pas-dev-keycloak
           ports:
             - containerPort: 8080
