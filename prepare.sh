@@ -98,7 +98,6 @@ configure_kservice_account
 
 "$DIR"/deploy_services.sh
 
-echo $VARIABLES_FILE
 VARIABLES_FILE=$VARIABLES_FILE bash "$DIR"/get_services.sh
 
 #docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}

@@ -6,6 +6,7 @@ set -x
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "${DIR}/vars"
 
+export ENV=${VARIABLES_FILE}
 echo "Running deploy step with following parameters KUBE_CONTEXT=$KUBE_CONTEXT, NAMESPACE=$NAMESPACE"
 if [ -n "$APPLICATION" ]; then
   APPLY_SCRIPT="${DIR}"/applications/"${APPLICATION}"/gcp/apply.sh

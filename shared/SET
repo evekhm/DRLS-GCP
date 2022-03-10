@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 export USE_GKE_GCLOUD_AUTH_PLUGIN=False
 UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-ENV="$UTILS/../.env"
+ENV=${ENV:-"$UTILS/../.env"}
 VARS="$UTILS/vars"
 
 source "$VARS"

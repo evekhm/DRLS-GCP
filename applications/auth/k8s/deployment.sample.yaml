@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   labels:
     application: keycloak
@@ -28,6 +28,13 @@ spec:
           name: keycloak
           ports:
             - containerPort: 8080
+          volumeMounts:
+          - name: jboss-persistent-storage
+            mountPath: /opt/jboss/keycloak/standalone/data/
       imagePullSecrets:
       - name: regcred
       restartPolicy: Always
+      volumes:
+      - name: jboss-persistent-storage
+        persistentVolumeClaim:
+          claimName: jboss-volumeclaim

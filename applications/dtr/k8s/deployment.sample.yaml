@@ -16,7 +16,7 @@ spec:
         application: dtr
     spec:
       containers:
-        - image: __IMAGE__
+        - image: hkong2/keycloak
           env:
           - name: REACT_APP_PROVIDER_LOGO
             valueFrom:
