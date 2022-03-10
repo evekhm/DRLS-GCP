@@ -5,6 +5,7 @@ metadata:
     application: keycloak
   name: keycloak
 spec:
+  serviceName: keycloak-service
   replicas: 1
   selector:
     matchLabels:
