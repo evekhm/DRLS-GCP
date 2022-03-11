@@ -90,4 +90,6 @@ build_keycloak:
   - docker push "$IMAGE"
   - docker push "$LATEST"
   rules:
+  - if: $PIPELINE_TRIGGERED #exclude building keycloak when triggered from upstream
+    when: never
   - !reference [.build_vars, rules]
