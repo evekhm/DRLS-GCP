@@ -1,11 +1,11 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   labels:
     application: keycloak
   name: keycloak
 spec:
-  serviceName: keycloak-service
+#  serviceName: keycloak-service
   replicas: 1
   selector:
     matchLabels:
@@ -24,18 +24,18 @@ spec:
             - name: KEYCLOAK_USER
               value: admin
             - name: KEYCLOAK_IMPORT
-              value: /resources/ClientFhirServerRealm.json
-          image: hkong2/keycloak
+              value: ClientFhirServerRealm.json
+          image: __IMAGE__
           name: keycloak
           ports:
             - containerPort: 8080
-          volumeMounts:
-          - name: jboss-persistent-storage
-            mountPath: /opt/jboss/keycloak/standalone/data/
+#          volumeMounts:
+#          - name: jboss-persistent-storage
+#            mountPath: /opt/jboss/keycloak/standalone/data/
       imagePullSecrets:
       - name: regcred
       restartPolicy: Always
-      volumes:
-      - name: jboss-persistent-storage
-        persistentVolumeClaim:
-          claimName: jboss-volumeclaim
+#      volumes:
+#      - name: jboss-persistent-storage
+#        persistentVolumeClaim:
+#          claimName: jboss-volumeclaim
