@@ -24,7 +24,7 @@ variables:
   PROJECT_ID_DEV: "pri-auth-cicd"
 
   KUBE_NAMESPACE: $NAMESPACE
-  BUCKET_NAME: ${PROJECT_ID}-cql-${KUBE_NAMESPACE}}
+  BUCKET_NAME: ${PROJECT_ID}-cql-${KUBE_NAMESPACE}
 
 stages:
 - prepare
