@@ -23,10 +23,8 @@ variables:
   PROJECT_ID_DEMO: "pri-auth-cicd"
   PROJECT_ID_DEV: "pri-auth-cicd"
 
-  # System Variables Temp Files
-  OUT_ENV: ${CI_PROJECT_DIR}/.env
-
   KUBE_NAMESPACE: $NAMESPACE
+  BUCKET_NAME: ${PROJECT_ID}-cql-${KUBE_NAMESPACE}}
 
 stages:
 - prepare
@@ -53,46 +51,48 @@ gcloud destroy:
   script:
   - PROJECT_ID=$PROJECT_ID BUCKET=$BUCKET bash "${CI_PROJECT_DIR}/CRD/gcp/delete.sh"
 
+build_keycloak:
+  script: echo BUCKET_NAME=$BUCKET_NAME
 # keycloak Fhir realm created by Da Vinci uses H2 and needs TEST-EHR IP
 # We use a wirkaround and embed TEST-EHR into the image.
 # Later this could be resolved by replacing keycloak or moving from h2 to postgress
-build_keycloak:
-  stage: build-keycloak
-  image: docker:${DOCKER_IMAGE_VERSION}
-  services:
-  - docker:${DOCKER_IMAGE_VERSION}-dind
-  variables:
-    # Use TLS https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
-    DOCKER_IMAGE_VERSION: 19.03.1
-    DOCKER_HOST: tcp://docker:2376
-    DOCKER_TLS_CERTDIR: "/certs"
-  #  BRANCH_NAME: "" #Workaround for Gitlab not coping with un-set variables in the rules
-  before_script:
-  - docker login -u ${CI_DEPLOY_USER} -p ${CI_DEPLOY_PASSWORD} ${CI_REGISTRY}
-  script:
-  - set -x
-  - echo "KUBE_NAMESPACE=$KUBE_NAMESPACE"
-  - ls ${VARIABLES_FILE}
-  - cat ${VARIABLES_FILE}
-  - source ${VARIABLES_FILE}
-  - echo $TEST_EHR
-  - IMAGE_REPO="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/auth/${IMAGE_TYPE}"
-  - IMAGE="${IMAGE_REPO}":"${CI_JOB_ID}"
-  - LATEST="${IMAGE_REPO}":"latest"
-  - echo $IMAGE, $LATEST
-  - apk update
-  - apk add git
-  - APPLICATION=auth
-  #- git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@${CI_SERVER_HOST}/${APPLICATION_NAMESPACE}/$APPLICATION.git $APPLICATION
-  - echo ${APPLICATION_NAMESPACE}
-  - echo ${CI_SERVER_HOST}/${APPLICATION_NAMESPACE}/${APPLICATION}.git
-  - git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@${CI_SERVER_HOST}/gcp-solutions/hcls/claims-modernization/pa-ref-impl/${APPLICATION}.git $APPLICATION
-  - cd $APPLICATION
-  - sed  's|__TEST_EHR__|'"$TEST_EHR"'|g; ' config/ClientFhirServerRealm.sample.json > config/ClientFhirServerRealm.json
-  - docker build -f Dockerfile -t "$IMAGE" -t "$LATEST" .
-  - docker push "$IMAGE"
-  - docker push "$LATEST"
-  rules:
-  - if: $PIPELINE_TRIGGERED #exclude building keycloak when triggered from upstream
-    when: never
-  - !reference [.build_vars, rules]
+#build_keycloak:
+#  stage: build-keycloak
+#  image: docker:${DOCKER_IMAGE_VERSION}
+#  services:
+#  - docker:${DOCKER_IMAGE_VERSION}-dind
+#  variables:
+#    # Use TLS https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
+#    DOCKER_IMAGE_VERSION: 19.03.1
+#    DOCKER_HOST: tcp://docker:2376
+#    DOCKER_TLS_CERTDIR: "/certs"
+#  #  BRANCH_NAME: "" #Workaround for Gitlab not coping with un-set variables in the rules
+#  before_script:
+#  - docker login -u ${CI_DEPLOY_USER} -p ${CI_DEPLOY_PASSWORD} ${CI_REGISTRY}
+#  script:
+#  - set -x
+#  - echo "KUBE_NAMESPACE=$KUBE_NAMESPACE"
+#  - ls ${VARIABLES_FILE}
+#  - cat ${VARIABLES_FILE}
+#  - source ${VARIABLES_FILE}
+#  - echo $TEST_EHR
+#  - IMAGE_REPO="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/auth/${IMAGE_TYPE}"
+#  - IMAGE="${IMAGE_REPO}":"${CI_JOB_ID}"
+#  - LATEST="${IMAGE_REPO}":"latest"
+#  - echo $IMAGE, $LATEST
+#  - apk update
+#  - apk add git
+#  - APPLICATION=auth
+#  #- git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@${CI_SERVER_HOST}/${APPLICATION_NAMESPACE}/$APPLICATION.git $APPLICATION
+#  - echo ${APPLICATION_NAMESPACE}
+#  - echo ${CI_SERVER_HOST}/${APPLICATION_NAMESPACE}/${APPLICATION}.git
+#  - git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@${CI_SERVER_HOST}/gcp-solutions/hcls/claims-modernization/pa-ref-impl/${APPLICATION}.git $APPLICATION
+#  - cd $APPLICATION
+#  - sed  's|__TEST_EHR__|'"$TEST_EHR"'|g; ' config/ClientFhirServerRealm.sample.json > config/ClientFhirServerRealm.json
+#  - docker build -f Dockerfile -t "$IMAGE" -t "$LATEST" .
+#  - docker push "$IMAGE"
+#  - docker push "$LATEST"
+#  rules:
+#  - if: $PIPELINE_TRIGGERED #exclude building keycloak when triggered from upstream
+#    when: never
+#  - !reference [.build_vars, rules]
