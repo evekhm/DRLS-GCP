@@ -53,6 +53,7 @@ gcloud destroy:
 
 build_keycloak:
   script: echo BUCKET_NAME=$BUCKET_NAME
+  stage: build-keycloak
 # keycloak Fhir realm created by Da Vinci uses H2 and needs TEST-EHR IP
 # We use a wirkaround and embed TEST-EHR into the image.
 # Later this could be resolved by replacing keycloak or moving from h2 to postgress
