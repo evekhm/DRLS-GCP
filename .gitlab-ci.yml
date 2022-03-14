@@ -26,6 +26,8 @@ variables:
   # System Variables Temp Files
   OUT_ENV: ${CI_PROJECT_DIR}/.env
 
+  KUBE_NAMESPACE: $NAMESPACE
+
 stages:
 - prepare
 - build-keycloak
@@ -69,6 +71,7 @@ build_keycloak:
   - docker login -u ${CI_DEPLOY_USER} -p ${CI_DEPLOY_PASSWORD} ${CI_REGISTRY}
   script:
   - set -x
+  - echo "KUBE_NAMESPACE=$KUBE_NAMESPACE"
   - ls ${VARIABLES_FILE}
   - cat ${VARIABLES_FILE}
   - source ${VARIABLES_FILE}

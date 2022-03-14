@@ -3,7 +3,7 @@ SERVICE=$1
 UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 function getExternalIp_Port() {
-  IP=$(kubectl get service "$SERVICE" -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}' 2>/dev/null)
+  IP=$(kubectl get service "$SERVICE" -n "$KUBE_NAMESPACE" -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}' 2>/dev/null)
 }
 
 #IP is assigned first, while ExternalIp takes some time before is assigned.

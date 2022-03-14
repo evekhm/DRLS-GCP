@@ -3,7 +3,7 @@
 set -e # Exit if error is detected during pipeline execution
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTILS="$DIR/bin"
-OUT_ENV="$DIR/.env"
+OUT_ENV=${VARIABLES_FILE:-"$DIR/.env"}
 OUT_ENV_tmp="$DIR/tmp.env"
 
 if [ -f "$OUT_ENV" ]; then

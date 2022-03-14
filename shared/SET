@@ -29,7 +29,7 @@ NETWORK=$(set_def NETWORK)
 CLUSTER=$(set_def CLUSTER)
 GSA_NAME=$(set_def GSA_NAME)
 KSA_NAME=$(set_def KSA_NAME)
-KUBE_NAMESPACE=$(set_def KUBE_NAMESPACE)
+KUBE_NAMESPACE=${KUBE_NAMESPACE:-$(set_def KUBE_NAMESPACE)}
 
 
 if [ -f "$ENV" ]; then

@@ -2,7 +2,7 @@
 SERVICE=$1
 
 function getExternalIp() {
-  IP=$(kubectl get service "$SERVICE" -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null)
+  IP=$(kubectl get service "$SERVICE" -n "$KUBE_NAMESPACE" -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null)
 }
 
 if ! kubectl get service "$SERVICE"  &> /dev/null; then
