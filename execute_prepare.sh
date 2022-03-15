@@ -18,6 +18,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 print="$DIR/shared/print"
 GSA_EMAIL=$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
 
+if [ -n "$KUBE_NAMESPACE" ]; then kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"; fi
+
 # Create KSA Service account and Workload Identity required for CRD application to access Cloud Storage
 
 # begin ----------- NAMESPACE specific -----------
