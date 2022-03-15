@@ -20,9 +20,6 @@ do
     esac
 done
 
-source "${DIR}/shared/SET.manual"
-source "${DIR}/shared/vars"
-
 #Steps:
 ## 1. Manual Steps: Pre-requisites
 # Create GCP Project
@@ -54,7 +51,10 @@ cd ..
 
 ############ Done Part of GitLab CI/CD Steps ##################
 
+source "${DIR}/shared/SET.manual"
+source "${DIR}/shared/vars"
 # setup cluster (done as part of GitLab prepare stage)
+echo $GSA_NAME
 bash "${DIR}"/execute_prepare.sh
 
 
