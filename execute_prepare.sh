@@ -16,6 +16,7 @@ set -x
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 print="$DIR/shared/print"
+GSA_EMAIL=$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
 
 # Create KSA Service account and Workload Identity required for CRD application to access Cloud Storage
 
