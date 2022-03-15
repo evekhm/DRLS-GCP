@@ -53,6 +53,7 @@ cd ..
 source "${DIR}/shared/SET.manual"
 
 # setup cluster (done as part of GitLab prepare stage)
+if [ -n "$KUBE_NAMESPACE" ]; then kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"; fi
 bash "${DIR}"/execute_prepare.sh
 
 
