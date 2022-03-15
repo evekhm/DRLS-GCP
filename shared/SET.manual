@@ -18,21 +18,21 @@ UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Source this file when running DRLS-Deploy not via the GitLab CI/CD
 # All of these are setup via GitLab otherwise
-SECRET='regcred'
+export SECRET='regcred'
 # GCP Cluster
-GSA_NAME='gsa-priauth-service'
-KSA_NAME='k8s-priauth-service'
-KUBE_NAMESPACE='demo'
+export GSA_NAME='gsa-priauth-service'
+export KSA_NAME='k8s-priauth-service'
+export KUBE_NAMESPACE='demo'
 
 # Setting Variables of Gitlab
-CI_REGISTRY="registry.gitlab.com"
-CI_SERVER_HOST="gitlab.com"
-CI_JOB_ID="manual"
+export CI_REGISTRY="registry.gitlab.com"
+export CI_SERVER_HOST="gitlab.com"
+export CI_JOB_ID="manual"
 
-APPLICATION_NAMESPACE="gcp-solutions/hcls/claims-modernization/pa-ref-impl"
-IMAGE_TYPE="released" # |qa|mr|released
+export APPLICATION_NAMESPACE="gcp-solutions/hcls/claims-modernization/pa-ref-impl"
+export IMAGE_TYPE="released" # |qa|mr|released
 
-VARIABLES_FILE="$UTILS/.env"
+export VARIABLES_FILE="$UTILS/.env"
 
 #source "$UTILS"/SET
 
