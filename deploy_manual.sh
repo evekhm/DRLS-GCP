@@ -20,7 +20,7 @@ do
     esac
 done
 
-source shared/SET.manual
+source "${DIR}/shared/SET.manual"
 source "${DIR}/shared/vars"
 
 #Steps:
