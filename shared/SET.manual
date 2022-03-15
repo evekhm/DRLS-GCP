@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+#Pre-requisites:
+# CI_DEPLOY_USER - GitLab User
+# CI_DEPLOY_PASSWORD - Gitlab Token
+# PROJECT_ID - GCP Project
+# CLUSTER
+
+######
+#
+# This script sets your required APIs to execute GitLab CI/CD flow.
+# Example call:
+# bash ./services_enable.sh -p prior_auth_test -c cluster_name -t $TOKEN -u user_name
+######
+
+
+
+# Source this file when running DRLS-Deploy not via the GitLab CI/CD
+# All of these are setup via GitLab otherwise
+SECRET='regcred'
+# GCP Cluster
+GSA_NAME='gsa-priauth-service'
+KSA_NAME='k8s-priauth-service'
+KUBE_NAMESPACE='demo'
+
+# Setting Variables of Gitlab
+CI_REGISTRY="registry.gitlab.com"
+CI_SERVER_HOST="gitlab.com"
+CI_JOB_ID="manual"
+
+APPLICATION_NAMESPACE="gcp-solutions/hcls/claims-modernization/pa-ref-impl"
+IMAGE_TYPE="released" # |qa|mr|released
+
+VARIABLES_FILE="$UTILS/.env"
+
+#source "$UTILS"/SET
+
+#For GitLab this is done via the GitLab Agent
+#docker login -u ${CI_DEPLOY_USER} -p ${CI_DEPLOY_PASSWORD} ${CI_REGISTRY}
+
+#gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
+
+
+

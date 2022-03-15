@@ -1,18 +1,9 @@
 #!/usr/bin/env bash
 
-# Default Variables, when running from Git/Lab those are defined in GitLab
-# GCP Generic
-DF_ZONE='us-central1-c'
-DF_REGION='us-central1'
-DF_NETWORK='drls'
-
-# GCP Cluster
-DF_CLUSTER='development'
-DF_GSA_NAME='gsa-priauth-service'
-DF_KSA_NAME='k8s-priauth-service'
-DF_KUBE_NAMESPACE='default'
-
-DF_REPO="registry.gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl"
+ZONE='us-central1-c'
+REGION='us-central1'
+NETWORK='drls'
+CLUSTER='prior-auth'
 
 get_service_file(){
   ENVIRONMENT=$1
@@ -26,23 +17,15 @@ get_service_file(){
   esac
 }
 
-get_bucket(){
-  ENVIRONMENT=$1
-  case "$ENVIRONMENT" in
-    demo) echo "${PROJECT_ID}-cql"
-       ;;
-    test) echo "${PROJECT_ID}-cql-test"
-       ;;
-    development) echo "${PROJECT_ID}-cql-dev"
-      ;;
-  esac
-}
-
-SERVICE_ACCOUNT_FILE=${SERVICE_ACCOUNT_FILE:-$(get_service_file "$ENVIRONMENT")}
+# In case SERVICE_ACCOUNT_FILE_$ENVIRONMENT is set, use that value. otherwise fall back to SERVICE_ACCOUNT_FILE
+SERVICE_ACCOUNT_FILE_ENV=$(get_service_file "$ENVIRONMENT")
+if [ -n "$SERVICE_ACCOUNT_FILE_ENV" ]; then
+  SERVICE_ACCOUNT_FILE=$SERVICE_ACCOUNT_FILE_ENV
+fi
 export SERVICE_ACCOUNT_FILE
 
 
-BUCKET_NAME=${BUCKET_NAME:-$(get_bucket "$ENVIRONMENT")}
+BUCKET_NAME=${BUCKET_NAME:-${PROJECT_ID}-cql-${KUBE_NAMESPACE}}
 export BUCKET_NAME
 BUCKET="gs://$BUCKET_NAME"
 export BUCKET
