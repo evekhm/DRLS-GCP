@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -e # Exit if error is detected during pipeline execution
-set -i
 GCP="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT="$GCP"/../../../..
 source "$GCP"/../../../shared/SET
