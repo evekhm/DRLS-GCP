@@ -66,6 +66,7 @@ build_keycloak:
   - set -x
   - apk update
   - apk add git
+  - apk add --no-cache bash
   #- bash ${CI_PROJECT_DIR}/jobs/build_keycloak.sh
   - bash ${CI_PROJECT_DIR}/jobs/test.sh
   rules:
