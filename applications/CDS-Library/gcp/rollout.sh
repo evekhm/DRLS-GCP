@@ -15,11 +15,16 @@ ZIP="$ZIP_PATH"/"$ZIP_FILE"
 # CI_DEPLOY_USER, CI_DEPLOY_PASSWORD
 
 echo "$(basename "$0") APPLICATION=$APPLICATION, PROJECT_REPO=$PROJECT_REPO BUCKET=$BUCKET PROJECT_ID=$PROJECT_ID KUBE_NAMESPACE=$KUBE_NAMESPACE"
+echo ${CI_DEPLOY_USER} ${CI_DEPLOY_PASSWORD}
 
 git_clone(){
   DD="$ROOT/$APPLICATION"
   if [ ! -d "$DD" ]; then
-    git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@"${PROJECT_REPO}" "$DD"
+    if [ -n "$TOKEN" ]; then
+      git clone https://oauth2:"$TOKEN"@"${PROJECT_REPO}" "$DD"
+    else
+      git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@"${PROJECT_REPO}" "$DD"
+    fi
   fi
 }
 

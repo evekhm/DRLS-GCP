@@ -61,12 +61,12 @@ source "${DIR}/shared/SET.manual"
 
 #Build keycloak, prevent writing to 'released' images
 APPLICATION=auth
-IMAGE_REPO="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/${APPLICATION}/manual/$PROJECT_ID/$KUBE_NAMESPACE"
-IMAGE=$IMAGE_REPO:$( date '+%F_%H_%M_%S' )
-IMAGE="$IMAGE" LATEST="${IMAGE_REPO}:latest" bash "${DIR}"/jobs/build_keycloak.sh
+IMAGE_REPO="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/${APPLICATION}/manual"
+IMAGE_TAG="$IMAGE_REPO:$PROJECT_ID-$KUBE_NAMESPACE"
+IMAGE="$IMAGE_TAG" LATEST="$IMAGE_TAG" bash "${DIR}"/jobs/build_keycloak.sh
 
 # Deploy All Applications All except auth
 bash "${DIR}"/jobs/deploy_applications.sh -x ${APPLICATION}
-IMAGE=$IMAGE bash "${DIR}"/jobs/deploy_application.sh -a ${APPLICATION}
+CI_DEPLOY_USER=$CI_DEPLOY_USER CI_DEPLOY_PASSWORD=$CI_DEPLOY_PASSWORD IMAGE=$IMAGE bash "${DIR}"/jobs/deploy_application.sh -a ${APPLICATION}
 
 bash "${DIR}"/jobs/print_steps.sh
