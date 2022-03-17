@@ -65,8 +65,4 @@ build_keycloak:
   rules:
   - if: $PIPELINE_TRIGGERED #exclude building keycloak when triggered from upstream
     when: never
-  - changes:
-    - "*.md"
-    - ".gitignore"
-    when: never
   - !reference [.build_vars, rules]
