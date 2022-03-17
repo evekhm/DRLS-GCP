@@ -50,14 +50,14 @@ function provision(){
 
 ##############################To be part of DTP#################################
 #  - Use Infrastructure Project for Provisioning
-#provision
+provision
 ############################### End of DTP######################################
 
 
 ############ Done Part of GitLab CI/CD Steps ##################
 source "${DIR}/shared/SET.manual"
 # setup cluster (done as part of GitLab prepare stage)
-#bash "${DIR}"/jobs/prepare.sh
+bash "${DIR}"/jobs/prepare.sh
 
 #Build keycloak, prevent writing to 'released' images
 APPLICATION=auth
@@ -66,7 +66,7 @@ IMAGE=$IMAGE_REPO:$( date '+%F_%H_%M_%S' )
 IMAGE="$IMAGE" LATEST="${IMAGE_REPO}:latest" bash "${DIR}"/jobs/build_keycloak.sh
 
 # Deploy All Applications All except auth
-#bash "${DIR}"/jobs/deploy_applications.sh -x ${APPLICATION}
+bash "${DIR}"/jobs/deploy_applications.sh -x ${APPLICATION}
 IMAGE=$IMAGE bash "${DIR}"/jobs/deploy_application.sh -a ${APPLICATION}
 
 bash "${DIR}"/jobs/print_steps.sh
