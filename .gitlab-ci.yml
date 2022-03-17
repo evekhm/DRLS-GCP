@@ -61,6 +61,8 @@ build_keycloak:
   - set -x
   - apk update
   - apk add git
+  - ls ${CI_PROJECT_DIR}
+  - ls ${CI_PROJECT_DIR}/jobs
   - ${CI_PROJECT_DIR}/jobs/build_keycloak.sh
   rules:
   - if: $PIPELINE_TRIGGERED #exclude building keycloak when triggered from upstream
