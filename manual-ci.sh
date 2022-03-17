@@ -7,7 +7,7 @@ ROOT="$DIR/.."
 #  PROJECT_ID
 
 function usage(){
-    echo "Missing (any of) the required parameters PROJECT_ID=$PROJECT_ID USER=$USER TOKEN."
+    echo "Missing (any of) the required parameters PROJECT_ID=$PROJECT_ID USERNAME=$USERNAME TOKEN."
     echo "Sample usage: $(basename "$0") -p <PROJECT_ID> -t <TOKEN> -u <USERNAME> "
     exit 1
 }

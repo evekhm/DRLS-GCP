@@ -15,7 +15,7 @@ set -x
 # Create KSA, secret (done part of .deploy template)
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "${DIR}/shared/vars"
+source "${DIR}/../shared/vars"
 gcloud auth activate-service-account --key-file "${SERVICE_ACCOUNT_FILE}" --project="$PROJECT_ID"
 
 "$DIR"/jobs/prepare_job.sh

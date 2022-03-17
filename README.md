@@ -47,11 +47,6 @@ Set the PROJECT_ID environment variable to point to the GCP project and activate
   gcloud config set project $PROJECT_ID 
 ```
 
-> When running remotely using gcloud sdk, you need to login using your credentials (step can be skipped when from the Gcp Terminal):
-
-```shell
-gcloud auth login
-```
 
 2. Set VSAC keys
 > At this point, you should have credentials to access VSAC. If not, please refer to [Prerequisites](#prerequisites) for how to create these credentials and return here after you have confirmed you can access VSAC.
