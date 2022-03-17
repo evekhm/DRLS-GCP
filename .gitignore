@@ -13,3 +13,6 @@
 /applications/prior-auth/k8s/deployment.yaml
 /applications/CDS-Library/CDS-Library.zip
 /jobs/.env
+/artefacts/
+/applications_org/
+/old/

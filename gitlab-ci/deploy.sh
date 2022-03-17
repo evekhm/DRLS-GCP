@@ -11,7 +11,7 @@ echo "Running deploy step with following parameters APPLICATON=$APPLICATION,
 apt-get update && apt-get install git
 apt-get install zip unzip -q
 
-"$DIR"/jobs/get_services.sh -o "${VARIABLES_FILE}"
+"$DIR"/../jobs/get_services.sh -o "${VARIABLES_FILE}"
 source "${VARIABLES_FILE}"
 
 source "${DIR}/../shared/vars"
