@@ -2,14 +2,14 @@
 
 There are **Seven Application Projects** originally branched off from DaVinci (`gcpDev` branch being the `main`),
 composing Microservice Architecture for the DRLS flow:
-- [CRD](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/CRD) 
+- [CRD](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd) 
 - [CDS-Library](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/CDS-Library)
 - [crd-request-generator](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd-request-generator)
 - [dtr](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/dtr)
 - [prior-auth](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/prior-auth)
 - [test-ehr](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/test-ehr)
-- [keycloak](TODO) TODO
-
+- [auth](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/auth) 
+- 
 > The above projects will be referenced as Applications with the corresponding names.
 
 > All the projects above (except CDS-Library)  have an associated Container Registry 
@@ -31,7 +31,7 @@ The namespace separation (named after the feature branch) will be used during th
 
 ## High Level Feature Release Example
 **Use Case:** As a developer, I want to be able to work on my own GCP environment while branching off components I need,
-with automatic CI/CD pipeline .
+with automatic CI/CD pipeline.
 
 **Translates to:** As a developer, I want to be able to build a new feature for the DRLS-flow (possibly touching multiple applications/projects) and do the following: 
 - Deploy and test inside my Development environment, 

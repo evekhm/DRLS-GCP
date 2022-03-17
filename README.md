@@ -5,8 +5,10 @@
 This document details the installation process for the dockerized version of the **Documentation Requirements Lookup Service (DRLS) Prior Auth Workflow** system for GCP Development. 
 Be aware that each component of DRLS has its own README where you will find more detailed documentation. This document **is not designed to replace those individual READMEs**.
 
+Read [here]() for the guide on CI/CD deployment using GitLab
+
 Following commands should be run from GCP Terminal.
-> Because keycloak needs to be re-built, running remotely via gcloud sdk requires environment to build contaienr and push it to GitLab repository. Those instructions are missing. Integration with Gitlab is troublesome. 
+> Because keycloak needs to be re-built, running remotely via gcloud sdk requires environment to build contaienr and push it to GitLab repository. Those instructions are missing. 
 
 ## Table of Contents
 - [Prerequisites](#prerequisites)
