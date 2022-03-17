@@ -25,10 +25,10 @@ done
 if [ -z  ${PROJECT_ID+x} ]  || [ -z ${CI_DEPLOY_USER+x} ] || [ -z ${CI_DEPLOY_PASSWORD+x} ]; then
   usage
 fi
-#Steps:
-## 1. Manual Steps: Pre-requisites
-# Create GCP Project
-# Create Service Account, export SERVICE_ACCOUNT=<name>
+
+export CI_DEPLOY_USER
+export CI_DEPLOY_PASSWORD
+
 
 #Argolis
 # Run
@@ -57,7 +57,7 @@ provision
 ############ Done Part of GitLab CI/CD Steps ##################
 source "${DIR}/shared/SET.manual"
 # setup cluster (done as part of GitLab prepare stage)
-bash "${DIR}"/jobs/prepare.sh
+"${DIR}"/jobs/prepare.sh
 
 #Build keycloak, prevent writing to 'released' images
 APPLICATION=auth
