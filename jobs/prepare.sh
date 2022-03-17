@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 set -e # Exit if error is detected during pipeline execution
-#Expects: KUBE_NAMESPACE, KSA_NAME, GSA_NAME, PROJECT_ID
-set -x
+#Expects following env to be set:
+# KUBE_NAMESPACE, KSA_NAME, GSA_NAME, PROJECT_ID, SECRET, CI_DEPLOY_USER, CI_DEPLOY_PASSWORD
+
+JOBS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+print="$JOBS_DIR/../shared/print"
+GSA_EMAIL=$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
 
 #Pre-pare steps:
 # 1. Each deployment has its own IP assigned to services, following steps are deployment specific:
@@ -11,18 +15,11 @@ set -x
 # 2. Project-ID specific steps
 # Service Account required for CRD to access Cloud Storage (with CQL rules)
 
-#NAMESPACE specific steps
-# Create KSA, secret (done part of .deploy template)
-
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-print="$DIR/shared/print"
-GSA_EMAIL=$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
-
-if [ -n "$KUBE_NAMESPACE" ]; then kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"; fi
-
+#KUBE_NAMESPACE specific steps
 # Create KSA Service account and Workload Identity required for CRD application to access Cloud Storage
 
-# begin ----------- NAMESPACE specific -----------
+echo "$(basename "$0") KUBE_NAMESPACE=$KUBE_NAMESPACE PROJECT_ID=$PROJECT_ID "
+# begin ----------- KUBE_NAMESPACE specific -----------
 create_kservice_account(){
   $print "Preparing KSA service account [$KSA_NAME] in [$KUBE_NAMESPACE] namespace ..."
   if kubectl get serviceaccounts --namespace "$KUBE_NAMESPACE" | grep "$KSA_NAME"; then
@@ -34,7 +31,20 @@ create_kservice_account(){
   fi
 }
 
-# end ----------- NAMESPACE specific -----------
+# Done by GitLab CI/CD template
+create_secret() {
+    echo "Creating secret $SECRET in namespace $KUBE_NAMESPACE required for private repository access"
+    if kubectl get secrets --namespace="$KUBE_NAMESPACE" | grep $SECRET; then
+      echo "$SECRET exists in namespace $KUBE_NAMESPACE, skipping..."
+    else
+      echo "Logging into $CI_REGISTRY with deploy token $CI_DEPLOY_USER"
+      docker login -u $CI_DEPLOY_USER -p $CI_DEPLOY_PASSWORD $CI_REGISTRY
+      kubectl create secret generic $SECRET --from-file=.dockerconfigjson=$HOME/.docker/config.json --type=kubernetes.io/dockerconfigjson --namespace=$KUBE_NAMESPACE
+      kubectl get secrets --namespace="$KUBE_NAMESPACE" | grep $SECRET
+    fi
+}
+
+# end ----------- KUBE_NAMESPACE specific -----------
 
 # begin ----------- PROJECT-ID specific -----------
 create_gservice_account() {
@@ -87,6 +97,9 @@ configure_kservice_account(){
 }
 # end ----------- PROJECT-ID specific -----------
 
+if [ -n "$KUBE_NAMESPACE" ]; then kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"; fi
+
+create_secret
 
 #Assign Workload Identity https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#kubectl
 
@@ -96,4 +109,5 @@ create_kservice_account
 
 configure_kservice_account
 
-"${DIR}"/deploy_services.sh
+
+"${JOBS_DIR}"/deploy_services.sh

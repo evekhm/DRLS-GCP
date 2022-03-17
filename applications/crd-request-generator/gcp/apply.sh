@@ -4,13 +4,11 @@ set -e # Exit if error is detected during pipeline execution
 GCP="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN="$GCP"/../bin
 PWD=$(pwd)
-source "$BIN"/../bin/SET
+source "$BIN"/SET
 
-gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
+echo "$(basename "$0") APPLICATION=$APPLICATION, IMAGE=$IMAGE KUBE_NAMESPACE=$KUBE_NAMESPACE"
 
-echo "***** Applying  $APPLICATION deployment to Cluster $CLUSTER *****"
 cd "$GCP"/../k8s/
-
 sed 's|__FHIR_SERVER__|'"$FHIR_SERVER"'|g;
     s|__AUTH__|'"$AUTH"'|g;
     s|__PUBLIC_KEYS__|'"$PUBLIC_KEYS"'|g;
@@ -22,9 +20,6 @@ kubectl apply -f deployment.yaml --namespace="$KUBE_NAMESPACE"
 
 kubectl apply -f service.yaml --namespace="$KUBE_NAMESPACE"
 
-
 cd "$PWD" || exit
-
-echo "***** DEPLOYED! *****"
 
 

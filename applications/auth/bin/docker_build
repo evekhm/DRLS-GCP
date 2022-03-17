@@ -1,18 +1,11 @@
 #!/usr/bin/env bash
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
-print="$BIN/../../../shared/print"
+
 source "$BIN"/SET
-
-cd "$BIN" || exit
-
-BUILD_TIMESTAMP=$( date '+%F_%H:%M:%S' )
-$print "Building image $IMAGE_TAG with timestamp $BUILD_TIMESTAMP ..."
-
-#sed 's|__TEST_EHR__|'"$TEST_EHR"'|g; ' "$BIN"/ClientFhirServerRealm.sample.json > "$BIN"/ClientFhirServerRealm.json
-
-docker build -f Dockerfile -t "$IMAGE_TAG" -t "$LATEST" --build-arg BUILD_TIMESTAMP="$BUILD_TIMESTAMP" .
-
-$print "Created image $IMAGE_TAG" INFO
-
+DD="$BIN/../../../../$APPLICATION"
+cd "$DD" || exit
+echo $IMAGE $LATEST
+sed  's|__TEST_EHR__|'"$TEST_EHR"'|g; ' config/ClientFhirServerRealm.sample.json > config/ClientFhirServerRealm.json
+docker build -f Dockerfile -t "$IMAGE" -t "$LATEST" .
 cd "$PWD" || exit

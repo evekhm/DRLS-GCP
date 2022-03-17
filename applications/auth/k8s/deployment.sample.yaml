@@ -2,18 +2,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    application: keycloak
-  name: keycloak
+    application: auth
+  name: auth
 spec:
 #  serviceName: keycloak-service
   replicas: 1
   selector:
     matchLabels:
-      application: keycloak
+      application: auth
   template:
     metadata:
       labels:
-        application: keycloak
+        application: auth
     spec:
       containers:
         - env:
@@ -26,7 +26,7 @@ spec:
             - name: KEYCLOAK_IMPORT
               value: ClientFhirServerRealm.json
           image: __IMAGE__
-          name: keycloak
+          name: auth
           ports:
             - containerPort: 8080
 #          volumeMounts:

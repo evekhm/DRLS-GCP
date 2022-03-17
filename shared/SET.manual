@@ -1,44 +1,26 @@
 #!/usr/bin/env bash
 UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-#Pre-requisites:
-# CI_DEPLOY_USER - GitLab User
-# CI_DEPLOY_PASSWORD - Gitlab Token
-# PROJECT_ID - GCP Project
-# CLUSTER
-
-######
-#
-# This script sets your required APIs to execute GitLab CI/CD flow.
-# Example call:
-# bash ./services_enable.sh -p prior_auth_test -c cluster_name -t $TOKEN -u user_name
-######
-
-
-
 # Source this file when running DRLS-Deploy not via the GitLab CI/CD
 # All of these are setup via GitLab otherwise
-export SECRET='regcred'
+export KUBE_NAMESPACE='demo-manual' #Namespace to which DRLS will be deployed inside the cluster
+
 # GCP Cluster
+export SECRET='regcred' #name of the secret used by pods to download images from the repository
 export GSA_NAME='gsa-priauth-service'
 export KSA_NAME='k8s-priauth-service'
-export KUBE_NAMESPACE='demo'
 
 # Setting Variables of Gitlab
 export CI_REGISTRY="registry.gitlab.com"
 export CI_SERVER_HOST="gitlab.com"
-export CI_JOB_ID="manual"
-
 export APPLICATION_NAMESPACE="gcp-solutions/hcls/claims-modernization/pa-ref-impl"
-export IMAGE_TYPE="released" # |qa|mr|released
 
+export IMAGE_TYPE="released" # Will use images for deployment
+
+#export CONTAINER_CLI='lima nerdctl'
 export VARIABLES_FILE="$UTILS/.env"
-
-#source "$UTILS"/SET
 
 #For GitLab this is done via the GitLab Agent
 #docker login -u ${CI_DEPLOY_USER} -p ${CI_DEPLOY_PASSWORD} ${CI_REGISTRY}
-
 #gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 
 

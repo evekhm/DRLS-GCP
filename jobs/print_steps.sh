@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
 set -e # Exit if error is detected during pipeline execution
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-print=$DIR/shared/print
-export TERM=vt100
+JOBS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+print="$JOBS_DIR/../shared/print"
+#export TERM=dumb
 
-source "$DIR"/.env
+"$JOBS_DIR"/get_services.sh -o "$JOBS_DIR"/.env
+source "$JOBS_DIR"/.env
+
 $print 'You are all Done! Use following External IPs to access deployed services' INFO
 
 $print "keycloak service     : $AUTH"

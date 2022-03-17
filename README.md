@@ -5,7 +5,8 @@
 This document details the installation process for the dockerized version of the **Documentation Requirements Lookup Service (DRLS) Prior Auth Workflow** system for GCP Development. 
 Be aware that each component of DRLS has its own README where you will find more detailed documentation. This document **is not designed to replace those individual READMEs**.
 
-To set up system for Local Development follow instruction [here](SetupLocalRunOnMac.md).
+Following commands should be run from GCP Terminal.
+> Because keycloak needs to be re-built, running remotely via gcloud sdk requires environment to build contaienr and push it to GitLab repository. Those instructions are missing. Integration with Gitlab is troublesome. 
 
 ## Table of Contents
 - [Prerequisites](#prerequisites)
@@ -19,7 +20,7 @@ To set up system for Local Development follow instruction [here](SetupLocalRunOn
 
 ### GitLab Access
 > Currently, this flow requires special access for the GitLab Repository and Container Registry, so a Personal Access Token is needed for the setup. 
-You will need to have permissions for the [HCLS Project](https://gitlab.com/gcp-solutions/hcls/claims-modernization/epa) and generated Personal Access Token with `read_registry` and `read_repository` scope.
+You will need to have permissions for the [HCLS Project](https://gitlab.com/gcp-solutions/hcls/claims-modernization/) and generated Personal Access Token with `read_registry` and `read_repository` scope.
 In case of planning on contributing back, the scope needs also to include `write_registry` and `write_repository`.
 
 Check GitLab instructions [here](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token).
@@ -31,6 +32,10 @@ Additionally, you must have credentials (api key) access to the **[Value Set Aut
 ## GCP Project Setup <a name="gcpsetup"></a>
 
 ### Setting Environment Variables
+
+When Running remotely using Cloud SDK:
+
+
 Create new GCP project and activate Cloud Shell. Following commands should be executed in the Cloud Shell of your GCP Project.
 
 1. Set Project ID
@@ -40,6 +45,12 @@ Set the PROJECT_ID environment variable to point to the GCP project and activate
 ```sh
   export PROJECT_ID=<your_project_id>
   gcloud config set project $PROJECT_ID 
+```
+
+> When running remotely using gcloud sdk, you need to login using your credentials (step can be skipped when from the Gcp Terminal):
+
+```shell
+gcloud auth login
 ```
 
 2. Set VSAC keys
@@ -52,25 +63,25 @@ Use your *vsac_api_key* to set VSAC credentials (otherwise the flow will not wor
   export VSAC_API_KEY=vsac_api_key
 ```
 
+3. Gitlab Token nad UserName created previously:
+```sh
+export TOKEN=<your_token>
+export USERNAME=<your_username>
+```
+
 ### Download Required Sources
 
 > At this point, you should have Access Token Generated for GitLab. If not, please refer to [Prerequisites](#prerequisites).
 
-```sh
-export TOKEN=<your_token>
-```
 
 Create a root directory for the DRLS demo work (we will call this `<drlsroot>` for the remainder of this setup guide). 
  ```bash
  mkdir <drlsroot> && cd <drlsroot>
  ```
 
-Clone this repository as well as CDS-Library repository which stores common files necessary to make the [Coverage Requirements Discovery (CRD)](https://github.com/HL7-DaVinci/CRD), [Documentation Templates and Rules (DTR)](https://github.com/HL7-DaVinci/dtr) and [Prior Authorization Support (PAS)](https://github.com/HL7-DaVinci/prior-auth) use cases work. 
-CDS-Library will be uploaded as Cloud Storage inside your project and used by CRD service when serving back the CDS cards.
-
+Clone this repository:
 ```sh
   git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP.git
-  git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/CDS-Library.git
 ```
 
 ### For Argolis Only
@@ -82,68 +93,35 @@ For the `Argolis` environment, following known Org Constraints need to be disabl
    gcloud org-policies reset constraints/compute.vmExternalIpAccess --project $PROJECT_ID
 ```
 
+Settings for the manual Deployment (such as KUBE namespace ):
+```shell
+source DRLS-GCP/shared/SET.manual
+```
+
 ## Deployment  <a name="deployment"></a>
-
-### 1. Provision Resources on the GKE Cluster
-
-Using following script to create the GKE cluster using auto-pilot and upload CDS-Library to the Cloud Storage of the Project.
-```sh
-  DRLS-GCP/setup_cluster.sh
-```
-
-When prompted, Authorize Cloud Shell for API execution.
-> In case the above operation exited with an error, depending on the error, try resolving it (such as disabling constraints)  and re-run the command again.
-> Steps that were successfully executed will be skipped, while the failed steps will be tried again.
-
-### 2. Deploy Services
-Deploy services required for the DRLS flow into the GKE cluster.
-This operation will provision service host IPs required for further deployment configurations.
-Following command will generate `.env` file, used later for the deployment. 
+Following command does the installation and deployment of the DRLS components.
 
 ```sh
-  DRLS-GCP/deploy_services.sh
+  DRLS-GCP/manual-ci.sh -p $PROJECT_ID -t $TOKEN -u $USERNAME 
 ```
 
-### 3. Build keycloak image 
+Behind the hoods, following steps are executed:
 
-You will need to build/push locally keycloak image to have <TEST_EHR> service IP embedded into it.
-Later keycloak will be replaced with IAP for GCP.
+- Provision Resources: Enable APIs, network and Cluster Creation (to be integrated with DTP).
+  * Resources are managed by a separate project: [gke-deploy-env](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/gke-deploy-env)
+- Prepare Cluster: create GitLab access secret, Kubernetes Workload identity.  
+- Deploy Services required for the DRLS flow into the GKE cluster.
+  * This operation will provision service host IPs required for further deployment configurations.
+- Build keycloak image
+  * A dedicated keycloak image per deployment needs to be built (will be hosted using GCP container registry of the project(. This is required to embed <TEST_EHR> service IP as allowed for re-direction))
+- Deploy DRLS components
+  * Now everything is ready to get images (both from the GitLab and the keycloak) deployed into the GCP cluster.
 
-```sh
-  DRLS-GCP/build_keycloak.sh
-```
-
-### 4. Create and Deploy Secret for GitLab Container Registry Access 
-
-All other images (except keycloak) are released and stored in the Private GitLab container registry.
-You need to create secret to allow access to those images.
-
-- Login into the GitLab Container Registry using TOKEN:
-``` sh
-   docker login registry.gitlab.com -u <username> -p $TOKEN
-```
-The login process creates or updates a config.json file that holds an authorization token required to pull images.
-View the `config.json` file:
-``` sh
-   cat $HOME/.docker/config.json
-```
-
-- Deploy secret into the cluster:
-```sh
-kubectl create secret generic regcred \
-    --from-file=.dockerconfigjson=$HOME/.docker/config.json \
-    --type=kubernetes.io/dockerconfigjson
-```
-
-### 5. Deploy DRLS components into the GKE
-Now everything is ready to get images (both from the GitLab and the keycloak) deployed into the GCP cluster.
-```sh
-  DRLS-GCP/apply_workers.sh
-```
 
 Wait for the pods to be created and get into Running state:
 ```sh
-  kubectl get pods --watch
+
+  kubectl get pods -n $KUBE_NAMESPACE --watch
 ```
 You should be getting five pods: 
 - crd
@@ -164,16 +142,12 @@ test-ehr-768645cdf4-ntg9t                1/1     Running   0          7m19s
 
 NOTE: Currently deployed applications have around five to seven minutes required for starting up. Make sure to wait for them to be ready, before trying the steps below.
 In the instructions below replace <APPLICATION> with the corresponding IP.
-  
-To see IPs for the deployed services:
-```sh
-  cat DRLS-GCP/.env
-```
 
 Print out the `steps`:
 ```sh
-  DRLS-GCP/print_steps.sh
+  DRLS-GCP/jobs/print_steps.sh
 ```
+
 
 Sample Output:
 ```
@@ -210,9 +184,9 @@ Go to http://34.135.12.152:3000/ehr-server/reqgen
 Congratulations! DRLS is fully installed and ready for you to use!
 
 ## Tear Down  <a name="teardown"></a>
-Following command will delete deployment and prevent from running resources when unwanted. 
+Following command will delete all resources in the KUBE_NAMESPACE and prevent from running resources when unwanted. 
 ```sh
-  DRLS-GCP/delete_deployment.sh
+  DRLS-GCP/jobs/destroy.sh
 ```
 
 

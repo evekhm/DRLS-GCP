@@ -6,9 +6,8 @@ BIN="$GCP"/../bin
 PWD=$(pwd)
 source "$BIN"/SET
 
-gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 
-echo "***** Applying  $APPLICATION  Deployment to Cluster $CLUSTER *****"
+echo "$(basename "$0") APPLICATION=$APPLICATION, IMAGE=$IMAGE KUBE_NAMESPACE=$KUBE_NAMESPACE"
 cd "$GCP"/../k8s/
 
 kubectl apply -f pv.yaml --namespace="$KUBE_NAMESPACE"
@@ -19,9 +18,6 @@ kubectl apply -f deployment.yaml --namespace="$KUBE_NAMESPACE"
 
 kubectl apply -f service.yaml --namespace="$KUBE_NAMESPACE"
 
-
 cd "$PWD" || exit
-
-echo "***** DEPLOYED! *****"
 
 

@@ -8,7 +8,7 @@ source "$BIN"/SET
 
 BUILD_TIMESTAMP=$( date '+%F_%H:%M:%S' )
 $print "Building image $IMAGE_TAG with timestamp $BUILD_TIMESTAMP"
-cd "$BIN"/../../../CRD || exit
+cd "$BIN"/../../../"$APPLICATION" || exit
 ./gradlew clean
 
 

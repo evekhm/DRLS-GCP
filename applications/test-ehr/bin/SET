@@ -1,5 +1,3 @@
 #!/usr/bin/env bash
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-APPLICATION='test-ehr'
-source "$BIN"/../../../shared/SET
+APPLICATION=${APPLICATION:-$(basename "$(dirname "${BIN}")")}

@@ -3,5 +3,8 @@ GCP="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 "$GCP"/apply.sh
 source "$GCP"/../bin/SET
-echo "Rolling Out $APPLICATION..."
-kubectl rollout restart statefulset "$APPLICATION"
+
+if  kubectl get statefulset "$APPLICATION" --ignore-not-found=true  -n "$KUBE_NAMESPACE" | grep "$APPLICATION"; then
+  echo "Rolling out restart $APPLICATION..."
+  kubectl rollout restart statefulset "$APPLICATION" -n "$KUBE_NAMESPACE"
+fi

@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    application: keycloak
-  name: keycloak-service
+    application: auth
+  name: auth-service
 spec:
   type: LoadBalancer
   ports:
@@ -11,5 +11,5 @@ spec:
       port: 8180
       targetPort: 8080
   selector:
-    application: keycloak
+    application: auth
 

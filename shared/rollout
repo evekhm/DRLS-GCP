@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN=$1
 GCP=$2
 
@@ -7,6 +6,7 @@ source "$BIN"/SET
 
 "$GCP"/apply.sh
 
-echo "Rolling Out $APPLICATION deployment ..."
-kubectl rollout restart deployment "$APPLICATION"
-echo "***** Rollout Initiated! *****"
+if kubectl get deployment "$APPLICATION" --ignore-not-found=true  -n "$KUBE_NAMESPACE" | grep "$APPLICATION"; then
+  echo "Rollout restart for $APPLICATION deployment ..."
+  kubectl rollout restart deployment "$APPLICATION" -n "$KUBE_NAMESPACE"
+fi

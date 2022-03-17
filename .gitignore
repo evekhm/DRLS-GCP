@@ -1,5 +1,4 @@
 /crd/gcp/CDS-Library.zip
-/auth/bin/ClientFhirServerRealm.json
 /.env
 /applications/crd/k8s/config.yaml
 /shared/.env
@@ -12,3 +11,5 @@
 /applications/crd/k8s/serviceaccount.yaml
 /applications//dtr/k8s/deployment.yaml
 /applications/prior-auth/k8s/deployment.yaml
+/applications/CDS-Library/CDS-Library.zip
+/jobs/.env

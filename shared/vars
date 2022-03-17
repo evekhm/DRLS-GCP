@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-ZONE='us-central1-c'
-REGION='us-central1'
-NETWORK='drls'
-CLUSTER='prior-auth'
-
 get_service_file(){
   ENVIRONMENT=$1
   case "$ENVIRONMENT" in
@@ -24,10 +19,19 @@ if [ -n "$SERVICE_ACCOUNT_FILE_ENV" ]; then
 fi
 export SERVICE_ACCOUNT_FILE
 
-
+## DRLS - GCP
 BUCKET_NAME=${BUCKET_NAME:-${PROJECT_ID}-cql-${KUBE_NAMESPACE}}
 export BUCKET_NAME
 BUCKET="gs://$BUCKET_NAME"
 export BUCKET
+DB_NAME="CDS-Library.zip"
+export DB_NAME
+
+export OAUTH_TOKEN="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/token"
+export OAUTH_AUTHORIZE="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/auth"
+export CDS_SERVICE="${CRD}/r4/cds-services"
+export FHIR_SERVER="${TEST_EHR}/test-ehr/r4"
+export CRD_REQUEST_GENERATOR="${CRD_REQUEST_GENERATOR_HOST}:3000"
+export PUBLIC_KEYS="${CRD_REQUEST_GENERATOR_HOST}:3001/public_keys"
 
 

@@ -1,61 +1,66 @@
 #!/usr/bin/env bash
 export USE_GKE_GCLOUD_AUTH_PLUGIN=False
 UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-ENV=${ENV:-"$UTILS/../.env"}
-VARS="$UTILS/vars"
 
-source "$VARS"
-# For GitLab CI/CD Integration, only set defaults when env variables not already set
-if [[ -z ${IMAGE} ]]; then
-  IMAGE_REPO="$DF_REPO/$APPLICATION"
-  IMAGE="$IMAGE_REPO:latest"
-fi
+#gcloud auth configure-docker
 
-function set_def(){
-  val=$1
-  varname=DF_$1
-  default=${!varname}
-  if [[ -z ${!val} ]]; then
-    val=$default
-  else
-    val=${!val}
-  fi
-  echo "$val"
-}
+# Examples
+#source SET
+#APPLICATION=crd ../jobs/deploy_application_job.sh
 
-ZONE=$(set_def ZONE) #Using DF_ZONE when ZONE not set
-REGION=$(set_def REGION)
-NETWORK=$(set_def NETWORK)
-CLUSTER=$(set_def CLUSTER)
-GSA_NAME=$(set_def GSA_NAME)
-KSA_NAME=$(set_def KSA_NAME)
-KUBE_NAMESPACE=${KUBE_NAMESPACE:-$(set_def KUBE_NAMESPACE)}
+source "$UTILS/vars"
+
+## For GitLab CI/CD Integration, only set defaults when env variables not already set
+#if [[ -z ${IMAGE} ]]; then
+#  IMAGE_REPO="$DF_REPO/$APPLICATION"
+#  IMAGE="$IMAGE_REPO:latest"
+#fi
+#
+#function set_def(){
+#  val=$1
+#  varname=DF_$1
+#  default=${!varname}
+#  if [[ -z ${!val} ]]; then
+#    val=$default
+#  else
+#    val=${!val}
+#  fi
+#  echo "$val"
+#}
+#
+#ZONE=$(set_def ZONE) #Using DF_ZONE when ZONE not set
+#REGION=$(set_def REGION)
+#NETWORK=$(set_def NETWORK)
+#CLUSTER=$(set_def CLUSTER)
+#GSA_NAME=$(set_def GSA_NAME)
+#KSA_NAME=$(set_def KSA_NAME)
+#KUBE_NAMESPACE=${KUBE_NAMESPACE:-$(set_def KUBE_NAMESPACE)}
 
 
-if [ -f "$ENV" ]; then
-  # Deployed Services
-  source "$ENV"
-else
-  AUTH="http://localhost:8180" #keycloak
-  CRD='http://localhost:8090'
-  TEST_EHR="http://localhost:8080"
-  DTR="http://localhost:3005"
-  CRD_REQUEST_GENERATOR_HOST="http://localhost"
-fi
-
-# DRLS
-DB='CDS-Library.zip'
-OAUTH_TOKEN="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/token"
-OAUTH_AUTHORIZE="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/auth"
-CDS_SERVICE="${CRD}/r4/cds-services"
-FHIR_SERVER="${TEST_EHR}/test-ehr/r4"
-if [ -n "$CRD_REQUEST_GENERATOR_HOST" ]; then
-  CRD_REQUEST_GENERATOR="${CRD_REQUEST_GENERATOR_HOST}:3000"
-  PUBLIC_KEYS="${CRD_REQUEST_GENERATOR_HOST}:3001/public_keys"
-fi
+#if [ -f "$ENV" ]; then
+#  # Deployed Services
+#  source "$ENV"
+#else
+#  AUTH="http://localhost:8180" #keycloak
+#  CRD='http://localhost:8090'
+#  TEST_EHR="http://localhost:8080"
+#  DTR="http://localhost:3005"
+#  CRD_REQUEST_GENERATOR_HOST="http://localhost"
+#fi
+#
+## DRLS
+#DB='CDS-Library.zip'
+#OAUTH_TOKEN="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/token"
+#OAUTH_AUTHORIZE="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/auth"
+#CDS_SERVICE="${CRD}/r4/cds-services"
+#FHIR_SERVER="${TEST_EHR}/test-ehr/r4"
+#if [ -n "$CRD_REQUEST_GENERATOR_HOST" ]; then
+#  CRD_REQUEST_GENERATOR="${CRD_REQUEST_GENERATOR_HOST}:3000"
+#  PUBLIC_KEYS="${CRD_REQUEST_GENERATOR_HOST}:3001/public_keys"
+#fi
 
 #For when running locally from IDEA to overwrite properties
-export AUTH_REDIRECT_HOST=$TEST_EHR
-export CRD_REQUEST_GENERATOR_HOST
-export GOOGLE_STORAGE_BUCKET="$PROJECT_ID"-crd
-export GOOGLE_STORAGE_PROJECTID="$PROJECT_ID"
+#export AUTH_REDIRECT_HOST=$TEST_EHR
+#export CRD_REQUEST_GENERATOR_HOST
+#export GOOGLE_STORAGE_BUCKET="$PROJECT_ID"-crd
+#export GOOGLE_STORAGE_PROJECTID="$PROJECT_ID"
