@@ -25,8 +25,8 @@ variables:
   PROJECT_ID_DEV:  $PROJECT_ID
 
 stages:
-- build-keycloak
 - prepare
+- build-keycloak
 - deploy
 - destroy
 
@@ -67,8 +67,7 @@ build_keycloak:
   - apk update
   - apk add git
   - apk add --no-cache bash
-  #- bash ${CI_PROJECT_DIR}/jobs/build_keycloak.sh
-  - bash ${CI_PROJECT_DIR}/jobs/test.sh
+  - bash ${CI_PROJECT_DIR}/jobs/build_keycloak.sh
   rules:
   - if: $PIPELINE_TRIGGERED #exclude building keycloak when triggered from upstream
     when: never
