@@ -67,6 +67,6 @@ IMAGE="$IMAGE_TAG" LATEST="$IMAGE_TAG" bash "${DIR}"/jobs/build_keycloak.sh
 
 # Deploy All Applications All except auth
 bash "${DIR}"/jobs/deploy_applications.sh -x ${APPLICATION}
-CI_DEPLOY_USER=$CI_DEPLOY_USER CI_DEPLOY_PASSWORD=$CI_DEPLOY_PASSWORD IMAGE=$IMAGE bash "${DIR}"/jobs/deploy_application.sh -a ${APPLICATION}
+IMAGE=$IMAGE_TAG bash "${DIR}"/jobs/deploy_application.sh -a ${APPLICATION}
 
 bash "${DIR}"/jobs/print_steps.sh

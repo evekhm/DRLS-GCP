@@ -20,11 +20,11 @@ echo ${CI_DEPLOY_USER} ${CI_DEPLOY_PASSWORD}
 git_clone(){
   DD="$ROOT/$APPLICATION"
   if [ ! -d "$DD" ]; then
-    if [ -n "$TOKEN" ]; then
-      git clone https://oauth2:"$TOKEN"@"${PROJECT_REPO}" "$DD"
-    else
+#    if [ -n "$TOKEN" ]; then
+#      git clone https://oauth2:"$TOKEN"@"${PROJECT_REPO}" "$DD"
+#    else
       git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@"${PROJECT_REPO}" "$DD"
-    fi
+#    fi
   fi
 }
 
