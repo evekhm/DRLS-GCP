@@ -3,21 +3,26 @@ include:
   file: /.gitlab/ci/.deploy.gitlab-ci.yml
 
 variables:
+
+  #Configurable Settings:
+  AGENT_NAME: "gitlab-agent"
+  PROJECT_ID: "pri-auth-cicd"
+  ##########################
+
   GSA_NAME: "gsa-priauth-service" # Service Account Name to be created for crd application required for Cloud Storage Access for CDS-Library Access
   KSA_NAME: "k8s-priauth-service" # kubernetes service account for workload Identity for crd application
-
   APPLICATION_NAMESPACE: ${CI_PROJECT_NAMESPACE}
 
-  #Sharing same Agent, but could use different agents per environment
-  #GITLAB_AGENT: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:development
-  KUBE_CONTEXT_DEMO: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:gitlab-agent
-  KUBE_CONTEXT_TEST: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:gitlab-agent
-  KUBE_CONTEXT_DEV: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:gitlab-agent
-
   ######### Per Environment #############
-  PROJECT_ID_TEST: "pri-auth-cicd"
-  PROJECT_ID_DEMO: "pri-auth-cicd"
-  PROJECT_ID_DEV: "pri-auth-cicd"
+  #Sharing same Agent/Cluster, but could use different agents per environment
+  KUBE_CONTEXT_DEMO: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:${AGENT_NAME}
+  KUBE_CONTEXT_TEST: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:${AGENT_NAME}
+  KUBE_CONTEXT_DEV: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:${AGENT_NAME}
+
+  #Sharing same Project ID, but could use different projects per environment
+  PROJECT_ID_TEST: $PROJECT_ID
+  PROJECT_ID_DEMO: $PROJECT_ID
+  PROJECT_ID_DEV:  $PROJECT_ID
 
 stages:
 - prepare
@@ -61,7 +66,8 @@ build_keycloak:
   - set -x
   - apk update
   - apk add git
-  - ${CI_PROJECT_DIR}/jobs/build_keycloak.sh
+  #- bash ${CI_PROJECT_DIR}/jobs/build_keycloak.sh
+  - bash ${CI_PROJECT_DIR}/jobs/test.sh
   rules:
   - if: $PIPELINE_TRIGGERED #exclude building keycloak when triggered from upstream
     when: never
