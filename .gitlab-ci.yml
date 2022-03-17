@@ -25,8 +25,8 @@ variables:
   PROJECT_ID_DEV:  $PROJECT_ID
 
 stages:
-- prepare
 - build-keycloak
+- prepare
 - deploy
 - destroy
 
