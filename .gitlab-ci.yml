@@ -54,8 +54,8 @@ destroy:
     fi
   script:
   - kubectl delete –all pods –namespace=$KUBE_NAMESPACE
-#  rules:
-#  - !reference [.build_vars, rules]
+  rules:
+  - !reference [.build_vars, rules]
 
 # keycloak Fhir realm created by Da Vinci uses H2 and needs TEST-EHR IP
 # We use a workaround and embed TEST-EHR into the image.
