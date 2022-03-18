@@ -53,7 +53,7 @@ destroy:
       exit 1
     fi
   script:
-  - kubectl delete –all pods –namespace=$KUBE_NAMESPACE
+  - kubectl delete namespaces $KUBE_NAMESPACE
   rules:
   - !reference [.build_vars, rules]
 
