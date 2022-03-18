@@ -3,8 +3,8 @@
 ## Table of Contents
 - [Overview](#overview)
 - [Prerequisites](#prerequisites)
-- [Setting up](#settingup)
-- [Git Lab Settings](#gitlabsettings)
+- [Setting up](#setting-up)
+- [Git Lab Settings](#git-lab-settings)
 
 ## Overview
 
@@ -13,24 +13,24 @@ For more information on Supported use cases:
 - Read about [the supported use cases](GitLabCICD_UseCases.md). 
 - Understand how [CI/CD is implemented](https://gitlab.com/gcp-solutions/hcls/claims-modernization/gitlab-ci/README.md) for this project.
 
-## Pre-requisites
-Git Lab Premium account and following projects hosted in GitLab in the same Group:
+## Prerequisites
+Git Lab Premium account and following projects hosted in the same GitLab sub-group:
 
- **Seven Application Projects** originally branched off from DaVinci (`gcpDev` branch being the `main`),
+- **Application Projects** originally branched off from DaVinci (`gcpDev` branch being the `main`),
 composing Microservice Architecture for the DRLS flow. All the projects (except CDS-Library) should have Container Registry enabled :
-- [CRD](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd)
-- [CDS-Library](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/CDS-Library)
-- [crd-request-generator](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd-request-generator)
-- [dtr](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/dtr)
-- [prior-auth](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/prior-auth)
-- [test-ehr](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/test-ehr)
-- [auth](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/auth)
+  - [CRD](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd)
+  - [CDS-Library](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/CDS-Library)
+  - [crd-request-generator](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/crd-request-generator)
+  - [dtr](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/dtr)
+  - [prior-auth](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/prior-auth)
+  - [test-ehr](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/test-ehr)
+  - [auth](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/auth)
 
-**Project to manage GCP Setup**, including GitLab Agent configuration (to be extended with DTP):
-- [gke-deploy-env](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/gke-deploy-env)
+- **Project to manage GCP Setup**, including GitLab Agent configuration (to be extended with DTP):
+  - [gke-deploy-env](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/gke-deploy-env)
 
-**Project to manage Deployment and CI/CD flow** containing GKE manifests file for the applications:
-- [DRLS-GCP](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP)
+- **Project to manage Deployment and CI/CD flow** containing GKE manifests file for the applications:
+  - [DRLS-GCP](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP)
 
 
 ## Setting up
@@ -41,7 +41,7 @@ GitLab Agent is installed per cluster. So when having  different clusters per en
 For more details see [here](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/gke-deploy-env/-/blob/main/README.md)
 
 #### Step 1
-Setup GCP Project to be used for CI/CD Deployment and install Gitlab Agent as described [here](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/gke-deploy-env/-/blob/main/README.md)
+Setup GCP Project to be used for CI/CD Deployment and install Gitlab Agent as described [here](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/gke-deploy-env/-/blob/main/README.md).
 
 #### Step 2
 Update CI/CD Settings

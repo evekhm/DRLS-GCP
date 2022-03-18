@@ -91,6 +91,8 @@ For the `Argolis` environment, following known Org Constraints need to be disabl
 ```sh
    gcloud services enable orgpolicy.googleapis.com
    gcloud org-policies reset constraints/compute.vmExternalIpAccess --project $PROJECT_ID
+   gcloud org-policies reset constraints/iam.disableServiceAccountKeyCreation --project $PROJECT_ID
+   
 ```
 
 Settings for the manual Deployment (such as KUBE namespace ):
