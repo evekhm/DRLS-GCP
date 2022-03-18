@@ -66,6 +66,7 @@ IMAGE_TAG="$IMAGE_REPO:$PROJECT_ID-$KUBE_NAMESPACE"
 IMAGE="$IMAGE_TAG" LATEST="$IMAGE_TAG" bash "${DIR}"/jobs/build_keycloak.sh
 
 # Deploy All Applications All except auth
+source "${VARIABLES_FILE}"
 bash "${DIR}"/jobs/deploy_applications.sh -x ${APPLICATION}
 IMAGE=$IMAGE_TAG bash "${DIR}"/jobs/deploy_application.sh -a ${APPLICATION}
 

@@ -11,10 +11,9 @@ echo "Running deploy step with following parameters APPLICATON=$APPLICATION,
 apt-get update && apt-get install git
 apt-get install zip unzip -q
 
-"$DIR"/../jobs/get_services.sh -o "${VARIABLES_FILE}"
 source "${VARIABLES_FILE}"
-
 source "${DIR}/../shared/vars"
+
 gcloud auth activate-service-account --key-file "${SERVICE_ACCOUNT_FILE}" --project="$PROJECT_ID"
 "${DIR}"/../jobs/deploy_application.sh -a "$APPLICATION"
 

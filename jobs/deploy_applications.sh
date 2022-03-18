@@ -14,9 +14,6 @@ do
     esac
 done
 
-# Set Variables Required for k8s Configurations, including Services
-"$JOBS_DIR"/get_services.sh -o "${VARIABLES_FILE}"
-source "${VARIABLES_FILE}"
 
 for DIR in "${APPLICATIONS_DIR}"/*/
 do

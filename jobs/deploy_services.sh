@@ -4,7 +4,7 @@ set -e # Exit if error is detected during pipeline execution
 JOBS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 APPLICATIONS_DIR="$JOBS_DIR/../applications"
 UTILS="$JOBS_DIR/../shared"
-OUT_ENV=${VARIABLES_FILE:-"$JOBS_DIR/.env"}
+OUT_ENV=${VARIABLES_FILE}
 OUT_ENV_tmp="$JOBS_DIR/tmp.env"
 
 echo "Running  $(basename "$0") with KUBE_NAMESPACE=$KUBE_NAMESPACE, out $OUT_ENV "
