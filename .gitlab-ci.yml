@@ -48,12 +48,14 @@ destroy:
         kubectl config use-context "$KUBE_CONTEXT"
         kubectl config current-context
         kubectl get pods -n "$KUBE_NAMESPACE"
+    else
+      echo "Needs following parameters to be passed: $KUBE_CONTEXT, $KUBE_NAMESPACE"
+      exit 1
     fi
   script:
   - kubectl delete –all pods –namespace=$KUBE_NAMESPACE
   rules:
   - !reference [.build_vars, rules]
-  - when: manual
 
 # keycloak Fhir realm created by Da Vinci uses H2 and needs TEST-EHR IP
 # We use a workaround and embed TEST-EHR into the image.
