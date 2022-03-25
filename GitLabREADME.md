@@ -9,9 +9,9 @@
 ## Overview
 
 This document details the installation process for Gitlab CI/CD Integration.
-For more information on Supported use cases:
+For more information:
 - Read about [the supported use cases](GitLabCICD_UseCases.md). 
-- Understand how [CI/CD is implemented](https://gitlab.com/gcp-solutions/hcls/claims-modernization/gitlab-ci/README.md) for this project.
+- Understand how [CI/CD is implemented](https://gitlab.com/gcp-solutions/hcls/claims-modernization/gitlab-ci/README.md) for this project using the custom developed CI/CD templates for GitLab.
 
 ## Prerequisites
 Git Lab Premium account and following projects hosted in the same GitLab sub-group:
@@ -45,8 +45,8 @@ Setup GCP Project to be used for CI/CD Deployment and install Gitlab Agent as de
 
 #### Step 2
 Update CI/CD Settings
-   - Modify [Settings-> CI/CD](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP/-/settings/ci_cd)
-   - 
+
+   - Set `SERVICE_ACCOUNT_FILE` via [Settings-> CI/CD](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP/-/settings/ci_cd)
      - When sharing same project, just one variable  `SERVICE_ACCOUNT_FILE` needs to be added. This is also a fall back variable.
      - If different projects are used per environment, SERVICE_ACCOUNT_FILE needs to be specified per deployment in the following way:
         * `SERVICE_ACCOUNT_FILE_DEV` - per development environment
@@ -58,7 +58,7 @@ Update CI/CD Settings
        - Type: File
        - Make sure to uncheck 'Protected variable' checkbox
 
-   - Modify [.gitlab_ci.yml](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP/.gitlab_ci.yml) file
+   - Set `KUBE_CONTEXT` in [.gitlab_ci.yml](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP/.gitlab_ci.yml) file
      - Update KUBE_CONTEXT to use the AGENT_NAME (use same one if shared)  created during the [Step 1](#step1).
      
 ```shell
