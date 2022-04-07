@@ -17,6 +17,12 @@ spec:
       containers:
         - image: __IMAGE__
           name: prior-auth
+          env:
+          - name: TOKEN_BASE_URI
+            valueFrom:
+              configMapKeyRef:
+                name: pa-config
+                key: token_base_uri
           ports:
             - containerPort: 9015
           resources: {}

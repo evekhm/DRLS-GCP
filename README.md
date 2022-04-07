@@ -69,6 +69,13 @@ export TOKEN=<your_token>
 export USERNAME=<your_username>
 ```
 
+4. (Optional) Set ZONE REGION CLUSTER name not to use the defaults
+```shell
+export CLUSTER=<cluster-name>
+export REGION=<your-region>
+export ZONE=<your-zone>
+```
+  
 ### Download Required Sources
 
 > At this point, you should have Access Token Generated for GitLab. If not, please refer to [Prerequisites](#prerequisites).
