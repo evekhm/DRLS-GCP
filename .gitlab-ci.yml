@@ -18,6 +18,9 @@ variables:
   PROJECT_ID_DEMO: pa-cicd
   PROJECT_ID_DEV:  pri-auth-cicd
 
+  #For the dev branch
+  SERVICE_ACCOUNT_FILE: $EK_SERVICE_ACCOUNT_FILE
+
 stages:
 - prepare
 - build-keycloak
