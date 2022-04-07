@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD=$(pwd)
+source "$BIN"/SET
+
+"$UTILS/docker_prepare" "$BIN"
+TAG="$IMAGE:$VERSION"
+echo "Running docker container $IMAGE_TAG for application $APPLICATION"
+docker run --rm -d -p 9015:9015 --label "$APPLICATION"  "$IMAGE_TAG"
