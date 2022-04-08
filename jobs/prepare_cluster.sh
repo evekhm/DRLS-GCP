@@ -7,6 +7,8 @@ JOBS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 print="$JOBS_DIR/../shared/print"
 GSA_EMAIL=$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
 
+echo SERVICE_ACCOUNT_FILE="$SERVICE_ACCOUNT_FILE"
+
 #Pre-pare steps:
 # 1. Each deployment has its own IP assigned to services, following steps are deployment specific:
 # Deploy services, because those IP are needed for Deployments
