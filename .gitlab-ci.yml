@@ -14,9 +14,9 @@ variables:
   KUBE_CONTEXT_DEV: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:gitlab-agent
 
   #Sharing same Project ID, but could use different projects per environment
-  PROJECT_ID_TEST: pri-auth-cicd
+  PROJECT_ID_TEST: gitlab-cicd-344423
   PROJECT_ID_DEMO: pa-cicd
-  PROJECT_ID_DEV:  pri-auth-cicd
+  PROJECT_ID_DEV:  gitlab-cicd-344423
 
   #For the dev branch
   SERVICE_ACCOUNT_FILE: $EK_SERVICE_ACCOUNT_FILE
