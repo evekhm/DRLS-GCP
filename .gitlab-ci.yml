@@ -19,7 +19,7 @@ variables:
   PROJECT_ID_DEV:  gitlab-cicd-344423
 
   #For the dev branch
-  SERVICE_ACCOUNT_FILE_DEV: evekhm
+  SERVICE_ACCOUNT_FILE_DEV: ${EK_SERVICE_ACCOUNT_FILE}
 
 stages:
 - prepare
