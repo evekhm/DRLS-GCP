@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pa-config
+data:
+  #TOKEN_BASE_URI: https://davinci-prior-auth.logicahealth.org
+  token_base_uri: http://__PRIOR_AUTH__:9000
+  google.projectId: __PROJECT_ID__
+  google.storage.rulesPath: /CDS-Library/PriorAuth/
+  google.storage.bucket: __BUCKET__
+  google.storage.db: __DB__
+  google.pod.zip: /usr/share/CDS-Library.zip
+  gcp.enabled: 'true'
