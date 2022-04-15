@@ -10,7 +10,7 @@
 
 This document details the installation process for Gitlab CI/CD Integration.
 For more information:
-- Read about [the supported use cases](GitLabCICD_UseCases.md). 
+- Read about [the supported use cases](gitLab/DRLS-GCPCases.md). 
 - Understand how [CI/CD is implemented](https://gitlab.com/gcp-solutions/hcls/claims-modernization/gitlab-ci/README.md) for this project using the custom developed CI/CD templates for GitLab.
 
 ## Prerequisites
