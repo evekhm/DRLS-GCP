@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     application: prior-auth
-  name: prior-auth-service
+  name: prior-auth-service-old
 spec:
   type: LoadBalancer
   ports:

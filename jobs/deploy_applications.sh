@@ -24,3 +24,10 @@ do
        "${JOBS_DIR}/deploy_application.sh" -a "$DD"
     fi
 done
+
+kubectx
+echo "DONE"
+kubens
+echo "$KUBE_NAMESPACE"
+kubens "$KUBE_NAMESPACE"
+kubectl get pods
