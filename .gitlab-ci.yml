@@ -10,17 +10,18 @@ variables:
   ######### Per Environment #############
   #Sharing same Agent/Cluster, but could use different agents per environment
   KUBE_CONTEXT_DEMO: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:pa-demo
-  KUBE_CONTEXT_TEST: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:gitlab-agent
-  KUBE_CONTEXT_DEV: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:gitlab-agent
+  KUBE_CONTEXT_TEST: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:ek-agent
+  KUBE_CONTEXT_DEV: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:ek-agent
 
   #Sharing same Project ID, but could use different projects per environment
   PROJECT_ID_TEST: gitlab-cicd-344423
   PROJECT_ID_DEMO: pa-cicd
+
   PROJECT_ID_DEV:  gitlab-cicd-344423
   CLUSTER_NAME: prior-auth
   REGION: us-central1
 
-  #For the dev branch
+  #For the dev 'ek' branch
   SERVICE_ACCOUNT_FILE_DEV: EK_SERVICE_ACCOUNT_FILE
 
 

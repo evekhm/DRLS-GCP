@@ -26,8 +26,5 @@ do
 done
 
 kubectx
-echo "DONE"
 kubens
-echo "$KUBE_NAMESPACE"
-kubens "$KUBE_NAMESPACE"
-kubectl get pods
+echo "DONE!"
