@@ -99,6 +99,8 @@ configure_kservice_account(){
 }
 # end ----------- PROJECT-ID specific -----------
 
+gcloud container clusters get-credentials $CLUSTER_NAME --region $REGION --project "$PROJECT_ID"
+
 if [ -n "$KUBE_NAMESPACE" ]; then kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"; fi
 
 create_secret

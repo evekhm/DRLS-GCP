@@ -17,6 +17,8 @@ variables:
   PROJECT_ID_TEST: gitlab-cicd-344423
   PROJECT_ID_DEMO: pa-cicd
   PROJECT_ID_DEV:  gitlab-cicd-344423
+  CLUSTER_NAME: prior-auth
+  REGION: us-central1
 
   #For the dev branch
   SERVICE_ACCOUNT_FILE_DEV: EK_SERVICE_ACCOUNT_FILE
