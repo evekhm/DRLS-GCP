@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: pa-config
-data:
-  token_base_uri: https://davinci-prior-auth.logicahealth.org

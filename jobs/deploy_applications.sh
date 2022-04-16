@@ -25,6 +25,6 @@ do
     fi
 done
 
+apt-get install kubectx
 kubectx
-kubens
 echo "DONE!"
