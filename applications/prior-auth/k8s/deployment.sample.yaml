@@ -8,11 +8,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      application: prior-auth-new
+      application: prior-auth
   template:
     metadata:
       labels:
-        application: prior-auth-new
+        application: prior-auth
     spec:
       serviceAccountName: __KSA_NAME__
       containers:
