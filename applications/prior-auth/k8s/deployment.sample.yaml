@@ -2,8 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    application: prior-auth-new
-  name: prior-auth-new
+    application: prior-auth
+  name: prior-auth
 spec:
   replicas: 1
   selector:
