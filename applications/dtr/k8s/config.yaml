@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: dtr-config
 data:
-  provider_logo: https://upload.wikimedia.org/wikipedia/commons/7/71/Oscar_Health_logo.svg
+  pa_base_url: https://davinci-prior-auth.logicahealth.org/fhir
