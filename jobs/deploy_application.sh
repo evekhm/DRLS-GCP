@@ -19,9 +19,14 @@ source "${JOBS_DIR}/../shared/vars"
 
 if [ -n "$APPLICATION" ]; then
   ROLLOUT_SCRIPT="${JOBS_DIR}"/../applications/"${APPLICATION}"/gcp/rollout.sh
-  if [ -z "$IMAGE" ]; then
-      IMAGE="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/${APPLICATION}/${IMAGE_TYPE}"
+  REPO_SUB=""
+  if [ "$CI_COMMIT_BRANCH" != "$CI_DEFAULT_BRANCH" ]; then
+    REPO_SUB=${CI_COMMIT_BRANCH:-$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}/
   fi
+  if [ -z "$IMAGE" ]; then
+      IMAGE="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/${APPLICATION}/${REPO_SUB}${IMAGE_TYPE}"
+  fi
+  echo "IMAGE=$IMAGE"
   if [ -f "${ROLLOUT_SCRIPT}" ] ; then
     IMAGE=$IMAGE bash "$ROLLOUT_SCRIPT"
   else
