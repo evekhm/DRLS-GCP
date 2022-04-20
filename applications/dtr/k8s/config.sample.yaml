@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: dtr-config
 data:
-  pa_base_url: https://davinci-prior-auth.logicahealth.org/fhir
+  pa_base_url: __PRIOR_AUTH__
