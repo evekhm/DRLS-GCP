@@ -18,7 +18,7 @@ spec:
       containers:
         - image: __IMAGE__
           env:
-          - name: REACT_PA_BASE_URL
+          - name: REACT_APP_PA_BASE_URL
             valueFrom:
               configMapKeyRef:
                 name: dtr-config
