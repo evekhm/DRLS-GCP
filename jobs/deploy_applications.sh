@@ -24,3 +24,7 @@ do
        "${JOBS_DIR}/deploy_application.sh" -a "$DD"
     fi
 done
+
+apt-get install kubectx
+kubectx
+echo "DONE!"

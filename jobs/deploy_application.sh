@@ -20,8 +20,9 @@ source "${JOBS_DIR}/../shared/vars"
 if [ -n "$APPLICATION" ]; then
   ROLLOUT_SCRIPT="${JOBS_DIR}"/../applications/"${APPLICATION}"/gcp/rollout.sh
   if [ -z "$IMAGE" ]; then
-      IMAGE="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/${APPLICATION}/${IMAGE_TYPE}"
+      IMAGE="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/${APPLICATION}/${REPO_SUB}${IMAGE_TYPE}"
   fi
+  echo "IMAGE=$IMAGE"
   if [ -f "${ROLLOUT_SCRIPT}" ] ; then
     IMAGE=$IMAGE bash "$ROLLOUT_SCRIPT"
   else

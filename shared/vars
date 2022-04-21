@@ -3,21 +3,38 @@
 get_service_file(){
   ENVIRONMENT=$1
   case "$ENVIRONMENT" in
-    demo) echo "$SERVICE_ACCOUNT_FILE_DEMO"
+    demo) echo "${!SERVICE_ACCOUNT_FILE_DEMO}"
        ;;
-    test) echo "$SERVICE_ACCOUNT_FILE_TEST"
+    test) echo "${!SERVICE_ACCOUNT_FILE_TEST}"
        ;;
-    development) echo "$SERVICE_ACCOUNT_FILE_DEV"
+    development) echo "${!SERVICE_ACCOUNT_FILE_DEV}"
       ;;
   esac
 }
 
+#function set_def(){
+#  val=$1
+#  varname=SERVICE_ACCOUNT_FILE_$1
+#  default=
+#  overwrite=${!varname}
+#  if [[ -z ${!val} ]]; then
+#    val=$overwrite
+#  else
+#    val=${!val}
+#  fi
+#  echo "$val"
+#}
+
 # In case SERVICE_ACCOUNT_FILE_$ENVIRONMENT is set, use that value. otherwise fall back to SERVICE_ACCOUNT_FILE
 SERVICE_ACCOUNT_FILE_ENV=$(get_service_file "$ENVIRONMENT")
+echo SERVICE_ACCOUNT_FILE_ENV="$SERVICE_ACCOUNT_FILE_ENV"
+
 if [ -n "$SERVICE_ACCOUNT_FILE_ENV" ]; then
   SERVICE_ACCOUNT_FILE=$SERVICE_ACCOUNT_FILE_ENV
 fi
 export SERVICE_ACCOUNT_FILE
+echo SERVICE_ACCOUNT_FILE="$SERVICE_ACCOUNT_FILE"
+
 
 ## DRLS - GCP
 BUCKET_NAME=${BUCKET_NAME:-${PROJECT_ID}-cql-${KUBE_NAMESPACE}}

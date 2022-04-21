@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: dtr-config
-data:
-  provider_logo: https://upload.wikimedia.org/wikipedia/commons/7/71/Oscar_Health_logo.svg

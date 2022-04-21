@@ -14,11 +14,48 @@ spec:
       labels:
         application: prior-auth
     spec:
+      serviceAccountName: __KSA_NAME__
       containers:
         - image: __IMAGE__
           name: prior-auth
+          env:
+          - name: TOKEN_BASE_URI
+            valueFrom:
+              configMapKeyRef:
+                name: pa-config
+                key: token_base_uri
+          - name: GOOGLE_STORAGE_BUCKET
+            valueFrom:
+              configMapKeyRef:
+                name: pa-config
+                key: google.storage.bucket
+          - name: GOOGLE_PROJECTID
+            valueFrom:
+              configMapKeyRef:
+                name: pa-config
+                key: google.projectId
+          - name: GOOGLE_STORAGE_DB
+            valueFrom:
+              configMapKeyRef:
+                name: pa-config
+                key: google.storage.db
+          - name: GOOGLE_POD_ZIP
+            valueFrom:
+              configMapKeyRef:
+                name: pa-config
+                key: google.pod.zip
+          - name: GOOGLE_STORAGE_RULESPATH
+            valueFrom:
+              configMapKeyRef:
+                name: pa-config
+                key: google.storage.rulesPath
+          - name: GCP_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                name: pa-config
+                key: gcp.enabled
           ports:
-            - containerPort: 9015
+            - containerPort: 9000
           resources: {}
       imagePullSecrets:
       - name: regcred

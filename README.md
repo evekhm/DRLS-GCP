@@ -16,7 +16,7 @@ Be aware that each component of DRLS has its own README where you will find more
 
 ## CI/CD Integration using GitLab <a name="cicd"></a>
 
-Refer to this  [guide](GitLabREADME.md) for instructions on CI/CD deployment using GitLab.
+Refer to this  [guide](gitLab/DRLS-GCPd) for instructions on CI/CD deployment using GitLab.
 
 ## Prerequisites  <a name="prerequisites"></a>
 Note, following commands should be run from GCP Terminal.
@@ -69,6 +69,13 @@ export TOKEN=<your_token>
 export USERNAME=<your_username>
 ```
 
+4. (Optional) Set ZONE REGION CLUSTER name not to use the defaults
+```shell
+export CLUSTER=<cluster-name>
+export REGION=<your-region>
+export ZONE=<your-zone>
+```
+  
 ### Download Required Sources
 
 > At this point, you should have Access Token Generated for GitLab. If not, please refer to [Prerequisites](#prerequisites).

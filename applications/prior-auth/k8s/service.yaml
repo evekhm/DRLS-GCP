@@ -7,8 +7,8 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - name: "9015"
-      port: 9015
-      targetPort: 9015
+    - name: "9000"
+      port: 9000
+      targetPort: 9000
   selector:
     application: prior-auth

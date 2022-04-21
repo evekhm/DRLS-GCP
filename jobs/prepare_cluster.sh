@@ -7,6 +7,8 @@ JOBS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 print="$JOBS_DIR/../shared/print"
 GSA_EMAIL=$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
 
+#echo SERVICE_ACCOUNT_FILE="$SERVICE_ACCOUNT_FILE"
+
 #Pre-pare steps:
 # 1. Each deployment has its own IP assigned to services, following steps are deployment specific:
 # Deploy services, because those IP are needed for Deployments
@@ -96,6 +98,12 @@ configure_kservice_account(){
   kubectl describe serviceaccount $KSA_NAME --namespace "$KUBE_NAMESPACE"
 }
 # end ----------- PROJECT-ID specific -----------
+
+apt-get update && apt-get install kubectx
+kubectx
+env
+
+#gcloud container clusters get-credentials $CLUSTER_NAME --region $REGION --project "$PROJECT_ID"
 
 if [ -n "$KUBE_NAMESPACE" ]; then kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"; fi
 

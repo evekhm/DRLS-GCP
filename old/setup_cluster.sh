@@ -103,7 +103,7 @@ setup_cluster() {
   fi
 
   #gcloud container clusters create CLUSTER --workload-pool=PROJECT_ID.svc.id.goog
-  gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
+#  gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
 }
 
 create_gservice_account() {

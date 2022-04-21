@@ -11,6 +11,8 @@ echo "$(basename "$0") APPLICATION=$APPLICATION, IMAGE=$IMAGE KUBE_NAMESPACE=$KU
 cd "$GCP"/../k8s/
 
 kubectl apply -f pv.yaml --namespace="$KUBE_NAMESPACE"
+
+sed 's|__PRIOR_AUTH__|'"$PRIOR_AUTH"'|g;' config.sample.yaml > config.yaml
 kubectl apply -f config.yaml --namespace="$KUBE_NAMESPACE"
 
 sed 's|__IMAGE__|'"$IMAGE"'|g;' deployment.sample.yaml > deployment.yaml
