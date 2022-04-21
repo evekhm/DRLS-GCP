@@ -11,6 +11,7 @@ variables:
   ## DEMO Environment
   KUBE_CONTEXT_DEMO: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:pa-demo
   PROJECT_ID_DEMO: pa-cicd
+  SERVICE_ACCOUNT_FILE_DEMO: SERVICE_ACCOUNT_FILE
 
   ## TEST Environment
   PROJECT_ID_TEST: gitlab-cicd-344423
