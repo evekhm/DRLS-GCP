@@ -35,13 +35,6 @@ fi
 export SERVICE_ACCOUNT_FILE
 echo SERVICE_ACCOUNT_FILE="$SERVICE_ACCOUNT_FILE"
 
-if [ $ENVIRONMENT = test ]; then
-  #fix namespace
-  BEFORE_FIX=$KUBE_NAMESPACE
-  KUBE_NAMESPACE="$(printf "${KUBE_NAMESPACE}" | tr -c 'a-zA-Z0-9_.-' - | sed 's/^[.-]*//' | cut -c -128 | tr '[:upper:]' '[:lower:]')"
-  echo "Fixed KUBE_NAMESPACE from $BEFORE_FIX to KUBE_NAMESPACE"
-fi
-
 ## DRLS - GCP
 BUCKET_NAME=${BUCKET_NAME:-${PROJECT_ID}-cql-${KUBE_NAMESPACE}}
 export BUCKET_NAME
