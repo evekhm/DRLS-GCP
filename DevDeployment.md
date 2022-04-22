@@ -18,10 +18,10 @@ In case of planning on contributing back, the scope needs also to include `write
 First things first. Be sure to branch off from the default branch and push your changes to GitLab for the desired Project/Application.
 If you are modifying multiple components from different repositories, you must use the same branch name, lets call it `YOUR-FEATURE`.
 
-## 2. Argolis Setup
+## 2. GCP Setup
 Some manual steps are required to get the Argolis Environment configured for the deployment.
-1. Create Argolis Project with Billing Account.
-2. In the Cloud Shell Terminal:
+1. Create  Project with Billing Account.
+2. In the Cloud Shell Terminal Execute commands:
 
 - Set Environment Variables:
   ```shell
@@ -31,19 +31,31 @@ Some manual steps are required to get the Argolis Environment configured for the
   export WORKDIR=argolis-pa-demo
   ```
 
-To get access to GitLab sources following command needs to be run:
+- Optional Variables (Will override defaults):
   ```shell
-  docker login -u $USERNAME -p $TOKEN registry.gitlab.com
+  export CLUSTER=<cluster-name>
+  export REGION=<your-region>
+  export ZONE=<your-zone>
   ```
 
+- Login to GitLab and get sources:
+  ```shell
+  docker login -u $USERNAME -p $TOKEN registry.gitlab.com
+  mkdir "$WORKDIR" && cd "$WORKDIR"
+  git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/gke-deploy-env.git gke-deploy-env
+  ```
 
+###For Argolis
 ```shell
-mkdir "$WORKDIR" && cd "$WORKDIR"
-git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/gke-deploy-env.git gke-deploy-env
 bash gke-deploy-env/argolis_prepare.sh
+```
+###For Non-Argolis GCP Projects
+```shell
+bash gke-deploy-env/gcp_prepare.sh
 ```
 
 ## 3. Gitlab Agent Setup
+> For this you need `Maintaner` rights to do yourself, or need this to be setup for your otherwise.
 Go to [gke-deploy-env](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/gke-deploy-env).
 
 ### Register
@@ -54,12 +66,12 @@ Go to [gke-deploy-env](https://gitlab.com/gcp-solutions/hcls/claims-modernizatio
 - Go to [Kubernetes page of this project](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/gke-deploy-env/-/clusters) and select Actions->Connect with Agent.
     - Select the `<USERNAME>-agent` you used -> Register 
     - Open a CLI and connect to the cluster you created in the step above.
-    - Copy the  `docker run` command.
+    - Copy the  `gitlab-agent helm install` command.
 
 
 ### Install
-- Go to the Argolis Cloud Shell:
-  - Connect to the created Cluster
+- Go to the Cloud Shell:
+  - Connect to the created Cluster (if not yet connected)
   - Run the copied command
   - Verify that Agents appears as `Connected` (Might take few minutes)
 
