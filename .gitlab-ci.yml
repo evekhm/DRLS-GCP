@@ -21,7 +21,7 @@ variables:
   ## DEV Environment
   # Replace these when branching off and setting up your own dev environment
   KUBE_CONTEXT_DEV: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:emtrinh-agent
-  PROJECT_ID_DEV:  ek-test11
+  PROJECT_ID_DEV:  emily-sandbox-345615
   SERVICE_ACCOUNT_FILE_DEV: EMTRINH_SERVICE_ACCOUNT_FILE # Make sure to add JSON File key as CI/CD Settings Variable in GitLab
 
 stages:
