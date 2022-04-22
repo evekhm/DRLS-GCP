@@ -15,8 +15,12 @@ This document details the installation process for the dockerized version of the
 Be aware that each component of DRLS has its own README where you will find more detailed documentation. This document **is not designed to replace those individual READMEs**.
 
 ## CI/CD Integration using GitLab <a name="cicd"></a>
+**If you are a Developer and want to contribute, check this [guide](DevDeployment.md) on the steps how to setup Argolis Deployment environment as part of CI/CD.**
 
-Refer to this  [guide](gitLab/DRLS-GCPd) for instructions on CI/CD deployment using GitLab.
+Refer to this [documentation](GitLabREADME.md) for more details about CI/CD deployment using GitLab. 
+
+Additional information on GitLab Deployment [Use Cases](GitLabCICD_UseCases.md).
+
 
 ## Prerequisites  <a name="prerequisites"></a>
 Note, following commands should be run from GCP Terminal.
