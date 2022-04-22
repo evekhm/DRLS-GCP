@@ -45,11 +45,11 @@ Some manual steps are required to get the Argolis Environment configured for the
   git clone https://oauth2:$TOKEN@gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/gke-deploy-env.git gke-deploy-env
   ```
 
-###For Argolis
+### For Argolis
 ```shell
 bash gke-deploy-env/argolis_prepare.sh
 ```
-###For Non-Argolis GCP Projects
+### For Non-Argolis GCP Projects
 ```shell
 bash gke-deploy-env/gcp_prepare.sh
 ```
