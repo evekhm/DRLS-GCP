@@ -4,6 +4,7 @@ set -e # Exit if error is detected during pipeline execution
 JOBS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 APPLICATIONS_DIR="$JOBS_DIR/../applications"
 UTILS="$JOBS_DIR/../shared"
+unset APPLICATION
 
 while getopts o: flag
 do
@@ -36,28 +37,20 @@ function get_service_ip(){
   echo "$IP"
 }
 
-echo APPLICATION=$APPLICATION
-unset APPLICATION
 printf "export AUTH=http://%s\n" "$(get_service_ip_port auth)" > "$OUT_ENV_tmp"
-cat "$OUT_ENV_tmp"
 get_service_ip_port auth
 
-unset APPLICATION
 printf "export CRD=http://%s\n" "$(get_service_ip_port crd)" >> "$OUT_ENV_tmp"
-cat "$OUT_ENV_tmp"
 get_service_ip_port crd
 
-unset APPLICATION
 printf "export DTR=http://%s\n" "$(get_service_ip_port dtr)" >> "$OUT_ENV_tmp"
 cat "$OUT_ENV_tmp"
 get_service_ip_port dtr
 
-unset APPLICATION
 printf "export TEST_EHR=http://%s\n" "$(get_service_ip_port test-ehr)" >> "$OUT_ENV_tmp"
 cat "$OUT_ENV_tmp"
 get_service_ip_port test-ehr
 
-unset APPLICATION
 printf "export PRIOR_AUTH=http://%s\n" "$(get_service_ip_port prior-auth)" >> "$OUT_ENV_tmp"
 cat "$OUT_ENV_tmp"
 get_service_ip_port prior-auth

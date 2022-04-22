@@ -17,10 +17,10 @@ fi
 source "${VARIABLES_FILE}"
 source "${DIR}/../shared/vars"
 
-"${DIR}"/../jobs/get_services.sh -o "${DIR}"/.env
-cat "${DIR}"/.env
-source "${DIR}"/.env
-rm -rf "${DIR}"/.env
+#"${DIR}"/../jobs/get_services.sh -o "${DIR}"/.env
+#cat "${DIR}"/.env
+#source "${DIR}"/.env
+#rm -rf "${DIR}"/.env
 
 gcloud auth activate-service-account --key-file "${SERVICE_ACCOUNT_FILE}" --project="$PROJECT_ID"
 "${DIR}"/../jobs/deploy_application.sh -a "$APPLICATION"

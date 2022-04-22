@@ -7,6 +7,8 @@ UTILS="$JOBS_DIR/../shared"
 OUT_ENV=${VARIABLES_FILE}
 OUT_ENV_tmp="$JOBS_DIR/tmp.env"
 
+unset APPLICATION
+
 echo "Running  $(basename "$0") with KUBE_NAMESPACE=$KUBE_NAMESPACE, out $OUT_ENV "
 
 if [ -f "$OUT_ENV" ]; then
