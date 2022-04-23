@@ -53,6 +53,11 @@ bash gke-deploy-env/argolis_prepare.sh
 ```shell
 bash gke-deploy-env/gcp_prepare.sh
 ```
+This would create CLUSTER and SERVICE_ACCOUNT. 
+Check the output of the terminal, since it would help with pointing the next steps.
+
+- You would need to connect to cluster to install the GitLab Agent on it. Check the command in the terminal output.
+- You would need to download the JSON key of the created Service Account, pointed in the output.
 
 ## 3. Gitlab Agent Setup
 > For this you need `Maintaner` rights to do yourself, or need this to be setup for your otherwise.
@@ -73,15 +78,15 @@ Go to [gke-deploy-env](https://gitlab.com/gcp-solutions/hcls/claims-modernizatio
 - Go to the Cloud Shell:
   - Connect to the created Cluster (if not yet connected)
   - Run the copied command
-  - Verify that Agents appears as `Connected` (Might take few minutes)
+  - Verify that Agents appears as `Connected` in GitLab Page (Might take few minutes)
 
 
 ## 4. DRLS-GCP Setup
 1. Branch off [DRLS-GCP Project](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP) using `YOUR-FEATURE` name. 
 2. Update [Settings-> CI/CD](https://gitlab.com/gcp-solutions/hcls/claims-modernization/pa-ref-impl/DRLS-GCP/-/settings/ci_cd)
 
-- Add `<USERNAME>-SERVICE_ACCOUNT_FILE` file downloaded in Step 2.
-  - Use the json key file downloaded in step 2, copy/paste and save it as a variable inside CI/CD Settings of the DRLS-GCP project
+- Add `<USERNAME>-SERVICE_ACCOUNT_FILE` file downloaded in Step 2 as a JSON Service Account key.
+  - Use the json key file downloaded, copy/paste and save it as a variable inside CI/CD Settings of the DRLS-GCP project
   - Type: File
   - Make sure to uncheck 'Protected variable' checkbox
 
