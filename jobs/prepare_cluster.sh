@@ -99,9 +99,11 @@ configure_kservice_account(){
 }
 # end ----------- PROJECT-ID specific -----------
 
+echo "======================"
 apt-get update && apt-get install kubectx
 kubectx
 env
+echo "======================"
 
 #gcloud container clusters get-credentials $CLUSTER_NAME --region $REGION --project "$PROJECT_ID"
 
