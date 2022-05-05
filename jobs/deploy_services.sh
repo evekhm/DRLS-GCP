@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 #
 set -e # Exit if error is detected during pipeline execution
+set -x
+
 JOBS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 APPLICATIONS_DIR="$JOBS_DIR/../applications"
 UTILS="$JOBS_DIR/../shared"
