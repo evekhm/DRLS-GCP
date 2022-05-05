@@ -5,7 +5,7 @@ metadata:
     application: prior-auth
   name: prior-auth
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       application: prior-auth
