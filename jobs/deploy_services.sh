@@ -9,6 +9,7 @@ UTILS="$JOBS_DIR/../shared"
 OUT_ENV=${VARIABLES_FILE}
 OUT_ENV_tmp="$JOBS_DIR/tmp.env"
 
+
 echo "Running  $(basename "$0") with KUBE_NAMESPACE=$KUBE_NAMESPACE, out $OUT_ENV "
 
 if [ -f "$OUT_ENV" ]; then
@@ -31,26 +32,32 @@ function deploy_service_ip(){
   echo "$IP"
 }
 
+unset APPLICATION
 IP=$(deploy_service_ip_port auth)
 printf "export AUTH=http://%s\n" "$IP" > "$OUT_ENV_tmp"
 echo "Deployed AUTH=$IP"
 
+unset APPLICATION
 IP=$(deploy_service_ip_port crd)
 printf "export CRD=http://%s\n" "$IP" >> "$OUT_ENV_tmp"
 echo "Deployed CRD=$IP"
 
+unset APPLICATION
 IP=$(deploy_service_ip_port dtr)
 printf "export DTR=http://%s\n" "$IP" >> "$OUT_ENV_tmp"
 echo "Deployed DTR=$IP"
 
+unset APPLICATION
 IP=$(deploy_service_ip_port test-ehr)
 printf "export TEST_EHR=http://%s\n" "$IP" >> "$OUT_ENV_tmp"
 echo "Deployed TEST_EHR=$IP"
 
+unset APPLICATION
 IP=$(deploy_service_ip crd-request-generator)
 printf "export CRD_REQUEST_GENERATOR_HOST=http://%s\n" "$IP" >> "$OUT_ENV_tmp"
 echo "Deployed CRD_REQUEST_GENERATOR_HOST=$IP"
 
+unset APPLICATION
 IP=$(deploy_service_ip_port prior-auth)
 printf "export PRIOR_AUTH=http://%s\n" "$IP" >> "$OUT_ENV_tmp"
 echo "Deployed PRIOR_AUTH=$IP"
