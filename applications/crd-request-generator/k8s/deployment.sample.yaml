@@ -5,7 +5,7 @@ metadata:
     application: crd-request-generator
   name: crd-request-generator
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       application: crd-request-generator
