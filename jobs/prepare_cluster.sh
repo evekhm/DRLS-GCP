@@ -107,7 +107,7 @@ env
 
 if [ -n "$KUBE_NAMESPACE" ]; then kubectl get namespace "$KUBE_NAMESPACE" 2>/dev/null || kubectl create namespace "$KUBE_NAMESPACE"; fi
 
-kubectl label namespace "$KUBE_NAMESPACE" istio-injection=enabled
+kubectl label namespace "$KUBE_NAMESPACE" istio-injection=enabled --overwrite
 
 create_secret
 
