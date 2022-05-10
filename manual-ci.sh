@@ -48,6 +48,8 @@ function provision(){
   bash "${DD}"/create_cluster.sh -p "$PROJECT_ID"
 }
 
+source "${DIR}/shared/SET.manual"
+
 ##############################To be part of DTP#################################
 #  - Use Infrastructure Project for Provisioning
 provision
@@ -55,7 +57,7 @@ provision
 
 
 ############ Done Part of GitLab CI/CD Steps ##################
-source "${DIR}/shared/SET.manual"
+
 # setup cluster (done as part of GitLab prepare stage)
 "${DIR}"/jobs/prepare_cluster.sh
 
