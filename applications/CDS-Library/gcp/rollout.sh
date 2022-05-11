@@ -4,8 +4,8 @@ GCP="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT="$GCP"/../../../..
 source "$GCP"/../../../shared/SET
 
-APPLICATION=${APPLICATION:-$(basename "$(dirname "${GCP}")")}
-PROJECT_PATH=${UPSTREAM_PROJECT_PATH:-"${APPLICATION_NAMESPACE}/${APPLICATION}"}
+APPLICATION=$(basename "$(dirname "${GCP}")")
+PROJECT_PATH="${APPLICATION_NAMESPACE}/${APPLICATION}"
 PROJECT_REPO=${CI_SERVER_HOST}/${PROJECT_PATH}.git
 ZIP_FILE="$DB_NAME"
 ZIP_PATH="$GCP/.."
