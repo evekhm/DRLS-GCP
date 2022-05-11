@@ -46,6 +46,7 @@ create_bucket(){
       gsutil mb -p "$PROJECT_ID" "${BUCKET}"/
   fi
   gsutil iam ch  "serviceAccount:$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com":objectViewer "${BUCKET}"
+  gsutil versioning set on "$BUCKET"
   gsutil cp "$ZIP" "$BUCKET"/"$ZIP_FILE"
 }
 
