@@ -6,7 +6,7 @@ metadata:
   name: dtr
 spec:
   serviceName: dtr-service
-  replicas: 3
+  replicas: 1
   updateStrategy:
     type: RollingUpdate
   selector:
