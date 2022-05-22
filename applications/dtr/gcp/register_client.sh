@@ -8,5 +8,5 @@ curl "$DTR/clients" \
   -H 'Sec-Fetch-Dest: empty' \
   -H 'Sec-Fetch-Mode: cors' \
   -H 'Sec-Fetch-Site: same-origin' \
-  --data-raw "{\"name\":\"app-login\",\"client\":\"$TEST_EHR/test-ehr/r4\"}" \
+  --data-raw "{\"name\":\"app-login\",\"client\":\"$TEST_EHR/2w\"}" \
   --compressed

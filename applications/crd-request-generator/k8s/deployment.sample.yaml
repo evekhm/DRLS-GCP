@@ -27,10 +27,6 @@ spec:
               cpu: 2
               memory: 4Gi
               ephemeral-storage: 2Gi
-            limits:
-              cpu: 4
-              memory: 8Gi
-              ephemeral-storage: 2Gi
           env:
           - name: REACT_APP_EHR_SERVER
             valueFrom:

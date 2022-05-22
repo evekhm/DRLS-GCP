@@ -98,20 +98,6 @@ spec:
               cpu: 2
               memory: 4Gi
               ephemeral-storage: 2Gi
-            limits:
-              cpu: 4
-              memory: 8Gi
-              ephemeral-storage: 4Gi
-          readinessProbe:
-            initialDelaySeconds: 20
-            periodSeconds: 15
-            exec:
-              command: [ "/bin/grpc_health_probe", "-addr=:9555" ]
-          livenessProbe:
-            initialDelaySeconds: 20
-            periodSeconds: 15
-            exec:
-              command: [ "/bin/grpc_health_probe", "-addr=:9555" ]
       imagePullSecrets:
       - name: regcred
       restartPolicy: Always

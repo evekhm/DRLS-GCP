@@ -58,7 +58,6 @@ spec:
                 key: gcp.enabled
           ports:
             - containerPort: 9000
-          resources: {}
       imagePullSecrets:
       - name: regcred
       restartPolicy: Always
