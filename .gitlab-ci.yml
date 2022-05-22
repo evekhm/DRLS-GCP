@@ -9,19 +9,19 @@ variables:
 
   ######### Per Environment #############
   ## DEMO Environment
-  KUBE_CONTEXT_DEMO: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:pa-demo
   PROJECT_ID_DEMO: pa-cicd
+  KUBE_CONTEXT_DEMO: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:pa-demo
   SERVICE_ACCOUNT_FILE_DEMO: SERVICE_ACCOUNT_FILE
 
   ## TEST Environment
-  PROJECT_ID_TEST: gitlab-cicd-344423
-  KUBE_CONTEXT_TEST: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:ek-agent
-  SERVICE_ACCOUNT_FILE_TEST: EK_SERVICE_ACCOUNT_FILE
+  PROJECT_ID_TEST: pa-cicd
+  KUBE_CONTEXT_TEST: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:pa-staging
+  SERVICE_ACCOUNT_FILE_TEST: STAGING_SERVICE_ACCOUNT_FILE
 
   ## DEV Environment
   # Replace these when branching off and setting up your own dev environment
-  KUBE_CONTEXT_DEV: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:pa-dev
   PROJECT_ID_DEV:  pa-cicd
+  KUBE_CONTEXT_DEV: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:pa-dev
   SERVICE_ACCOUNT_FILE_DEV: DEV_SERVICE_ACCOUNT_FILE # Make sure to add JSON File key as CI/CD Settings Variable in GitLab
 
 stages:
