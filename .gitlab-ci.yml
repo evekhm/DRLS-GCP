@@ -20,9 +20,9 @@ variables:
 
   ## DEV Environment
   # Replace these when branching off and setting up your own dev environment
-  KUBE_CONTEXT_DEV: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:ek-agent
-  PROJECT_ID_DEV:  gitlab-cicd-344423
-  SERVICE_ACCOUNT_FILE_DEV: EK_SERVICE_ACCOUNT_FILE # Make sure to add JSON File key as CI/CD Settings Variable in GitLab
+  KUBE_CONTEXT_DEV: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:pa-dev
+  PROJECT_ID_DEV:  pa-cicd
+  SERVICE_ACCOUNT_FILE_DEV: DEV_SERVICE_ACCOUNT_FILE # Make sure to add JSON File key as CI/CD Settings Variable in GitLab
 
 stages:
 - prepare
