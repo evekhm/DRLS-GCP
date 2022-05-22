@@ -5,7 +5,9 @@ metadata:
     application: prior-auth
   name: prior-auth
 spec:
-  replicas: 1
+  replicas: 2
+  strategy:
+    type: RollingUpdate
   selector:
     matchLabels:
       application: prior-auth
@@ -56,7 +58,6 @@ spec:
                 key: gcp.enabled
           ports:
             - containerPort: 9000
-          resources: {}
       imagePullSecrets:
       - name: regcred
       restartPolicy: Always

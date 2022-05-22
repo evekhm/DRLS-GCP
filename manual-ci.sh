@@ -12,12 +12,13 @@ function usage(){
     exit 1
 }
 # ARGPARSE
-while getopts p:u:t: flag
+while getopts p:u:t:A flag
 do
     case "${flag}" in
         p) PROJECT_ID=${OPTARG};;
         u) CI_DEPLOY_USER=${OPTARG};;
         t) CI_DEPLOY_PASSWORD=${OPTARG};;
+        A) ARGOLIS="-A";;
         *) echo "Wrong arguments provided" && usage
     esac
 done
@@ -44,9 +45,10 @@ function provision(){
     git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@"${PROJECT_REPO}" "$DD"
   fi
 
-  bash "${DD}"/services_enable.sh -p "$PROJECT_ID"
-  bash "${DD}"/create_cluster.sh -p "$PROJECT_ID"
+  bash "${DD}"/provision_demo.sh -p "$PROJECT_ID" "$ARGOLIS"
 }
+
+source "${DIR}/shared/SET.manual"
 
 ##############################To be part of DTP#################################
 #  - Use Infrastructure Project for Provisioning
@@ -55,7 +57,7 @@ provision
 
 
 ############ Done Part of GitLab CI/CD Steps ##################
-source "${DIR}/shared/SET.manual"
+
 # setup cluster (done as part of GitLab prepare stage)
 "${DIR}"/jobs/prepare_cluster.sh
 

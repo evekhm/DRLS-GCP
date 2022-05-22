@@ -14,18 +14,16 @@ if [ ! -d "$OUT" ]; then
 fi
 
 function checkout(){
-  cd "$OUT" || exit
   URL="${GIT_BASE}/$1.git"
   DIR=$1
   BRANCH=$2
+  echo "git clone --branch $BRANCH $URL" >> out
   if [ -d "$DIR" ]; then
     # rm -rf "$OUT"
-    $print "$OUT/$DIR already exists, skipping ..." WARNING
+    echo "$OUT/$DIR already exists, skipping ..."
   else
-    $print "Checking out $URL $BRANCH ..."
-    git clone "$URL"
-    cd "$DIR" || exit
-    git checkout "$BRANCH"
+    echo "Checking out $URL $BRANCH ..."
+    git clone --branch "$BRANCH" "$URL"
   fi
 
 }
@@ -36,9 +34,9 @@ checkout crd-request-generator gcpDev
 checkout CDS-Library master
 checkout test-ehr gcpDev
 checkout prior-auth gcpDev
+checkout gke-deploy-env main
+# checkout DRLS-GCP main
 
-#dtr
-#crd-request-generator
 
 $print "Done! $OUT" INFO
 ls "$OUT"

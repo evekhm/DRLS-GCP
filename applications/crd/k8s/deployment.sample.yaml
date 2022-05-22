@@ -5,7 +5,9 @@ metadata:
     app: crd
   name: crd
 spec:
-  replicas: 1
+  replicas: 2
+  strategy:
+    type: RollingUpdate
   selector:
     matchLabels:
       app: crd
@@ -96,10 +98,6 @@ spec:
               cpu: 2
               memory: 4Gi
               ephemeral-storage: 2Gi
-            limits:
-              cpu: 4
-              memory: 8Gi
-              ephemeral-storage: 4Gi
       imagePullSecrets:
       - name: regcred
       restartPolicy: Always

@@ -5,11 +5,12 @@ metadata:
     application: crd-request-generator
   name: crd-request-generator
 spec:
-  replicas: 1
+  replicas: 2
+  strategy:
+    type: RollingUpdate
   selector:
     matchLabels:
       application: crd-request-generator
-  strategy: {}
   template:
     metadata:
       labels:
@@ -25,10 +26,6 @@ spec:
             requests:
               cpu: 2
               memory: 4Gi
-              ephemeral-storage: 2Gi
-            limits:
-              cpu: 4
-              memory: 8Gi
               ephemeral-storage: 2Gi
           env:
           - name: REACT_APP_EHR_SERVER

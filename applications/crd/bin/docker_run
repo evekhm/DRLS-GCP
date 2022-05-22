@@ -2,7 +2,7 @@
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
 UTILS="$BIN"/../../../shared
-
+CLI="lima nerdctl"
 source "$BIN"/SET
 
 "$UTILS/docker_prepare" "$BIN"
