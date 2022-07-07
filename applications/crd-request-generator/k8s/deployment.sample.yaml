@@ -52,6 +52,11 @@ spec:
               configMapKeyRef:
                 name: crd-request-generator-config
                 key: ehr_base
+          - name: REACT_APP_LAUNCH_URL
+            valueFrom:
+              configMapKeyRef:
+                name: crd-request-generator-config
+                key: launch_url
           - name: REACT_APP_CDS_SERVICE
             valueFrom:
               configMapKeyRef:
