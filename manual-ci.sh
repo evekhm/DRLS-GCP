@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -e # Exit if error is detected during pipeline execution
+
 # Executes steps as Gitlab CI/CD would do
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT="$DIR/.."
@@ -12,13 +15,12 @@ function usage(){
     exit 1
 }
 # ARGPARSE
-while getopts p:u:t:A flag
+while getopts p:u:t: flag
 do
     case "${flag}" in
         p) PROJECT_ID=${OPTARG};;
         u) CI_DEPLOY_USER=${OPTARG};;
         t) CI_DEPLOY_PASSWORD=${OPTARG};;
-        A) ARGOLIS="-A";;
         *) echo "Wrong arguments provided" && usage
     esac
 done
@@ -30,11 +32,6 @@ fi
 export CI_DEPLOY_USER
 export CI_DEPLOY_PASSWORD
 
-
-#Argolis
-# Run
-#gcloud services enable orgpolicy.googleapis.com
-#gcloud org-policies reset constraints/compute.vmExternalIpAccess --project "${PROJECT_ID}"
 
 function provision(){
   # Currently Done manually when setting up GitLab CI/CD
@@ -49,7 +46,7 @@ function provision(){
     cd ..
   fi
 
-  bash "${DD}"/provision_demo.sh -p "$PROJECT_ID" "$ARGOLIS"
+  bash "${DD}"/provision_demo.sh -p "$PROJECT_ID"
 }
 
 source "${DIR}/shared/SET.manual"

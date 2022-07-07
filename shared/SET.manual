@@ -3,6 +3,7 @@ UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Source this file when running DRLS-Deploy not via the GitLab CI/CD
 # All of these are setup via GitLab otherwise
 export KUBE_NAMESPACE='demo-manual' #Namespace to which DRLS will be deployed inside the cluster
+export NETWORK='drls'
 
 # GCP Cluster
 export SECRET='regcred' #name of the secret used by pods to download images from the repository

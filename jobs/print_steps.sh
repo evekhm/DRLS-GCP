@@ -5,8 +5,7 @@ JOBS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 print="$JOBS_DIR/../shared/print"
 #export TERM=dumb
 
-"$JOBS_DIR"/get_services.sh -o "$JOBS_DIR"/.env
-source "$JOBS_DIR"/.env
+source "$JOBS_DIR"/../shared/.endpoints
 
 $print 'You are all Done! Use following External IPs to access deployed services' INFO
 
@@ -15,7 +14,7 @@ $print "CRD service          : $CRD"
 echo   "                           $CRD/data - should reveal a few rule sets with names such as "Hospital Beds" and "Non Emergency Ambulance Transportation.""
 $print "Test-ehr service     : $TEST_EHR"
 echo   "                           $TEST_EHR/test-ehr/r4/Patient should display a 200 response with a patient resource"
-$print "crd-request-generator: $CRD_REQUEST_GENERATOR_HOST:3000/ehr-server/reqgen"
+$print "crd-request-generator: $CRD_REQUEST_GENERATOR/ehr-server/reqgen"
 $print "dtr                  : $DTR"
 echo "                           $DTR/register should show you a simple web page with a form to register a Client ID and Fhir Server."
 $print "prior-auth           : $PRIOR_AUTH"
@@ -35,7 +34,7 @@ echo "    - Client Id        : app-login"
 echo "    - Fhir Server (iss): $TEST_EHR/test-ehr/r4"
 echo
 $print "### Run the DRLS Flow ###" INFO
-echo "1. Go to $CRD_REQUEST_GENERATOR_HOST:3000/ehr-server/reqgen"
+echo "1. Go to $CRD_REQUEST_GENERATOR/ehr-server/reqgen"
 echo "2. Click ${FG_YELLOW}Patient Select${normal} button in upper left."
 echo "3. Find ${FG_YELLOW}William Oster${normal} in the list of patients and click the dropdown menu next to his name."
 echo "4. Select ${FG_YELLOW}E0470${normal} in the dropdown menu."
