@@ -5,7 +5,7 @@ metadata:
     app: crd
   name: crd
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
   selector:
@@ -102,6 +102,12 @@ spec:
               cpu: 4
               memory: 8Gi
               ephemeral-storage: 4Gi
+#          livenessProbe:
+#            httpGet:
+#              path: /index
+#              port: 8090
+#            initialDelaySeconds: 0
+#            timeoutSeconds: 5
       imagePullSecrets:
       - name: regcred
       restartPolicy: Always

@@ -1,14 +1,26 @@
 apiVersion: v1
 kind: Service
 metadata:
+  annotations:
+    cloud.google.com/backend-config: '{"default": "prior-auth-service-backend-config"}'
   labels:
     application: prior-auth
   name: prior-auth-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: "9000"
       port: 9000
       targetPort: 9000
   selector:
     application: prior-auth
+---
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: prior-auth-service-backend-config
+spec:
+  healthCheck:
+    type: HTTP
+    requestPath: /fhir/metadata
+    port: 9000

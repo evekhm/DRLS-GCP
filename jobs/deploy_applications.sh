@@ -25,6 +25,3 @@ do
     fi
 done
 
-apt-get install kubectx
-kubectx
-echo "DONE!"

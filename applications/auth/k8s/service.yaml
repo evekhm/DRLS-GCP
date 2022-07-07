@@ -5,11 +5,14 @@ metadata:
     application: auth
   name: auth-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
-    - name: "8180"
-      port: 8180
-      targetPort: 8080
+    - name: "http"
+      port: 80
+      targetPort: http
+    - name: "https"
+      port: 443
+      targetPort: https
   selector:
     application: auth
 

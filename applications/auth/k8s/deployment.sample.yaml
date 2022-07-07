@@ -7,8 +7,8 @@ metadata:
 spec:
 #  serviceName: keycloak-service
   replicas: 1
-  strategy:
-    type: RollingUpdate
+#  strategy:
+#    type: RollingUpdate
   selector:
     matchLabels:
       application: auth
@@ -17,23 +17,68 @@ spec:
       labels:
         application: auth
     spec:
+      volumes:
+      - name: tls-config-volume
+        secret:
+          secretName: tls-config
+          items:
+          - key: tls.crt
+            path: tls.crt
+          - key: tls.key
+            path: tls.key
       containers:
-        - env:
-            - name: DB_VENDOR
-              value: h2
-            - name: KEYCLOAK_PASSWORD
-              value: admin
-            - name: KEYCLOAK_USER
-              value: admin
-            - name: KEYCLOAK_IMPORT
-              value: ClientFhirServerRealm.json
-          image: __IMAGE__
-          name: auth
-          ports:
-            - containerPort: 8080
+      - name: auth
+        env:
+        - name: DB_VENDOR
+          value: h2
+        - name: KEYCLOAK_PASSWORD
+          value: admin
+        - name: KEYCLOAK_USER
+          value: admin
+        - name: KEYCLOAK_IMPORT
+          value: ClientFhirServerRealm.json
+        - name: PROXY_ADDRESS_FORWARDING
+          value: "true"
+#        envFrom:
+#        - configMapRef:
+#            name: environment-config
+        image: __IMAGE__
+        volumeMounts:
+        - name: tls-config-volume
+          mountPath: "/etc/x509/https"
+        ports:
+          - name: http
+            containerPort: 8080
+            protocol: TCP
+          - name: https
+            protocol: TCP
+            containerPort: 8443
 #          volumeMounts:
 #          - name: jboss-persistent-storage
 #            mountPath: /opt/jboss/keycloak/standalone/data/
+        # Liveness probe configuration
+        livenessProbe:
+          httpGet:
+            path: /auth/
+            port: 8080
+          initialDelaySeconds: 0
+          timeoutSeconds: 5
+        # Readiness probe configuration
+        readinessProbe:
+          httpGet:
+            path: /auth/realms/master
+            port: 8080
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+        # Startup probe configuration
+        startupProbe:
+          httpGet:
+            path: /auth/
+            port: 8080
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+          failureThreshold: 60
+          periodSeconds: 5
       imagePullSecrets:
       - name: regcred
       restartPolicy: Always

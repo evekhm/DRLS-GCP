@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+docker #!/usr/bin/env bash
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD=$(pwd)
 
@@ -6,6 +6,6 @@ source "$BIN"/SET
 DD="$BIN/../../../../$APPLICATION"
 cd "$DD" || exit
 echo $IMAGE $LATEST
-sed  's|__TEST_EHR__|'"$TEST_EHR"'|g; ' config/ClientFhirServerRealm.sample.json > config/ClientFhirServerRealm.json
+#sed  's|__TEST_EHR__|'"$TEST_EHR"'|g; ' config/ClientFhirServerRealm.sample.json > config/ClientFhirServerRealm.json
 docker build -f Dockerfile -t "$IMAGE" -t "$LATEST" .
 cd "$PWD" || exit

@@ -10,7 +10,7 @@ echo "$(basename "$0") APPLICATION=$APPLICATION, IMAGE=$IMAGE KUBE_NAMESPACE=$KU
 
 cd "$GCP"/../k8s/
 sed 's|__FHIR_SERVER__|'"$FHIR_SERVER"'|g;
-    s|__AUTH__|'"$AUTH"'|g;
+    s|__AUTH__|'"$AUTH"'|g; # TODO replace __TOKEN__
     s|__PUBLIC_KEYS__|'"$PUBLIC_KEYS"'|g;
     s|__CDS_SERVICE__|'"$CDS_SERVICE"'|g;' config.sample.yaml > config.yaml
 kubectl apply -f config.yaml --namespace="$KUBE_NAMESPACE"
