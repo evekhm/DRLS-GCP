@@ -34,7 +34,7 @@ function create_endpoint(){
   fi
 
 
-  echo "Creating managedCert and Endpoints for SERVICE=$K8S_SERVICE PORT=$K8S_SERVICE_PORT, FQDN=$FQDN, $K8S_NAME"
+  echo "Creating managedCert and Endpoints for SERVICE=$K8S_NAME PORT=$K8S_SERVICE_PORT, FQDN=$FQDN"
   FW_RULE_NAME=${NETWORK}-${K8S_NAME}-allow-lb-healthchecks
 
 
