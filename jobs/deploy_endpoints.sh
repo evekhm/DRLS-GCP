@@ -182,13 +182,13 @@ create_cert(){
 }
 
 source "$DIR/../shared/.endpoints"
-create_endpoint auth-service "$AUTH" 80
-create_cert "$AUTH"
-create_endpoint crd-service "$CRD" 8090
-create_endpoint dtr-service "$DTR" 3005
-create_endpoint prior-auth-service "$PRIOR_AUTH" 9000
-create_endpoint test-ehr-service "$TEST_EHR" 8080
-create_endpoint crd-request-generator-service "$CRD_REQUEST_GENERATOR" 80 "/*" 3001 "/public_keys" -n emr
+create_endpoint auth-service "$AUTH_EP" 80
+create_cert "$AUTH_EP"
+create_endpoint crd-service "$CRD_EP" 8090
+create_endpoint dtr-service "$DTR_EP" 3005
+create_endpoint prior-auth-service "$PRIOR_AUTH_EP" 9000
+create_endpoint test-ehr-service "$TEST_EHR_EP" 8080
+create_endpoint crd-request-generator-service "$CRD_REQUEST_GENERATOR_EP" 80 "/*" 3001 "/public_keys" -n emr
 
 kubectl get managedcertificates -n "$K8S_NAMESPACE"
 gcloud endpoints services list
