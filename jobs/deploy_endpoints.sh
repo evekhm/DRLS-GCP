@@ -56,7 +56,7 @@ function create_endpoint(){
   K8S_INGRESS_IP=$(gcloud compute addresses describe "$K8S_INGRESS_IP_NAME" --global --format="value(address)")
   echo K8S_INGRESS_IP=$K8S_INGRESS_IP
 
-if gcloud endpoints services list --format="value(TITLE)" | grep "$K8S_NAME"; then
+if gcloud endpoints services list --format="value(NAME)" | grep "$FQDN"; then
     :
   else
   # Map the FQDN to the IP address
