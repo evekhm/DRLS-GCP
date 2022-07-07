@@ -4,7 +4,7 @@ export CRD="https://crd.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"
 export DTR="https://dtr.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"
 export TEST_EHR="https://test-ehr.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"
 export PRIOR_AUTH="https://prior-auth.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"
-export CRD_REQUEST_GENERATOR="https://crd-request-generator.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"
+export CRD_REQUEST_GENERATOR="https://emr.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"
 
 export OAUTH_TOKEN="${AUTH}/auth/realms/ClientFhirServer/protocol/openid-connect/token"
 export OAUTH_AUTHORIZE="${AUTH}/auth/realms/ClientFhirServer/protocol/openid-connect/auth"

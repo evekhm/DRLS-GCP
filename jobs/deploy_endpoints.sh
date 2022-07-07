@@ -1,5 +1,7 @@
 set -e
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 PROJECT_ID=$(gcloud config get-value project 2> /dev/null);
 if [ -z "$PROJECT_ID" ]; then
   echo "Make sure active configuration has PROJECT set" 'ERROR'
@@ -9,14 +11,14 @@ fi
 
 function create_endpoint(){
   K8S_NAME=$1
-  K8S_SERVICE=$K8S_NAME"-service"
-  K8S_SERVICE_PORT=$2
-  PATH_1=$3  #optional
-  K8S_SERVICE_PORT_2=$4 #optional
-  PATH_2=$5 #optional
+  FQDN=$2
+  K8S_SERVICE_PORT=$3
+  PATH_1=$4  #optional
+  K8S_SERVICE_PORT_2=$5 #optional
+  PATH_2=$6 #optional
 
-  if [[ $# -eq 5 ]]; then
-    echo "Ingress for multiple Service ports: ${K8S_SERVICE_PORT} with path ${PATH_1} and ${K8S_SERVICE_PORT_2} with path ${PATH_2} will be initiated"
+  if [[ $# -eq 6 ]]; then
+    echo "Ingress for multiple $K8S_NAME service ports: ${K8S_SERVICE_PORT} with path ${PATH_1} and ${K8S_SERVICE_PORT_2} with path ${PATH_2} will be initiated"
     INGRESS2='true'
   fi
 
@@ -31,7 +33,7 @@ function create_endpoint(){
     PORTS=tcp:${K8S_SERVICE_PORT},tcp:${K8S_SERVICE_PORT_2}
   fi
 
-  FQDN="${K8S_NAME}.${K8S_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"
+
   echo "Creating managedCert and Endpoints for SERVICE=$K8S_SERVICE PORT=$K8S_SERVICE_PORT, FQDN=$FQDN, $K8S_NAME"
   FW_RULE_NAME=${NETWORK}-${K8S_NAME}-allow-lb-healthchecks
 
@@ -109,7 +111,7 @@ metadata:
 spec:
   defaultBackend:
     service:
-      name: ${K8S_SERVICE}
+      name: ${K8S_NAME}
       port:
         number: ${K8S_SERVICE_PORT}
 EOF
@@ -138,14 +140,14 @@ spec:
       paths:
       - backend:
           service:
-            name: ${K8S_SERVICE}
+            name: ${K8S_NAME}
             port:
               number: ${K8S_SERVICE_PORT}
         path: ${PATH_1}
         pathType: ImplementationSpecific
       - backend:
           service:
-            name: ${K8S_SERVICE}
+            name: ${K8S_NAME}
             port:
               number: ${K8S_SERVICE_PORT_2}
         path: ${PATH_2}
@@ -179,13 +181,14 @@ create_cert(){
 
 }
 
-create_endpoint auth 80
-create_cert "$FQDN"
-create_endpoint crd 8090
-create_endpoint dtr 3005
-create_endpoint prior-auth 9000
-create_endpoint test-ehr 8080
-create_endpoint crd-request-generator 80 "/*" 3001 "/public_keys"
+source "$DIR/../shared/.endpoints"
+create_endpoint auth-service "$AUTH" 80
+create_cert "$AUTH"
+create_endpoint crd-service "$CRD" 8090
+create_endpoint dtr-service "$DTR" 3005
+create_endpoint prior-auth-service "$PRIOR_AUTH" 9000
+create_endpoint test-ehr-service "$TEST_EHR" 8080
+create_endpoint crd-request-generator-service "$CRD_REQUEST_GENERATOR" 80 "/*" 3001 "/public_keys" -n emr
 
 kubectl get managedcertificates -n "$K8S_NAMESPACE"
 gcloud endpoints services list
