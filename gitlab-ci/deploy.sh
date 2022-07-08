@@ -16,7 +16,7 @@ if [ -n "${VARIABLES_FILE}" ] && [ -f "${VARIABLES_FILE}" ]; then
   source "${VARIABLES_FILE}"
 fi
 source "${DIR}/../shared/vars"
-source "${JOBS_DIR}/../shared/.endpoints"
+source "${DIR}/../shared/.endpoints"
 
 gcloud auth activate-service-account --key-file "${SERVICE_ACCOUNT_FILE}" --project="$PROJECT_ID"
 "${DIR}"/../jobs/deploy_application.sh -a "$APPLICATION"
