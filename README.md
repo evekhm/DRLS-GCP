@@ -148,9 +148,9 @@ test-ehr-768645cdf4-ntg9t                1/1     Running   0          7m19s
 NOTE: Currently deployed applications have around five to seven minutes required for starting up. Make sure to wait for them to be ready, before trying the steps below.
 In the instructions below replace <APPLICATION> with the corresponding IP.
 
-Print out the `steps`:
+Print out the `steps` and assigned endpoints:
 ```sh
-  DRLS-GCP/jobs/print_steps.sh
+  DRLS-GCP/steps
 ```
 
 

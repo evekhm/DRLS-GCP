@@ -67,4 +67,4 @@ source "${DIR}"/shared/.endpoints
 # Deploy All Applications
 bash "${DIR}"/jobs/deploy_applications.sh
 
-bash "${DIR}"/jobs/print_steps.sh
+bash "${DIR}"/steps

@@ -18,8 +18,6 @@ export APPLICATION_NAMESPACE="gcp-solutions/hcls/claims-modernization/pa-ref-imp
 export IMAGE_TYPE="released" # Will use images for deployment
 
 #export CONTAINER_CLI='lima nerdctl'
-export VARIABLES_FILE="$UTILS/.env"
-
 #For GitLab this is done via the GitLab Agent
 #docker login -u ${CI_DEPLOY_USER} -p ${CI_DEPLOY_PASSWORD} ${CI_REGISTRY}
 #gcloud container clusters get-credentials "$CLUSTER" --region="$REGION" --project "$PROJECT_ID"
