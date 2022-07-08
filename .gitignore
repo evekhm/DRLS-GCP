@@ -15,4 +15,5 @@
 /jobs/.env
 /artefacts/
 /applications_org/
-/old/
+/utils/
+/applications/crd-request-generator/k8s/ingress.yaml

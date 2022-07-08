@@ -3,7 +3,7 @@ set -e # Exit if error is detected during pipeline execution
 #Expects: KUBE_NAMESPACE, KSA_NAME, GSA_NAME, PROJECT_ID
 set -x
 
-#Pre-pare steps:
+#Prepare steps:
 # 1. Each deployment has its own IP assigned to services, following steps are deployment specific:
 # Deploy services, because those IP are needed for Deployments
 # Build and deploy keycloak, because it has IP address built in the Image of the service

@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -e # Exit if error is detected during pipeline execution
+
 # Executes steps as Gitlab CI/CD would do
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT="$DIR/.."
@@ -30,11 +33,6 @@ export CI_DEPLOY_USER
 export CI_DEPLOY_PASSWORD
 
 
-#Argolis
-# Run
-#gcloud services enable orgpolicy.googleapis.com
-#gcloud org-policies reset constraints/compute.vmExternalIpAccess --project "${PROJECT_ID}"
-
 function provision(){
   # Currently Done manually when setting up GitLab CI/CD
   local PROJECT=gke-deploy-env
@@ -42,11 +40,16 @@ function provision(){
   local DD="$ROOT/$PROJECT"
   if [ ! -d "$DD" ]; then
     git clone https://"${CI_DEPLOY_USER}":"${CI_DEPLOY_PASSWORD}"@"${PROJECT_REPO}" "$DD"
+  else
+    cd "$DD" || exit
+    git pull
+    cd ..
   fi
 
-  bash "${DD}"/services_enable.sh -p "$PROJECT_ID"
-  bash "${DD}"/create_cluster.sh -p "$PROJECT_ID"
+  bash "${DD}"/provision_demo.sh -p "$PROJECT_ID"
 }
+
+source "${DIR}/shared/SET.manual"
 
 ##############################To be part of DTP#################################
 #  - Use Infrastructure Project for Provisioning
@@ -55,19 +58,13 @@ provision
 
 
 ############ Done Part of GitLab CI/CD Steps ##################
-source "${DIR}/shared/SET.manual"
+
 # setup cluster (done as part of GitLab prepare stage)
 "${DIR}"/jobs/prepare_cluster.sh
 
-#Build keycloak, prevent writing to 'released' images
-APPLICATION=auth
-IMAGE_REPO="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/${APPLICATION}/manual"
-IMAGE_TAG="$IMAGE_REPO:$PROJECT_ID-$KUBE_NAMESPACE"
-IMAGE="$IMAGE_TAG" LATEST="$IMAGE_TAG" bash "${DIR}"/jobs/build_keycloak.sh
+source "${DIR}"/shared/.endpoints
 
-# Deploy All Applications All except auth
-source "${VARIABLES_FILE}"
-bash "${DIR}"/jobs/deploy_applications.sh -x ${APPLICATION}
-IMAGE=$IMAGE_TAG bash "${DIR}"/jobs/deploy_application.sh -a ${APPLICATION}
+# Deploy All Applications
+bash "${DIR}"/jobs/deploy_applications.sh
 
-bash "${DIR}"/jobs/print_steps.sh
+bash "${DIR}"/steps

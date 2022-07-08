@@ -5,12 +5,9 @@ metadata:
     application: test-ehr
   name: test-ehr
 spec:
-  replicas: 3
+  replicas: 1
   strategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 0
-      maxUnavailable: 1
   selector:
     matchLabels:
       application: test-ehr

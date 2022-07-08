@@ -43,11 +43,4 @@ export BUCKET
 DB_NAME="CDS-Library.zip"
 export DB_NAME
 
-export OAUTH_TOKEN="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/token"
-export OAUTH_AUTHORIZE="http://$AUTH/auth/realms/ClientFhirServer/protocol/openid-connect/auth"
-export CDS_SERVICE="${CRD}/r4/cds-services"
-export FHIR_SERVER="${TEST_EHR}/test-ehr/r4"
-export CRD_REQUEST_GENERATOR="${CRD_REQUEST_GENERATOR_HOST}:3000"
-export PUBLIC_KEYS="${CRD_REQUEST_GENERATOR_HOST}:3001/public_keys"
-
 

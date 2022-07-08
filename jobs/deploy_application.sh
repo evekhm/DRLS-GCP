@@ -15,8 +15,6 @@ done
 echo "======= Running deploy step $(basename "$0") APPLICATION=$APPLICATION, KUBE_NAMESPACE=$KUBE_NAMESPACE ======="
 JOBS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source "${JOBS_DIR}/../shared/vars"
-
 if [ -n "$APPLICATION" ]; then
   ROLLOUT_SCRIPT="${JOBS_DIR}"/../applications/"${APPLICATION}"/gcp/rollout.sh
   if [ -z "$IMAGE" ]; then

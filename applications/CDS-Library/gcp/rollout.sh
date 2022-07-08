@@ -4,8 +4,8 @@ GCP="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT="$GCP"/../../../..
 source "$GCP"/../../../shared/SET
 
-APPLICATION=${APPLICATION:-$(basename "$(dirname "${GCP}")")}
-PROJECT_PATH=${UPSTREAM_PROJECT_PATH:-"${APPLICATION_NAMESPACE}/${APPLICATION}"}
+APPLICATION=$(basename "$(dirname "${GCP}")")
+PROJECT_PATH="${APPLICATION_NAMESPACE}/${APPLICATION}"
 PROJECT_REPO=${CI_SERVER_HOST}/${PROJECT_PATH}.git
 ZIP_FILE="$DB_NAME"
 ZIP_PATH="$GCP/.."
@@ -46,6 +46,7 @@ create_bucket(){
       gsutil mb -p "$PROJECT_ID" "${BUCKET}"/
   fi
   gsutil iam ch  "serviceAccount:$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com":objectViewer "${BUCKET}"
+  gsutil versioning set on "$BUCKET"
   gsutil cp "$ZIP" "$BUCKET"/"$ZIP_FILE"
 }
 

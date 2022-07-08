@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+export AUTH_EP="auth.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"
+export CRD_EP="crd.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"
+export DTR_EP="dtr.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"
+export TEST_EHR_EP="test-ehr.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"
+export PRIOR_AUTH_EP="prior-auth.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"
+export CRD_REQUEST_GENERATOR_EP="emr.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"
+
+SCHEMA="https://"
+export AUTH="${SCHEMA}${AUTH_EP}"
+export CRD="${SCHEMA}${CRD_EP}"
+export DTR="${SCHEMA}${DTR_EP}"
+export TEST_EHR="${SCHEMA}${TEST_EHR_EP}"
+export CRD_REQUEST_GENERATOR="${SCHEMA}${CRD_REQUEST_GENERATOR_EP}"
+export PRIOR_AUTH="${SCHEMA}${PRIOR_AUTH_EP}"
+
+export OAUTH_TOKEN="${AUTH}/auth/realms/ClientFhirServer/protocol/openid-connect/token"
+export OAUTH_AUTHORIZE="${AUTH}/auth/realms/ClientFhirServer/protocol/openid-connect/auth"
+export CDS_SERVICE="${CRD}/r4/cds-services"
+export FHIR_SERVER="${TEST_EHR}/test-ehr/r4"
+export PUBLIC_KEYS="${CRD_REQUEST_GENERATOR}/public_keys"
+

@@ -15,9 +15,6 @@ sed 's|__IMAGE__|'"$IMAGE"'|g;'  deployment.sample.yaml > deployment.yaml
 kubectl apply -f deployment.yaml --namespace="$KUBE_NAMESPACE"
 kubectl apply -f service.yaml --namespace="$KUBE_NAMESPACE"
 
-#IP=$("$UTILS/get_service_external_ip_port" "$APPLICATION"-service)
-#echo "External IP for $APPLICATION-service " "$IP"
-
 cd "$PWD" || exit
 
 

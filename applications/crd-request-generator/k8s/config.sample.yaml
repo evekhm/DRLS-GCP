@@ -8,3 +8,4 @@ data:
   auth: __AUTH__
   public_keys: __PUBLIC_KEYS__
   cds_service: __CDS_SERVICE__
+  launch_url: __DTR__/launch

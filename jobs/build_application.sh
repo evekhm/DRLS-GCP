@@ -3,6 +3,10 @@ set -e # Exit if error is detected during pipeline execution
 PWD=$(pwd)
 JOBS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+#sample usage
+#build_application.sh -a auth
+
+
 # ARGPARSE
 while getopts a: flag
 do

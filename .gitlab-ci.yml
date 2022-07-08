@@ -9,24 +9,23 @@ variables:
 
   ######### Per Environment #############
   ## DEMO Environment
-  KUBE_CONTEXT_DEMO: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:pa-demo
   PROJECT_ID_DEMO: pa-cicd
+  KUBE_CONTEXT_DEMO: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:pa-demo
   SERVICE_ACCOUNT_FILE_DEMO: SERVICE_ACCOUNT_FILE
 
   ## TEST Environment
-  PROJECT_ID_TEST: gitlab-cicd-344423
-  KUBE_CONTEXT_TEST: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:ek-agent
-  SERVICE_ACCOUNT_FILE_TEST: EK_SERVICE_ACCOUNT_FILE
+  PROJECT_ID_TEST: pa-cicd
+  KUBE_CONTEXT_TEST: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:pa-staging
+  SERVICE_ACCOUNT_FILE_TEST: STAGING_SERVICE_ACCOUNT_FILE
 
   ## DEV Environment
   # Replace these when branching off and setting up your own dev environment
-  KUBE_CONTEXT_DEV: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:ek-agent
-  PROJECT_ID_DEV:  gitlab-cicd-344423
-  SERVICE_ACCOUNT_FILE_DEV: EK_SERVICE_ACCOUNT_FILE # Make sure to add JSON File key as CI/CD Settings Variable in GitLab
+  PROJECT_ID_DEV:  pa-cicd
+  KUBE_CONTEXT_DEV: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:pa-dev
+  SERVICE_ACCOUNT_FILE_DEV: DEV_SERVICE_ACCOUNT_FILE # Make sure to add JSON File key as CI/CD Settings Variable in GitLab
 
 stages:
 - prepare
-- build-keycloak
 - deploy
 - destroy
 
@@ -61,28 +60,4 @@ destroy:
   script:
   - kubectl delete namespaces $KUBE_NAMESPACE
   rules:
-  - !reference [.build_vars, rules]
-
-# keycloak Fhir realm created by Da Vinci uses H2 and needs TEST-EHR IP
-# We use a workaround and embed TEST-EHR into the image.
-# Later this could be resolved by replacing keycloak or moving from h2 to postgress
-build_keycloak:
-  stage: build-keycloak
-  image: docker:${DOCKER_IMAGE_VERSION}
-  services:
-  - docker:${DOCKER_IMAGE_VERSION}-dind
-  variables:
-    # Use TLS https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
-    DOCKER_IMAGE_VERSION: 19.03.1
-    DOCKER_HOST: tcp://docker:2376
-    DOCKER_TLS_CERTDIR: "/certs"
-  script:
-  - set -x
-  - apk update
-  - apk add git
-  - apk add --no-cache bash
-  - bash ${CI_PROJECT_DIR}/jobs/build_keycloak.sh
-  rules:
-  - if: $PIPELINE_TRIGGERED #exclude building keycloak when triggered from upstream
-    when: never
   - !reference [.build_vars, rules]

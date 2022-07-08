@@ -6,7 +6,7 @@ metadata:
   name: dtr
 spec:
   serviceName: dtr-service
-  replicas: 3
+  replicas: 1
   updateStrategy:
     type: RollingUpdate
   selector:
@@ -27,10 +27,25 @@ spec:
                 key: pa_base_url
           name: dtr
           ports:
-            - containerPort: 3005
+            - name: http
+              containerPort: 3005
           volumeMounts:
           - name: lowdb-persistent-storage
             mountPath: /home/node/app/databaseData
+          # Liveness probe configuration
+          livenessProbe:
+            httpGet:
+              path: /register
+              port: 3005
+            initialDelaySeconds: 0
+            timeoutSeconds: 5
+          # Readiness probe configuration
+          readinessProbe:
+            httpGet:
+              path: /register
+              port: 3005
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
           resources:
             requests:
               cpu: 1

@@ -106,10 +106,6 @@ For the `Argolis` environment, following known Org Constraints need to be disabl
    
 ```
 
-Settings for the manual Deployment (such as KUBE namespace ):
-```shell
-source DRLS-GCP/shared/SET.manual
-```
 
 ## Deployment  <a name="deployment"></a>
 Following command does the installation and deployment of the DRLS components.
@@ -156,9 +152,9 @@ test-ehr-768645cdf4-ntg9t                1/1     Running   0          7m19s
 NOTE: Currently deployed applications have around five to seven minutes required for starting up. Make sure to wait for them to be ready, before trying the steps below.
 In the instructions below replace <APPLICATION> with the corresponding IP.
 
-Print out the `steps`:
+Print out the `steps` and assigned endpoints:
 ```sh
-  DRLS-GCP/jobs/print_steps.sh
+  DRLS-GCP/steps
 ```
 
 
@@ -181,7 +177,7 @@ Go to http://34.135.12.152:3000/ehr-server/reqgen
 2. Click **Submit**
 
 ## Run the DRLS Flow 
-1. Go to `<CRD_REQUEST_GENERATOR_HOST:3000>`/ehr-server/reqgen.
+1. Go to `<CRD_REQUEST_GENERATOR>`/ehr-server/reqgen.
 2. Click **Patient Select** button in upper left.
 3. Find **William Oster** in the list of patients and click the dropdown menu next to his name.
 4. Select **E0470** in the dropdown menu.
