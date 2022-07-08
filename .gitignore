@@ -16,3 +16,4 @@
 /artefacts/
 /applications_org/
 /utils/
+/applications/crd-request-generator/k8s/ingress.yaml
