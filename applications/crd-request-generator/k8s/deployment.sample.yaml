@@ -42,11 +42,6 @@ spec:
               configMapKeyRef:
                 name: crd-request-generator-config
                 key: ehr_server
-          - name: REACT_APP_TOKEN
-            valueFrom:
-              configMapKeyRef:
-                name: crd-request-generator-config
-                key: iap_token
           - name: REACT_APP_EHR_BASE
             valueFrom:
               configMapKeyRef:
