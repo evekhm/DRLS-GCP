@@ -23,7 +23,7 @@ function create_endpoint(){
   fi
 
   K8S_INGRESS=${K8S_NAME}-ingress
-  K8S_INGRESS_IP_NAME=${K8S_NAME}-ip
+  K8S_INGRESS_IP_NAME=${K8S_NAME}-${KUBE_NAMESPACE}-ip
   K8S_CERTIFICATE=${K8S_NAME}-certificate
   NETWORK=${NETWORK:-default}
   K8S_NAMESPACE=${KUBE_NAMESPACE:-default}
