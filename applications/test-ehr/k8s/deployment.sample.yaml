@@ -17,41 +17,41 @@ spec:
         application: test-ehr
     spec:
       containers:
-        - image: __IMAGE__
-          name: test-ehr
-          ports:
-            - containerPort: 8080
-          env:
-          - name: OAUTH_TOKEN
-            valueFrom:
-              configMapKeyRef:
-                name: test-ehr-config
-                key: oauth_token
-          - name: OAUTH_AUTHORIZE
-            valueFrom:
-              configMapKeyRef:
-                name: test-ehr-config
-                key: oauth_authorize
-          - name: AUTH_REDIRECT_HOST
-            valueFrom:
-              configMapKeyRef:
-                name: test-ehr-config
-                key: auth_redirect_host
-          - name: PROXY_AUTHORIZE
-            valueFrom:
-              configMapKeyRef:
-                name: test-ehr-config
-                key: proxy_authorize
-          - name: PROXY_TOKEN
-            valueFrom:
-              configMapKeyRef:
-                name: test-ehr-config
-                key: proxy_token
-          - name: REDIRECT_POST_LAUNCH
-            valueFrom:
-              configMapKeyRef:
-                name: test-ehr-config
-                key: redirect_post_launch
+      - image: __IMAGE__
+        name: test-ehr
+        ports:
+        - containerPort: 8080
+        env:
+        - name: OAUTH_TOKEN
+          valueFrom:
+            configMapKeyRef:
+              name: test-ehr-config
+              key: oauth_token
+        - name: OAUTH_AUTHORIZE
+          valueFrom:
+            configMapKeyRef:
+              name: test-ehr-config
+              key: oauth_authorize
+        - name: AUTH_REDIRECT_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: test-ehr-config
+              key: auth_redirect_host
+        - name: PROXY_AUTHORIZE
+          valueFrom:
+            configMapKeyRef:
+              name: test-ehr-config
+              key: proxy_authorize
+        - name: PROXY_TOKEN
+          valueFrom:
+            configMapKeyRef:
+              name: test-ehr-config
+              key: proxy_token
+        - name: REDIRECT_POST_LAUNCH
+          valueFrom:
+            configMapKeyRef:
+              name: test-ehr-config
+              key: redirect_post_launch
       imagePullSecrets:
       - name: regcred
       restartPolicy: Always

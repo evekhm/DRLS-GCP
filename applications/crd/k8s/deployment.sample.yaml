@@ -5,12 +5,9 @@ metadata:
     app: crd
   name: crd
 spec:
-  replicas: 3
+  replicas: 1
   strategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 0
-      maxUnavailable: 1
   selector:
     matchLabels:
       app: crd
@@ -21,90 +18,96 @@ spec:
     spec:
       serviceAccountName: __KSA_NAME__
       containers:
-        - env:
-          - name: LAUNCHURL
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: launchUrl
-          - name: ENDPOINTS_CRDREQUESTGENERATOR
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: endpoints.crdRequestGenerator
-          - name: ENDPOINTS_DTR
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: endpoints.dtr
-          - name: ENDPOINTS_TESTEHR
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: endpoints.testEhr
-          - name: ENDPOINTS_AUTH
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: endpoints.auth
-          - name: SPRING_PROFILES_ACTIVE
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: profile
-          - name: GOOGLE_STORAGE_BUCKET
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: google.storage.bucket
-          - name: GOOGLE_STORAGE_PROJECTID
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: google.storage.projectId
-          - name: GOOGLE_STORAGE_DB
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: google.storage.db
-          - name: GOOGLE_POD_PATH
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: google.pod.path
-          - name: GOOGLE_POD_ZIP
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: google.pod.zip
-          - name: GOOGLE_STORAGE_EXAMPLESPATH
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: google.storage.examplesPath
-          - name: GOOGLE_STORAGE_RULESPATH
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: google.storage.rulesPath
-          - name: VSAC_API_KEY
-            valueFrom:
-              configMapKeyRef:
-                name: crd-config
-                key: vsac_api_key
-          image: __IMAGE__
-          name: crd
-          ports:
-            - containerPort: 8090
-          resources:
-            requests:
-              cpu: 2
-              memory: 4Gi
-              ephemeral-storage: 2Gi
-            limits:
-              cpu: 4
-              memory: 8Gi
-              ephemeral-storage: 4Gi
+      - env:
+        - name: LAUNCHURL
+          valueFrom:
+            configMapKeyRef:
+              name: crd-config
+              key: launchUrl
+        - name: ENDPOINTS_CRDREQUESTGENERATOR
+          valueFrom:
+            configMapKeyRef:
+              name: crd-config
+              key: endpoints.crdRequestGenerator
+        - name: ENDPOINTS_DTR
+          valueFrom:
+            configMapKeyRef:
+              name: crd-config
+              key: endpoints.dtr
+        - name: ENDPOINTS_TESTEHR
+          valueFrom:
+            configMapKeyRef:
+              name: crd-config
+              key: endpoints.testEhr
+        - name: ENDPOINTS_AUTH
+          valueFrom:
+            configMapKeyRef:
+              name: crd-config
+              key: endpoints.auth
+        - name: SPRING_PROFILES_ACTIVE
+          valueFrom:
+            configMapKeyRef:
+              name: crd-config
+              key: profile
+        - name: GOOGLE_STORAGE_BUCKET
+          valueFrom:
+            configMapKeyRef:
+              name: crd-config
+              key: google.storage.bucket
+        - name: GOOGLE_STORAGE_PROJECTID
+          valueFrom:
+            configMapKeyRef:
+              name: crd-config
+              key: google.storage.projectId
+        - name: GOOGLE_STORAGE_DB
+          valueFrom:
+            configMapKeyRef:
+              name: crd-config
+              key: google.storage.db
+        - name: GOOGLE_POD_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: crd-config
+              key: google.pod.path
+        - name: GOOGLE_POD_ZIP
+          valueFrom:
+            configMapKeyRef:
+              name: crd-config
+              key: google.pod.zip
+        - name: GOOGLE_STORAGE_EXAMPLESPATH
+          valueFrom:
+            configMapKeyRef:
+              name: crd-config
+              key: google.storage.examplesPath
+        - name: GOOGLE_STORAGE_RULESPATH
+          valueFrom:
+            configMapKeyRef:
+              name: crd-config
+              key: google.storage.rulesPath
+        - name: VSAC_API_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: crd-config
+              key: vsac_api_key
+        image: __IMAGE__
+        name: crd
+        ports:
+        - containerPort: 8090
+        resources:
+          requests:
+            cpu: 2
+            memory: 4Gi
+            ephemeral-storage: 2Gi
+          limits:
+            cpu: 4
+            memory: 8Gi
+            ephemeral-storage: 4Gi
+      #          livenessProbe:
+      #            httpGet:
+      #              path: /index
+      #              port: 8090
+      #            initialDelaySeconds: 0
+      #            timeoutSeconds: 5
       imagePullSecrets:
       - name: regcred
       restartPolicy: Always
