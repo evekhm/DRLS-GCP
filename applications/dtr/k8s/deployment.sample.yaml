@@ -33,12 +33,12 @@ spec:
           - name: lowdb-persistent-storage
             mountPath: /home/node/app/databaseData
           # Liveness probe configuration
-          livenessProbe:
-            httpGet:
-              path: /register
-              port: 3005
-            initialDelaySeconds: 0
-            timeoutSeconds: 5
+#          livenessProbe:
+#            httpGet:
+#              path: /register
+#              port: 3005
+#            initialDelaySeconds: 0
+#            timeoutSeconds: 5
           # Readiness probe configuration
           readinessProbe:
             httpGet:
