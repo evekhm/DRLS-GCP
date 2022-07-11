@@ -8,7 +8,6 @@ if [ -z "$PROJECT_ID" ]; then
   exit 1
 fi
 
-
 function create_endpoint(){
   K8S_NAME=$1
   FQDN=$2
@@ -53,13 +52,11 @@ function create_endpoint(){
   else
     gcloud compute addresses create "$K8S_INGRESS_IP_NAME" --global
   fi
+
   K8S_INGRESS_IP=$(gcloud compute addresses describe "$K8S_INGRESS_IP_NAME" --global --format="value(address)")
   echo K8S_INGRESS_IP=$K8S_INGRESS_IP
 
-if gcloud endpoints services list --format="value(NAME)" | grep "$FQDN"; then
-    :
-  else
-  # Map the FQDN to the IP address
+# Map the FQDN to the IP address
 cat <<EOF > ${K8S_NAME}-openapi.yaml
 swagger: "2.0"
 info:
@@ -76,7 +73,7 @@ EOF
 
 gcloud endpoints services deploy ${K8S_NAME}-openapi.yaml
 rm ${K8S_NAME}-openapi.yaml
-fi
+
 
 cat <<EOF | kubectl apply -n $K8S_NAMESPACE -f -
 apiVersion: networking.gke.io/v1
