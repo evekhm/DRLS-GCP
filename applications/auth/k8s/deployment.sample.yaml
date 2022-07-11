@@ -5,10 +5,10 @@ metadata:
     application: auth
   name: auth
 spec:
-  #  serviceName: keycloak-service
+#  serviceName: keycloak-service
   replicas: 1
-  #  strategy:
-  #    type: RollingUpdate
+#  strategy:
+#    type: RollingUpdate
   selector:
     matchLabels:
       application: auth
@@ -39,23 +39,23 @@ spec:
           value: ClientFhirServerRealm.json
         - name: PROXY_ADDRESS_FORWARDING
           value: "true"
-        #        envFrom:
-        #        - configMapRef:
-        #            name: environment-config
+#        envFrom:
+#        - configMapRef:
+#            name: environment-config
         image: __IMAGE__
         volumeMounts:
         - name: tls-config-volume
           mountPath: "/etc/x509/https"
         ports:
-        - name: http
-          containerPort: 8080
-          protocol: TCP
-        - name: https
-          protocol: TCP
-          containerPort: 8443
-        #          volumeMounts:
-        #          - name: jboss-persistent-storage
-        #            mountPath: /opt/jboss/keycloak/standalone/data/
+          - name: http
+            containerPort: 8080
+            protocol: TCP
+          - name: https
+            protocol: TCP
+            containerPort: 8443
+#          volumeMounts:
+#          - name: jboss-persistent-storage
+#            mountPath: /opt/jboss/keycloak/standalone/data/
         # Liveness probe configuration
         livenessProbe:
           httpGet:

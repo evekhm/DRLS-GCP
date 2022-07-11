@@ -21,6 +21,12 @@ Refer to this [documentation](GitLabREADME.md) for more details about CI/CD depl
 
 Additional information on GitLab Deployment [Use Cases](GitLabCICD_UseCases.md).
 
+## Known Constraints
+Project constraint: Limit: 21 IP addresses globally. 
+For a deployment: 6 end points are created (6 IP addresses are reserved) => Each project can handle only max 3 deployments
+
+DNS name can be max 63 symbols
+This outs constraints on the namespace name and project-id. (to be elaborated)
 
 ## Prerequisites  <a name="prerequisites"></a>
 Note, following commands should be run from GCP Terminal.
