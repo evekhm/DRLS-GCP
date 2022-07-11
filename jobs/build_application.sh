@@ -23,6 +23,7 @@ if [ -z "$APPLICATION" ]; then
   exit
 fi
 
+REPO_SUB="$(printf "${REPO_SUB}" | tr -c 'a-zA-Z0-9_.-' - | sed 's/^[.-]*//' | cut -c -128 | tr '[:upper:]' '[:lower:]')" #Hack because CI_MERGE_REQUEST_SOURCE_BRANCH_NAME does not have a SLUG
 IMAGE_REPO="${CI_REGISTRY}/${APPLICATION_NAMESPACE}/${APPLICATION}/${REPO_SUB}${IMAGE_TYPE}"
 PROJECT_REPO=${CI_SERVER_HOST}/${APPLICATION_NAMESPACE}/${APPLICATION}.git
 
