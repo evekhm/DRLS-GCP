@@ -8,6 +8,7 @@ if [ -z "$PROJECT_ID" ]; then
   exit 1
 fi
 
+echo "======= Running  $(basename "$0") with KUBE_NAMESPACE=$KUBE_NAMESPACE ======="
 
 function create_endpoint(){
   K8S_NAME=$1
@@ -34,7 +35,7 @@ function create_endpoint(){
   fi
 
 
-  echo "Creating managedCert and Endpoints for SERVICE=$K8S_NAME PORT=$K8S_SERVICE_PORT, FQDN=$FQDN"
+  echo "*************** Creating managedCert and Endpoints for SERVICE=$K8S_NAME, PORT=$K8S_SERVICE_PORT, FQDN=$FQDN ***************"
   FW_RULE_NAME=${NETWORK}-${K8S_NAME}-allow-lb-healthchecks
 
 
@@ -51,15 +52,14 @@ function create_endpoint(){
   if gcloud compute addresses list --format="value(NAME)"  --project=$PROJECT_ID | grep "$K8S_INGRESS_IP_NAME"; then
     echo "Already reserved External IP $K8S_INGRESS_IP_NAME"
   else
+    echo "Reserving External IP $K8S_INGRESS_IP_NAME"
     gcloud compute addresses create "$K8S_INGRESS_IP_NAME" --global
   fi
+
   K8S_INGRESS_IP=$(gcloud compute addresses describe "$K8S_INGRESS_IP_NAME" --global --format="value(address)")
   echo K8S_INGRESS_IP=$K8S_INGRESS_IP
 
-if gcloud endpoints services list --format="value(NAME)" | grep "$FQDN"; then
-    :
-  else
-  # Map the FQDN to the IP address
+# Map the FQDN to the IP address
 cat <<EOF > ${K8S_NAME}-openapi.yaml
 swagger: "2.0"
 info:
@@ -76,7 +76,7 @@ EOF
 
 gcloud endpoints services deploy ${K8S_NAME}-openapi.yaml
 rm ${K8S_NAME}-openapi.yaml
-fi
+
 
 cat <<EOF | kubectl apply -n $K8S_NAMESPACE -f -
 apiVersion: networking.gke.io/v1
@@ -191,5 +191,6 @@ create_endpoint test-ehr-service "$TEST_EHR_EP" 8080
 create_endpoint crd-request-generator-service "$CRD_REQUEST_GENERATOR_EP" 80 "/*" 3001 "/public_keys" -n emr
 
 kubectl get managedcertificates -n "$K8S_NAMESPACE"
-gcloud endpoints services list
+gcloud endpoints services list | grep  "$K8S_NAMESPACE"
+gcloud compute addresses list | grep  "$K8S_NAMESPACE"
 kubectl get ingress -n "$K8S_NAMESPACE"

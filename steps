@@ -2,12 +2,12 @@
 
 set -e # Exit if error is detected during pipeline execution
 JOBS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-print="$JOBS_DIR/../shared/print"
+print="$JOBS_DIR/shared/print"
 #export TERM=dumb
 
-source "$JOBS_DIR"/../shared/.endpoints
+source "$JOBS_DIR"/shared/.endpoints
 
-$print 'You are all Done! Use following External IPs to access deployed services' INFO
+$print 'Use following External IPs to access deployed services:' INFO
 
 $print "keycloak service     : $AUTH"
 $print "CRD service          : $CRD"
