@@ -18,43 +18,43 @@ spec:
         application: dtr
     spec:
       containers:
-        - image: __IMAGE__
-          env:
-          - name: REACT_APP_PA_BASE_URL
-            valueFrom:
-              configMapKeyRef:
-                name: dtr-config
-                key: pa_base_url
-          name: dtr
-          ports:
-            - name: http
-              containerPort: 3005
-          volumeMounts:
-          - name: lowdb-persistent-storage
-            mountPath: /home/node/app/databaseData
-          # Liveness probe configuration
-#          livenessProbe:
-#            httpGet:
-#              path: /register
-#              port: 3005
-#            initialDelaySeconds: 0
-#            timeoutSeconds: 5
-          # Readiness probe configuration
-          readinessProbe:
-            httpGet:
-              path: /register
-              port: 3005
-            initialDelaySeconds: 30
-            timeoutSeconds: 1
-          resources:
-            requests:
-              cpu: 1
-              memory: 4Gi
-              ephemeral-storage: 4Gi
-            limits:
-              cpu: 2
-              memory: 8Gi
-              ephemeral-storage: 5Gi
+      - image: __IMAGE__
+        env:
+        - name: REACT_APP_PA_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: dtr-config
+              key: pa_base_url
+        name: dtr
+        ports:
+        - name: http
+          containerPort: 3005
+        volumeMounts:
+        - name: lowdb-persistent-storage
+          mountPath: /home/node/app/databaseData
+        # Liveness probe configuration
+#        livenessProbe:
+#          httpGet:
+#            path: /register
+#            port: 3005
+#          initialDelaySeconds: 0
+#          timeoutSeconds: 5
+        # Readiness probe configuration
+        readinessProbe:
+          httpGet:
+            path: /register
+            port: 3005
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+        resources:
+          requests:
+            cpu: 1
+            memory: 4Gi
+            ephemeral-storage: 4Gi
+          limits:
+            cpu: 2
+            memory: 8Gi
+            ephemeral-storage: 5Gi
       imagePullSecrets:
       - name: regcred
       volumes:
