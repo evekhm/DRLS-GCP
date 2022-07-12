@@ -11,23 +11,37 @@ ROOT="$DIR/.."
 echo "======= Running  $(basename "$0") with KUBE_NAMESPACE=$KUBE_NAMESPACE  PROJECT_ID=$PROJECT_ID ======="
 
 function usage(){
-    echo "Missing (any of) the required parameters PROJECT_ID=$PROJECT_ID USERNAME=$USERNAME TOKEN."
     echo "Sample usage: $(basename "$0") -p <PROJECT_ID> -t <TOKEN> -u <USERNAME> "
+    echo "Defaults:"
+    echo "   PROJECT_ID=$PROJECT_ID"
+    echo "   CLUSTER=$CLUSTER"
+    echo "   ZONE=$ZONE"
+    echo "   REGION=$REGION"
+    echo "   ARGOLIS=$ARGOLIS"
+    echo "   KUBE_NAMESPACE=$KUBE_NAMESPACE"
+    echo "   username=$USERNAME"
+
     exit 1
 }
 # ARGPARSE
-while getopts p:u:t: flag
+while getopts p:u:t:h flag
 do
     case "${flag}" in
         p) PROJECT_ID=${OPTARG};;
-        u) USERNAME=${OPTARG};;
-        t) TOKEN=${OPTARG};;
+        h) HELP='true';;
+        u) CI_DEPLOY_USER=${OPTARG};;
+        t) CI_DEPLOY_PASSWORD=${OPTARG};;
         *) echo "Wrong arguments provided" && usage
     esac
 done
 
 
-if [ -z  ${PROJECT_ID+x} ]  || [ -z ${USERNAME+x} ] || [ -z ${TOKEN+x} ]; then
+if [ -n "$HELP" ]; then
+  usage
+fi
+
+if [ -z  ${PROJECT_ID+x} ]  || [ -z ${CI_DEPLOY_USER+x} ] || [ -z ${CI_DEPLOY_PASSWORD+x} ]; then
+  echo "Missing (any of) the required parameters PROJECT_ID=$PROJECT_ID USERNAME=$USERNAME TOKEN."
   usage
 fi
 
@@ -37,6 +51,7 @@ export CI_DEPLOY_USER
 CI_DEPLOY_PASSWORD=$TOKEN
 export CI_DEPLOY_PASSWORD
 
+gcloud config set project $PROJECT_ID
 
 function provision(){
   # Currently Done manually when setting up GitLab CI/CD
