@@ -10,9 +10,11 @@ ROOT="$DIR/.."
 #  PROJECT_ID
 echo "======= Running  $(basename "$0") with KUBE_NAMESPACE=$KUBE_NAMESPACE  PROJECT_ID=$PROJECT_ID ======="
 
+source "${DIR}/shared/SET.manual"
+
 function usage(){
     echo "Sample usage: $(basename "$0") -p <PROJECT_ID> -t <TOKEN> -u <USERNAME> "
-    echo "Defaults:"
+    echo "Defaults:"g
     echo "   PROJECT_ID=$PROJECT_ID"
     echo "   CLUSTER=$CLUSTER"
     echo "   ZONE=$ZONE"
@@ -20,6 +22,7 @@ function usage(){
     echo "   ARGOLIS=$ARGOLIS"
     echo "   KUBE_NAMESPACE=$KUBE_NAMESPACE"
     echo "   username=$USERNAME"
+    echo "   network=$NETWORK"
 
     exit 1
 }
@@ -48,6 +51,7 @@ fi
 export CI_DEPLOY_USER
 export CI_DEPLOY_PASSWORD
 
+
 gcloud config set project $PROJECT_ID
 
 function provision(){
@@ -66,7 +70,7 @@ function provision(){
   bash "${DD}"/provision_demo.sh -p "$PROJECT_ID"
 }
 
-source "${DIR}/shared/SET.manual"
+
 
 ##############################To be part of DTP#################################
 #  - Use Infrastructure Project for Provisioning
