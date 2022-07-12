@@ -10,7 +10,7 @@ variables:
   ######### Per Environment #############
   ## DEMO Environment
   PROJECT_ID_DEMO: prior-auth-demo
-  KUBE_CONTEXT_DEMO: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:pa-demo
+  KUBE_CONTEXT_DEMO: ${CI_PROJECT_NAMESPACE}/gke-deploy-env:demo-agent
   SERVICE_ACCOUNT_FILE_DEMO: SERVICE_ACCOUNT_FILE
 
   ## TEST Environment

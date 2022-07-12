@@ -59,7 +59,6 @@ Set the PROJECT_ID environment variable to point to the GCP project and activate
 
 ```sh
   export PROJECT_ID=<your_project_id>
-  gcloud config set project $PROJECT_ID 
 ```
 
 
