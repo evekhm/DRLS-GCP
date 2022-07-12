@@ -11,6 +11,7 @@ ROOT="$DIR/.."
 echo "======= Running  $(basename "$0") with KUBE_NAMESPACE=$KUBE_NAMESPACE  PROJECT_ID=$PROJECT_ID ======="
 
 source "${DIR}/shared/SET.manual"
+source "${DIR}/shared/vars"
 
 function usage(){
     echo "Sample usage: $(basename "$0") -p <PROJECT_ID> -t <TOKEN> -u <USERNAME> "
@@ -22,6 +23,8 @@ function usage(){
     echo "   ARGOLIS=$ARGOLIS"
     echo "   KUBE_NAMESPACE=$KUBE_NAMESPACE"
     echo "   USERNAME=$USERNAME"
+    echo "   BUCKET_NAME=$BUCKET_NAME"
+    echo "   DB_NAME=$DB_NAME"
     echo "   NETWORK=$NETWORK"
     exit 1
 }
