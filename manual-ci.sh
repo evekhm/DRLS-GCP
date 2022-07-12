@@ -8,6 +8,7 @@ ROOT="$DIR/.."
 #  USER/TOKEN - GitLab User and Token
 #  SERVICE_ACCOUNT - Name of the Manually created SERVICE_ACCOUNT
 #  PROJECT_ID
+echo "======= Running  $(basename "$0") with KUBE_NAMESPACE=$KUBE_NAMESPACE  PROJECT_ID=$PROJECT_ID ======="
 
 function usage(){
     echo "Missing (any of) the required parameters PROJECT_ID=$PROJECT_ID USERNAME=$USERNAME TOKEN."
@@ -19,17 +20,21 @@ while getopts p:u:t: flag
 do
     case "${flag}" in
         p) PROJECT_ID=${OPTARG};;
-        u) CI_DEPLOY_USER=${OPTARG};;
-        t) CI_DEPLOY_PASSWORD=${OPTARG};;
+        u) USERNAME=${OPTARG};;
+        t) TOKEN=${OPTARG};;
         *) echo "Wrong arguments provided" && usage
     esac
 done
 
-if [ -z  ${PROJECT_ID+x} ]  || [ -z ${CI_DEPLOY_USER+x} ] || [ -z ${CI_DEPLOY_PASSWORD+x} ]; then
+
+if [ -z  ${PROJECT_ID+x} ]  || [ -z ${USERNAME+x} ] || [ -z ${TOKEN+x} ]; then
   usage
 fi
 
+CI_DEPLOY_USER=$USERNAME
 export CI_DEPLOY_USER
+
+CI_DEPLOY_PASSWORD=$TOKEN
 export CI_DEPLOY_PASSWORD
 
 
