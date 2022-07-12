@@ -43,5 +43,6 @@ BUCKET="gs://$BUCKET_NAME"
 export BUCKET
 DB_NAME="CDS-Library.zip"
 export DB_NAME
-export NETWORK='drls' #duplicate definition with gke-deploy-env/vars
+
+export NETWORK=${NETWORK:-'drls'} #duplicate definition with gke-deploy-env/vars
 
