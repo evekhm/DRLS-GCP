@@ -21,9 +21,8 @@ function usage(){
     echo "   REGION=$REGION"
     echo "   ARGOLIS=$ARGOLIS"
     echo "   KUBE_NAMESPACE=$KUBE_NAMESPACE"
-    echo "   username=$USERNAME"
-    echo "   network=$NETWORK"
-
+    echo "   USERNAME=$USERNAME"
+    echo "   NETWORK=$NETWORK"
     exit 1
 }
 # ARGPARSE
@@ -32,11 +31,17 @@ do
     case "${flag}" in
         p) PROJECT_ID=${OPTARG};;
         h) HELP='true';;
-        u) CI_DEPLOY_USER=${OPTARG};;
-        t) CI_DEPLOY_PASSWORD=${OPTARG};;
+        u) USERNAME=${OPTARG};;
+        t) TOKEN=${OPTARG};;
         *) echo "Wrong arguments provided" && usage
     esac
 done
+
+CI_DEPLOY_USER=$USERNAME
+CI_DEPLOY_PASSWORD=$TOKEN
+
+export CI_DEPLOY_USER
+export CI_DEPLOY_PASSWORD
 
 
 if [ -n "$HELP" ]; then
@@ -47,12 +52,6 @@ if [ -z  ${PROJECT_ID+x} ]  || [ -z ${CI_DEPLOY_USER+x} ] || [ -z ${CI_DEPLOY_PA
   echo "Missing (any of) the required parameters PROJECT_ID=$PROJECT_ID USERNAME=$USERNAME TOKEN."
   usage
 fi
-
-CI_DEPLOY_USER=$USERNAME
-export CI_DEPLOY_USER
-
-CI_DEPLOY_PASSWORD=$TOKEN
-export CI_DEPLOY_PASSWORD
 
 
 gcloud config set project $PROJECT_ID
