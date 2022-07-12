@@ -45,7 +45,10 @@ if [ -z  ${PROJECT_ID+x} ]  || [ -z ${CI_DEPLOY_USER+x} ] || [ -z ${CI_DEPLOY_PA
   usage
 fi
 
+CI_DEPLOY_USER=$USERNAME
 export CI_DEPLOY_USER
+
+CI_DEPLOY_PASSWORD=$TOKEN
 export CI_DEPLOY_PASSWORD
 
 gcloud config set project $PROJECT_ID
