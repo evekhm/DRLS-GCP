@@ -39,7 +39,8 @@ create_CDS_Library_zip(){
 
 create_bucket(){
   echo "Preparing Cloud Storage [${BUCKET}] bucket..."
-  if gsutil ls | grep "${BUCKET}"; then
+  RESULT="$(gsutil ls "${BUCKET}" || true)"
+  if [[ -n "${RESULT}" ]]; then
       echo "Bucket [$BUCKET] already exists - skipping step" INFO
   else
       echo "Creating GCS bucket for pipeline: [$BUCKET]..." INFO
