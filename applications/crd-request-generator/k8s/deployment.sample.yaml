@@ -5,7 +5,7 @@ metadata:
     application: crd-request-generator
   name: __CRD_REQUEST_GENERATOR_DEPLOYMENT__
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     type: RollingUpdate
   selector:
