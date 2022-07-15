@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: crd-config
+  name: __CRD_CONFIG__
 data:
   google.pod.zip: /usr/share/CDS-Library.zip
   google.pod.path: /usr/share/CDS-Library.zip/CDS-Library

@@ -15,7 +15,7 @@ metadata:
     cloud.google.com/backend-config: '{"default": "crd-service-backend-config"}'
   labels:
     app: crd
-  name: crd-service
+  name: __CRD_SERVICE__
 spec:
   type: ClusterIP
   ports:

@@ -52,3 +52,7 @@ export CRD_REQUEST_GENERATOR_DEPLOYMENT="crd-request-generator"
 export CRD_REQUEST_GENERATOR_CONFIG="crd-request-generator-config"
 export CRD_REQUEST_GENERATOR_SERVICE="crd-request-generator-service"
 export PA_SECRET="pa-tokens"
+
+export CRD_CONFIG="crd-config"
+export CRD_DEPLOYMENT="crd"
+export CRD_SERVICE="crd-service"
