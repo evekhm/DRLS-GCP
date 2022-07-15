@@ -43,5 +43,12 @@ BUCKET="gs://$BUCKET_NAME"
 export BUCKET
 DB_NAME="CDS-Library.zip"
 export DB_NAME
-export NETWORK='drls' #duplicate definition with gke-deploy-env/vars
 
+export NETWORK=${NETWORK:-'drls'} #duplicate definition with gke-deploy-env/vars
+
+export ORDER_SELECT="order-select-crd"
+export ORDER_SIGN="order-sign-crd"
+export CRD_REQUEST_GENERATOR_DEPLOYMENT="crd-request-generator"
+export CRD_REQUEST_GENERATOR_CONFIG="crd-request-generator-config"
+export CRD_REQUEST_GENERATOR_SERVICE="crd-request-generator-service"
+export PA_SECRET="pa-tokens"

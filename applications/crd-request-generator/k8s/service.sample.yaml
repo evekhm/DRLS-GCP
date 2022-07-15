@@ -14,7 +14,7 @@ metadata:
     cloud.google.com/backend-config: '{"default": "crd-request-generator-service-backend-config"}'
   labels:
     application: crd-request-generator
-  name: crd-request-generator-service
+  name: __CRD_REQUEST_GENERATOR_SERVICE__
 spec:
   type: ClusterIP
   ports:
