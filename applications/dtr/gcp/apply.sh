@@ -12,7 +12,8 @@ cd "$GCP"/../k8s/
 
 kubectl apply -f pv.yaml --namespace="$KUBE_NAMESPACE"
 
-sed 's|__PRIOR_AUTH__|'"$PRIOR_AUTH"'|g;' config.sample.yaml > config.yaml
+sed 's|__PRIOR_AUTH__|'"$PRIOR_AUTH"'|g;
+     s|__TEST_EHR__|'"$TEST_EHR"'|g; ' config.sample.yaml > config.yaml
 kubectl apply -f config.yaml --namespace="$KUBE_NAMESPACE"
 
 sed 's|__IMAGE__|'"$IMAGE"'|g;' deployment.sample.yaml > deployment.yaml

@@ -3,11 +3,13 @@
 ## Table of Contents
 - [Overview](#overview)
 - [CI/CD Integration with GitLab](#cicd)
+- [Consumed Resources](#resources)
 - [Prerequisites](#prerequisites)
 - [GCP Project Setup](#gcpsetup)
 - [Deployment](#deployment)
 - [Verify DRLS Prior Auth is working](#verify-drls-is-working)
 - [Tear Down](#teardown)
+- [Useful Commands](#commands)
 
 ## Overview
 
@@ -21,12 +23,26 @@ Refer to this [documentation](GitLabREADME.md) for more details about CI/CD depl
 
 Additional information on GitLab Deployment [Use Cases](GitLabCICD_UseCases.md).
 
-## Known Constraints
-Project constraint: Limit: 21 IP addresses globally. 
-For a deployment: 6 end points are created (6 IP addresses are reserved) => Each project can handle only max 3 deployments
+## Consumed Resources <a name="resources"></a>
+Each deployed Prior-Auth Solution consumes following resources:
+- [GKE](https://cloud.google.com/kubernetes-engine/pricing) Autopilot cluster:
+  - 6 deployed services/workloads
+  - 6 GKE Ingress objects setup with NEG ([Container native LB*](https://cloud.google.com/kubernetes-engine/docs/how-to/container-native-load-balancing))
+    - 6 GCE_VM_IP_PORT NEGs (zonal NEGs) 
+  - GCP Cloud Storage
+- [Network Premium Tier](https://cloud.google.com/network-tiers/pricing):
+  - 1 VPC Network
+  - 6 [Global external HTTP(S) Load Balancers (classic)](https://cloud.google.com/load-balancing/docs/https)
+    - 12 [URL maps](https://cloud.google.com/load-balancing/docs/url-map) (HTTP+HTTPS for each service) 
+    - 6 Reserved static IP addresses (used for the EndPoints to provide domain name)
+    - 6 Google managed SSL Global Certificates
+    - 6 Global Target HTTP proxies; 6 Global Target HTTPS(s) proxies
 
-DNS name can be max 63 symbols
-This outs constraints on the namespace name and project-id. (to be elaborated)
+*Container-native load balancing enables load balancers to target Pods directly and to make load distribution decisions at the Pod-level instead of at the VM-level.
+
+## Known Constraints
+Due to the existing out-of-the-box quotas (30 URL maps, 21 Static IP addresses globally, 30 SSL certificates) only *two*  instances of
+Prior-Autherization full end-to-end solutions can be deployed within one GCP Project (even when using different GKE clusters and namespaces).
 
 ## Prerequisites  <a name="prerequisites"></a>
 Note, following commands should be run from GCP Terminal.
@@ -174,26 +190,50 @@ Go to http://34.67.137.51:3005/register
 Go to http://34.135.12.152:3000/ehr-server/reqgen
 ```
   
-### Register the test-ehr
+## EndPoints
 
-1. Go to `<DTR>`/register.
-   - Client Id: **app-login**
-   - Fhir Server (iss): **`<TEST_EHR>`/test-ehr/r4**
-2. Click **Submit**
+There are two ways to see the list of created EndPoints.
+
+Via commandline:
+```shell
+gcloud endpoints services list
+```
+
+Via the GCP UI, go to [EndPoints](https://pantheon.corp.google.com/endpoints/)
+
+The entry point for the flow is the test emr service:
+```shell
+gcloud endpoints services list | grep emr
+```
+
+[//]: # (### Register the test-ehr)
+
+[//]: # ()
+[//]: # (1. Go to `<DTR>`/register.)
+
+[//]: # (   - Client Id: **app-login**)
+
+[//]: # (   - Fhir Server &#40;iss&#41;: **`<TEST_EHR>`/test-ehr/r4**)
+
+[//]: # (2. Click **Submit**)
 
 ## Run the DRLS Flow 
-1. Go to `<CRD_REQUEST_GENERATOR>`/ehr-server/reqgen.
-2. Click **Patient Select** button in upper left.
-3. Find **William Oster** in the list of patients and click the dropdown menu next to his name.
-4. Select **E0470** in the dropdown menu.
-5. Click anywhere in the row for William Oster.
-6. Click **Submit** at the bottom of the page.
-7. After several seconds you should receive a response in the form of two **CDS cards**:
-    - **Respiratory Assist Device**
-    - **Positive Airway Pressure Device**
-8. Select **Order Form** on one of those CDS cards.
-9. If you are asked for login credentials, use **alice** for username and **alice** for password.
-10. A webpage should open in a new tab, and after a few seconds, a questionnaire should appear.
+1. Get the emr deploy address: 
+```shell
+gcloud endpoints services list --filter="TITLE=( crd-request-generator-service )" --format "list(NAME)"
+```
+2. Go to the address retrieved above in the web browser.
+5. Click **Patient Select** button in upper left.
+6. Find **William Oster** in the list of patients and click the dropdown menu next to his name.
+7. Select **E0470** in the dropdown menu.
+8. Click anywhere in the row for William Oster.
+9. Click **Submit** at the bottom of the page.
+10. After several seconds you should receive a response in the form of two **CDS cards**:
+     - **Respiratory Assist Device**
+     - **Positive Airway Pressure Device**
+11. Select **Order Form** on one of those CDS cards.
+12. If you are asked for login credentials, use **alice** for username and **alice** for password.
+13. A webpage should open in a new tab, and after a few seconds, a questionnaire should appear.
 
 Congratulations! DRLS is fully installed and ready for you to use!
 
@@ -202,5 +242,34 @@ Following command will delete all resources in the KUBE_NAMESPACE and prevent fr
 ```sh
   DRLS-GCP/jobs/destroy.sh
 ```
+## Useful commands <a name="commands"></a>
 
+List of created SSL certificates:
+```shell
+gcloud compute ssl-certificates list 
+```
+
+Delete Managed certificate:
+```shell
+gcloud compute ssl-certificates delete <name> 
+```
+
+List of reserved IP addresses:
+```shell
+gcloud compute addresses list --global --format "table(name, address, status)"
+```
+
+Delete reserved address:
+```shell
+gcloud compute addresses delete <name> --global
+```
+List of Cloud Endpoints:
+```shell
+gcloud endpoints services list
+```
+
+Delete Cloud End Point: (operation has grace period of 30 days )
+```shell
+gcloud endpoints services delete <service_name> --project=<project_id> --async
+```
 
