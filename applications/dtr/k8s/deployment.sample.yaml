@@ -25,13 +25,23 @@ spec:
             configMapKeyRef:
               name: dtr-config
               key: pa_base_url
+        - name: REACT_APP_SERVER_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: dtr-config
+              key: server-port
+        - name: REACT_APP_INITIAL_CLIENT
+          valueFrom:
+            configMapKeyRef:
+              name: dtr-config
+              key: initial-client
         name: dtr
         ports:
         - name: http
           containerPort: 3005
         volumeMounts:
         - name: lowdb-persistent-storage
-          mountPath: /home/node/app/databaseData
+          mountPath: /home/node/app/dtr/databaseData
         # Liveness probe configuration
 #        livenessProbe:
 #          httpGet:

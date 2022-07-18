@@ -1,11 +1,17 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: crd-request-generator-config
+  name: __CRD_REQUEST_GENERATOR_CONFIG__
 data:
   ehr_server: __FHIR_SERVER__
   ehr_base: __FHIR_SERVER__
-  auth: __AUTH__
+  auth: __AUTH__/auth
   public_keys: __PUBLIC_KEYS__
   cds_service: __CDS_SERVICE__
+  cds_client_id: __CDS_CLIENT_ID__
   launch_url: __DTR__/launch
+  order_sign: __ORDER_SIGN__
+  order_select: __ORDER_SELECT__
+  user: alice
+  password: alice
+  client: app-login

@@ -28,11 +28,12 @@ FG_WHITE="$(tput setaf 7)"
 
 echo
 echo "********************************* DRLS FLOW STEPS *********************************"
-$print "### Register the test-ehr ###" INFO
-echo "Go to $DTR/register"
-echo "    - Client Id        : app-login"
-echo "    - Fhir Server (iss): $TEST_EHR/test-ehr/r4"
-echo
+# This step is now part of deployment
+#$print "### Register the test-ehr ###" INFO
+#echo "Go to $DTR/register"
+#echo "    - Client Id        : app-login"
+#echo "    - Fhir Server (iss): $TEST_EHR/test-ehr/r4"
+#echo
 $print "### Run the DRLS Flow ###" INFO
 echo "1. Go to $CRD_REQUEST_GENERATOR/ehr-server/reqgen"
 echo "2. Click ${FG_YELLOW}Patient Select${normal} button in upper left."

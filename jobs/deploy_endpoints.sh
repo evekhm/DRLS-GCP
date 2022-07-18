@@ -88,8 +88,10 @@ spec:
     - ${FQDN}
 EOF
 
+
 # ingress
   if [ -z "$INGRESS2" ]; then
+echo "Deploying Ingress ${K8S_INGRESS}..."
 cat <<EOF | kubectl apply -n $K8S_NAMESPACE -f -
 apiVersion: networking.gke.io/v1beta1
 kind: FrontendConfig
@@ -116,6 +118,7 @@ spec:
         number: ${K8S_SERVICE_PORT}
 EOF
   else
+echo "Deploying Ingress ${K8S_INGRESS}... with two paths"
 cat <<EOF | kubectl apply -n $K8S_NAMESPACE -f -
 apiVersion: networking.gke.io/v1beta1
 kind: FrontendConfig
@@ -144,14 +147,14 @@ spec:
             port:
               number: ${K8S_SERVICE_PORT}
         path: ${PATH_1}
-        pathType: ImplementationSpecific
+        pathType: Prefix
       - backend:
           service:
             name: ${K8S_NAME}
             port:
               number: ${K8S_SERVICE_PORT_2}
         path: ${PATH_2}
-        pathType: ImplementationSpecific
+        pathType: Prefix
 EOF
   fi
   echo "Deployed $FQDN end point"
@@ -188,9 +191,11 @@ create_endpoint crd-service "$CRD_EP" 8090
 create_endpoint dtr-service "$DTR_EP" 3005
 create_endpoint prior-auth-service "$PRIOR_AUTH_EP" 9000
 create_endpoint test-ehr-service "$TEST_EHR_EP" 8080
-create_endpoint crd-request-generator-service "$CRD_REQUEST_GENERATOR_EP" 80 "/*" 3001 "/public_keys" -n emr
+create_endpoint crd-request-generator-service "$CRD_REQUEST_GENERATOR_EP" 80 "/" 3001 "/public_keys"
 
 kubectl get managedcertificates -n "$K8S_NAMESPACE"
-gcloud endpoints services list | grep  "$K8S_NAMESPACE"
-gcloud compute addresses list | grep  "$K8S_NAMESPACE"
+#gcloud endpoints services list | grep  "$K8S_NAMESPACE"
+#gcloud compute addresses list | grep  "$K8S_NAMESPACE"
 kubectl get ingress -n "$K8S_NAMESPACE"
+gcloud endpoints services list
+gcloud compute addresses list --global --format "table[title='===== RESERVED STATIC IPs ====='](name, address, status)"

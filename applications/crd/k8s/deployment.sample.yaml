@@ -3,9 +3,9 @@ kind: Deployment
 metadata:
   labels:
     app: crd
-  name: crd
+  name: __CRD_DEPLOYMENT__
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     type: RollingUpdate
   selector:

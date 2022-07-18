@@ -7,8 +7,8 @@ metadata:
 spec:
 #  serviceName: keycloak-service
   replicas: 1
-#  strategy:
-#    type: RollingUpdate
+  strategy:
+    type: RollingUpdate
   selector:
     matchLabels:
       application: auth

@@ -3,9 +3,9 @@ kind: Deployment
 metadata:
   labels:
     application: crd-request-generator
-  name: crd-request-generator
+  name: __CRD_REQUEST_GENERATOR_DEPLOYMENT__
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     type: RollingUpdate
   selector:
@@ -57,6 +57,21 @@ spec:
               configMapKeyRef:
                 name: crd-request-generator-config
                 key: cds_service
+          - name: REACT_APP_USER
+            valueFrom:
+              configMapKeyRef:
+                name: crd-request-generator-config
+                key: user
+          - name: REACT_APP_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: crd-request-generator-config
+                key: password
+          - name: REACT_APP_CLIENT
+            valueFrom:
+              configMapKeyRef:
+                name: crd-request-generator-config
+                key: client
           - name: REACT_APP_AUTH
             valueFrom:
               configMapKeyRef:
@@ -67,6 +82,31 @@ spec:
               configMapKeyRef:
                 name: crd-request-generator-config
                 key: public_keys
+          - name: REACT_APP_ORDER_SIGN
+            valueFrom:
+              configMapKeyRef:
+                name: crd-request-generator-config
+                key: order_sign
+          - name: REACT_APP_ORDER_SELECT
+            valueFrom:
+              configMapKeyRef:
+                name: crd-request-generator-config
+                key: order_select
+          - name: REACT_APP_FHIR_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: __PA_SECRET__
+                key: fhir_access_token
+          - name: REACT_APP_CDS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: __PA_SECRET__
+                key: cds_access_token
+          - name: REACT_APP_CDS_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: __PA_SECRET__
+                key: cds_secret
       imagePullSecrets:
       - name: regcred
       restartPolicy: Always
