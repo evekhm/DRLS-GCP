@@ -23,6 +23,7 @@ spec:
       port: 8090
       protocol: TCP
       targetPort: 8090
+  sessionAffinity: ClientIP
   selector:
     app: crd
 
