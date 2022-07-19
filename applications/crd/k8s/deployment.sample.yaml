@@ -5,7 +5,7 @@ metadata:
     app: crd
   name: __CRD_DEPLOYMENT__
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
   selector:
