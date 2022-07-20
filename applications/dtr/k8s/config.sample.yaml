@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: dtr-config
 data:
-  pa_base_url: __PRIOR_AUTH__
+  pa_base_url: __PRIOR_AUTH__/fhir
   initial-client: "__TEST_EHR__/test-ehr/r4::app-login"
   server-port: '3005'
