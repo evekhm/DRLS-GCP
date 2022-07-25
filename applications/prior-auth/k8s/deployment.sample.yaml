@@ -56,6 +56,11 @@ spec:
               configMapKeyRef:
                 name: pa-config
                 key: gcp.enabled
+          - name: debug
+            valueFrom:
+              configMapKeyRef:
+                name: pa-config
+                key: debug
           ports:
             - containerPort: 9000
       imagePullSecrets:
