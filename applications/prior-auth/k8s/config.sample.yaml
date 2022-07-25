@@ -11,3 +11,4 @@ data:
   google.storage.db: __DB__
   google.pod.zip: /usr/share/CDS-Library.zip
   gcp.enabled: 'true'
+  debug: 'true'
