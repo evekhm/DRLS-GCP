@@ -9,3 +9,6 @@ then
 else
     exit
 fi
+
+#Delete end points
+for i in $(gcloud endpoints services list --format="value(NAME)"); do gcloud endpoints services delete "$i" --async; done
