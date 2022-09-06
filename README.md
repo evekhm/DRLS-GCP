@@ -135,9 +135,10 @@ For the `Argolis` environment, following known Org Constraints need to be disabl
 
 ## Deployment  <a name="deployment"></a>
 
-> As mentioned above, if your PROJECT-ID happened to exceed 20 characters, you can manually modify the way endpoints look, by manually changing 4-9 lines in the  *DRLS-GCP/shared/.endpoints* file.
-> Things you can actually change for the domain: Part before the `.endpoints`
-> For example: `prior-auth.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog` could become pa.endpoints.${PROJECT_ID}.cloud.goog
+> As mentioned above, if your PROJECT-ID happened to exceed 20 characters, you can manually modify the way endpoints look, by manually changing Lines: 4-9 in the  *DRLS-GCP/shared/.endpoints* file.
+> Things you can actually change for the domain - is the part before the `.endpoints`
+> 
+> For example: `prior-auth.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog` could become `pa.endpoints.${PROJECT_ID}.cloud.goog`
 
 Following command does the installation and deployment of the DRLS components.
 
