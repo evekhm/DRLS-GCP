@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+
+## Endpoints Structure to be used in the Deployment
 export AUTH_EP="auth.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"
 export CRD_EP="crd.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"
 export DTR_EP="dtr.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog"

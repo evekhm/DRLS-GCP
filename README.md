@@ -45,9 +45,6 @@ Due to the existing out-of-the-box quotas (30 URL maps, 21 Static IP addresses g
 Prior-Autherization full end-to-end solutions can be deployed within one GCP Project (even when using different GKE clusters and namespaces).
 
 ## Prerequisites  <a name="prerequisites"></a>
-Note, following commands should be run from GCP Terminal.
-> Because keycloak needs to be re-built, running remotely via gcloud sdk requires environment to build contaienr and push it to GitLab repository. Those instructions are missing.
-
 
 ### GitLab Access
 > Currently, this flow requires special access for the GitLab Repository and Container Registry, so a Personal Access Token is needed for the setup. 
@@ -70,6 +67,14 @@ When Running remotely using Cloud SDK:
 Create new GCP project and activate Cloud Shell. Following commands should be executed in the Cloud Shell of your GCP Project.
 
 1. Set Project ID
+
+*Important:* PROJECT ID should not exceed 20 characters long, for the deployment to work out-of-the-box without any modifications.
+Due to the way endpoints are generated for the demo purposes (and PROJECT ID is the part of the domain name to pass the trusted domain verification), we have to stay within the limits of the allowed domain name: 63 characters at max.
+
+If you really need to adapt this Deployment to work with PROJECT ID that exceeds 20 characters, there is a manual step (a hack), you still might do (will be mentioned below).
+Encouraged, to stay within 20 characters limit.
+
+
 
 Set the PROJECT_ID environment variable to point to the GCP project and activate the config (replace <your_project_id> below):
 
@@ -129,6 +134,12 @@ For the `Argolis` environment, following known Org Constraints need to be disabl
 
 
 ## Deployment  <a name="deployment"></a>
+
+> As mentioned above, if your PROJECT-ID happened to exceed 20 characters, you can manually modify the way endpoints look, by manually changing Lines: 4-9 in the  *DRLS-GCP/shared/.endpoints* file.
+> Things you can actually change for the domain - is the part before the `.endpoints`
+> 
+> For example: `prior-auth.${KUBE_NAMESPACE}.endpoints.${PROJECT_ID}.cloud.goog` could become `pa.endpoints.${PROJECT_ID}.cloud.goog`
+
 Following command does the installation and deployment of the DRLS components.
 
 ```sh
@@ -142,16 +153,14 @@ Behind the hoods, following steps are executed:
 - Prepare Cluster: create GitLab access secret, Kubernetes Workload identity.  
 - Deploy Services required for the DRLS flow into the GKE cluster.
   * This operation will provision service host IPs required for further deployment configurations.
-- Build keycloak image
-  * A dedicated keycloak image per deployment needs to be built (will be hosted using GCP container registry of the project(. This is required to embed <TEST_EHR> service IP as allowed for re-direction))
 - Deploy DRLS components
-  * Now everything is ready to get images (both from the GitLab and the keycloak) deployed into the GCP cluster.
+  * Now everything is ready to get images deployed into the GCP cluster.
 
 
-Wait for the pods to be created and get into Running state:
+Wait for the pods to be created and get into Running state: (default )
 ```sh
 
-  kubectl get pods -n $KUBE_NAMESPACE --watch
+  kubectl get pods -n demo-manual --watch
 ```
 You should be getting five pods: 
 - crd
@@ -171,25 +180,7 @@ test-ehr-768645cdf4-ntg9t                1/1     Running   0          7m19s
 ## Verify DRLS is working
 
 NOTE: Currently deployed applications have around five to seven minutes required for starting up. Make sure to wait for them to be ready, before trying the steps below.
-In the instructions below replace <APPLICATION> with the corresponding IP.
 
-Print out the `steps` and assigned endpoints:
-```sh
-  DRLS-GCP/steps
-```
-
-
-Sample Output:
-```
-==> ### Register the test-ehr ###
-Go to http://34.67.137.51:3005/register
-- Client Id        : app-login
-- Fhir Server (iss): http://35.224.229.97:8080/test-ehr/r4
-
-==> ### Run the DRLS Flow ###
-Go to http://34.135.12.152:3000/ehr-server/reqgen
-```
-  
 ## EndPoints
 
 There are two ways to see the list of created EndPoints.
@@ -236,6 +227,12 @@ gcloud endpoints services list --filter="TITLE=( crd-request-generator-service )
 13. A webpage should open in a new tab, and after a few seconds, a questionnaire should appear.
 
 Congratulations! DRLS is fully installed and ready for you to use!
+
+
+## Troubleshooting
+
+Navigate to the Project Quotas to make sure Quotas are not exceeded. 
+
 
 ## Tear Down  <a name="teardown"></a>
 Following command will delete all resources in the KUBE_NAMESPACE and prevent from running resources when unwanted. 
