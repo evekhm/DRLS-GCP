@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-UTILS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Source this file when running DRLS-Deploy not via the GitLab CI/CD
 # All of these are setup via GitLab otherwise
 export KUBE_NAMESPACE=${KUBE_NAMESPACE:-'demo-manual'} #Namespace to which DRLS will be deployed inside the cluster
@@ -11,10 +10,15 @@ export GSA_NAME='gsa-priauth-service'
 export KSA_NAME='k8s-priauth-service'
 
 # Setting Variables of Gitlab
-export CI_REGISTRY="registry.gitlab.com"
-export CI_SERVER_HOST="gitlab.com"
-export APPLICATION_NAMESPACE="gcp-solutions/hcls/claims-modernization/pa-ref-impl"
+export CI_REGISTRY=${REGISTRY:-"registry.gitlab.com"}
+export CI_SERVER_HOST=${SERVER_HOST:-"gitlab.com"}
+export APPLICATION_NAMESPACE=${APPLICATION_NAMESPACE:-"gcp-solutions/hcls/claims-modernization/pa-ref-impl"}
 
+# For Artifacts Registry
+# REPOSITORY=<add-name-here>
+# REGISTRY=${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}
+# APPLICATION_NAMESPACE=${PROJECT_ID}/${REPOSITORY}
+# export SERVER_HOST=
 export IMAGE_TYPE="released" # Will use images for deployment
 
 #export CONTAINER_CLI='lima nerdctl'
