@@ -11,4 +11,8 @@ else
 fi
 
 #Delete end points
-for i in $(gcloud endpoints services list --format="value(NAME)"); do gcloud endpoints services delete "$i" --async; done
+for i in $(gcloud endpoints services list --format="value(NAME)"); do gcloud endpoints services delete "$i" --async --quiet; done
+
+#Delete reserved IP addresses
+for i in $(gcloud compute addresses list --global --format "value(name)"); do gcloud compute addresses delete "$i" --quiet --global; done
+
